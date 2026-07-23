@@ -1,4 +1,4 @@
-{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"KnowledgeDocument","type":"object","additionalProperties":false,
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://sanjiguan.local/schemas/knowledge-document.schema.json","title":"KnowledgeDocument","type":"object","additionalProperties":false,
 "required":["id","title","traditions","knowledge_layer","access_class","license","language","review_status","reviewer_ids"],
 "properties":{"id":{"type":"string","format":"uuid"},"title":{"type":"string","minLength":1},"original_title":{"type":["string","null"]},
 "author":{"type":["string","null"]},"translator":{"type":["string","null"]},"editor":{"type":["string","null"]},
