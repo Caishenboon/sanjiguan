@@ -1,0 +1,21 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sanjiguan.local/schemas/research-preview-launch.schema.json",
+  "type":"object",
+  "required":["profile_id","ruleset_id","mode","synthetic_or_research","research_consent_confirmed","prose_provider"],
+  "properties":{
+    "profile_id":{"type":"string","format":"uuid"},
+    "ruleset_id":{"type":"string","format":"uuid"},
+    "mode":{"const":"research_preview"},
+    "synthetic_or_research":{"const":true},
+    "research_consent_confirmed":{"const":true},
+    "prose_provider":{"enum":["template","deepseek"],"default":"template"},
+    "external_model_confirmed":{"type":"boolean","default":false},
+    "approved_evidence_summaries":{"type":"array","items":{"type":"string"}},
+    "approved_counterevidence_summaries":{"type":"array","items":{"type":"string"}},
+    "allowed_esoteric_entities":{"type":"array","items":{"type":"string"}}
+  },
+  "allOf":[{"if":{"properties":{"prose_provider":{"const":"deepseek"}}},
+    "then":{"properties":{"external_model_confirmed":{"const":true}},"required":["external_model_confirmed"]}}],
+  "additionalProperties":true
+}

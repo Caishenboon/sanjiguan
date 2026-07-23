@@ -1,5 +1,6 @@
 """Owner-only deterministic research preview pipeline."""
-import json
+import json,os
+from decimal import Decimal
 from datetime import datetime,timezone
 from pathlib import Path
 from uuid import UUID
@@ -35,6 +36,12 @@ def create_analysis(payload:dict=Body(...),response:Response=None,key:str=Header
     module,user=pg(),owner(token)
     if payload.get("mode")!="research_preview" or not payload.get("synthetic_or_research"):
         raise HTTPException(422,"research_preview_fixture_or_research_profile_required")
+    provider_choice=payload.get("prose_provider","template")
+    if provider_choice not in ("template","deepseek"):raise HTTPException(422,"invalid_prose_provider")
+    if not payload.get("is_synthetic") and not payload.get("research_consent_confirmed"):
+        raise HTTPException(422,"research_preview_confirmation_required")
+    if provider_choice=="deepseek" and not payload.get("external_model_confirmed"):
+        raise HTTPException(422,"external_model_confirmation_required")
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
         idem=module.idempotency(conn,user["id"],"POST","/api/v1/admin/research/analyses",key,module.fingerprint(payload))
@@ -46,12 +53,16 @@ def create_analysis(payload:dict=Body(...),response:Response=None,key:str=Header
             raise HTTPException(422,"profile_not_marked_for_research")
         rid=uuid7()
         conn.execute("""INSERT INTO analysis_runs(id,profile_id,ruleset_id,status,input_snapshot_encrypted,
-          input_hash,random_seed,data_completeness,run_mode,is_synthetic,ruleset_snapshot,claim_snapshot)
-          VALUES(%s,%s,%s,'queued',%s,%s,%s,%s,'research_preview',%s,%s,%s)""",
+          input_hash,random_seed,data_completeness,run_mode,is_synthetic,ruleset_snapshot,claim_snapshot,
+          prose_provider,research_consent_at,external_model_consent_at)
+          VALUES(%s,%s,%s,'queued',%s,%s,%s,%s,'research_preview',%s,%s,%s,%s,
+          CASE WHEN %s THEN now() ELSE NULL END,CASE WHEN %s THEN now() ELSE NULL END)""",
           (rid,payload["profile_id"],payload["ruleset_id"],encrypt(payload),stable_hash(payload),
            payload["random_seed"],payload.get("completeness",0),payload.get("is_synthetic",False),
-           json.dumps(payload.get("ruleset_snapshot",{})),json.dumps(payload.get("claim_snapshot",[]))))
-        result={"id":str(rid),"mode":"research_preview","status":"queued"}
+           json.dumps(payload.get("ruleset_snapshot",{})),json.dumps(payload.get("claim_snapshot",[])),
+           provider_choice,payload.get("research_consent_confirmed",False),
+           payload.get("external_model_confirmed",False)))
+        result={"id":str(rid),"mode":"research_preview","status":"queued","prose_provider":provider_choice}
         module.complete(conn,idem,key,201,result);return result
 
 
@@ -138,25 +149,46 @@ def run_analysis(analysis_id:UUID,key:str=Header(alias="Idempotency-Key"),
               basis_claim_ids,system_mapping_claim_ids,status,content_encrypted)
               VALUES(%s,%s,%s,%s,'{}','{}','breakpoint',%s)""",
               (uuid7(),analysis_id,sequence_no,link_type,encrypt({"notice":"链条未成：缺少已审校依据"})))
-        provider=FakeProvider()
-        prose=provider.generate({"locked_verdict":locked})
+        source="template";usage={"prompt_tokens":0,"completion_tokens":0,"total_tokens":0};model=None
+        if row["prose_provider"]=="deepseek" and row["external_model_consent_at"]:
+            provider=DeepSeekProvider();provider.retries=0
+            approved_payload={"verdict":locked["verdict"],"status":"research_preview",
+              "polarity":locked.get("polarity","undetermined"),"strength":locked.get("strength",0),
+              "rank":1,"symbolic_title":locked.get("symbolic_title","研究断章"),
+              "manifestation_period":locked.get("manifestation_period","待验"),
+              "judgement":{"dominant_side":locked.get("dominant_side","undetermined")},
+              "evidence_summaries":case.get("approved_evidence_summaries",[]),
+              "counterevidence_summaries":case.get("approved_counterevidence_summaries",[]),
+              "claims":case.get("approved_claims",[]),"ruleset_version":CONFIG["version"],
+              "prompt_version":"style-review-1.1","action_posture":locked.get("action_posture","observe"),
+              "allowed_esoteric_entities":case.get("allowed_esoteric_entities",[])}
+            try:
+                generated=provider.generate_with_metrics(approved_payload);prose=generated["content"]
+                usage=generated["usage"];model=generated["model"];source="deepseek"
+            except Exception:prose=TemplateProvider().generate({"locked_verdict":locked})
+        else:prose=TemplateProvider().generate({"locked_verdict":locked})
         pass1_hash=stable_hash(prose)
         conn.execute("""INSERT INTO prompt_runs(id,analysis_run_id,pass_no,provider,prompt_hash,
-          response_hash,status,token_budget) VALUES(%s,%s,1,'fake',%s,%s,'complete',0)""",
-          (uuid7(),analysis_id,stable_hash({"pass":1,"locked":locked}),pass1_hash))
+          response_hash,status,token_budget,model,estimated_cost) VALUES(%s,%s,1,%s,%s,%s,'complete',%s,%s,%s)""",
+          (uuid7(),analysis_id,source,stable_hash({"pass":1,"locked":locked}),pass1_hash,
+           provider.max_tokens if source=="deepseek" else 0,model,_estimated_cost(usage)))
         composition={"image_text":prose["image_text"],"plain_interpretation":prose["plain_interpretation"],
                      "judgement":prose["judgement"]}
         conn.execute("""INSERT INTO prompt_runs(id,analysis_run_id,pass_no,provider,prompt_hash,
-          response_hash,status,token_budget) VALUES(%s,%s,2,'fake',%s,%s,'complete',0)""",
-          (uuid7(),analysis_id,stable_hash({"pass":2,"validated":pass1_hash}),stable_hash(composition)))
+          response_hash,status,token_budget,model,estimated_cost) VALUES(%s,%s,2,%s,%s,%s,'complete',0,%s,0)""",
+          (uuid7(),analysis_id,source,stable_hash({"pass":2,"validated":pass1_hash}),stable_hash(composition),model))
         report=merge_prose(locked,composition)
         conn.execute("""INSERT INTO generated_prose(id,analysis_run_id,prose_encrypted,provider,template_version,
-          locked_verdict_hash,validated) VALUES(%s,%s,%s,'fake','1.0',%s,true)""",
-          (uuid7(),analysis_id,encrypt(prose),deterministic["locked_hash"]))
+          locked_verdict_hash,validated) VALUES(%s,%s,%s,%s,'1.1',%s,true)""",
+          (uuid7(),analysis_id,encrypt(prose),source,deterministic["locked_hash"]))
         conn.execute("""INSERT INTO research_reports(id,analysis_run_id,verdict_json,report_encrypted,
-          ruleset_version,claim_snapshot,prose_source) VALUES(%s,%s,%s,%s,%s,%s,'fake')""",
+          ruleset_version,claim_snapshot,prose_source) VALUES(%s,%s,%s,%s,%s,%s,%s)""",
           (uuid7(),analysis_id,json.dumps(locked),encrypt(report),CONFIG["version"],
-           json.dumps(case.get("claim_snapshot",[]))))
+           json.dumps(case.get("claim_snapshot",[])),source))
+        conn.execute("""INSERT INTO model_usage_records(id,analysis_run_id,provider,model,prompt_tokens,
+          completion_tokens,total_tokens,estimated_cost) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)""",
+          (uuid7(),analysis_id,source,model,usage["prompt_tokens"],usage["completion_tokens"],
+           usage["total_tokens"],_estimated_cost(usage)))
         conn.execute("UPDATE analysis_runs SET status='complete',result_json=%s,output_hash=%s,completed_at=now() WHERE id=%s",
                      (json.dumps(locked),deterministic["locked_hash"],analysis_id))
         result={"id":str(analysis_id),"status":"complete","verdict":locked["verdict"],
@@ -173,18 +205,37 @@ def retry_prose(analysis_id:UUID,key:str=Header(alias="Idempotency-Key"),
         idem=module.idempotency(conn,user["id"],"POST","/api/v1/admin/research/analyses/{id}/retry-prose",
                                 key,module.fingerprint(request))
         if isinstance(idem,dict):return idem
-        row=conn.execute("SELECT result_json FROM analysis_runs WHERE id=%s AND status='complete'",(analysis_id,)).fetchone()
+        row=conn.execute("""SELECT result_json,prose_provider,external_model_consent_at,input_snapshot_encrypted
+          FROM analysis_runs WHERE id=%s AND status='complete'""",(analysis_id,)).fetchone()
         if not row:raise HTTPException(404,"completed_analysis_not_found")
-        provider=DeepSeekProvider()
-        source="deepseek"
-        try:prose=provider.generate({"locked_verdict":row["result_json"]})
-        except Exception:
-            source="template";prose=TemplateProvider().generate({"locked_verdict":row["result_json"]})
-        try:report=merge_prose(row["result_json"],prose)
+        locked=row["result_json"];case=json.loads(module.provider.decrypt(row["input_snapshot_encrypted"]).decode())
+        source="template";model=None;usage={"prompt_tokens":0,"completion_tokens":0,"total_tokens":0}
+        prose=TemplateProvider().generate({"locked_verdict":locked})
+        if row["prose_provider"]=="deepseek" and row["external_model_consent_at"]:
+            provider=DeepSeekProvider();provider.retries=0
+            approved_payload={"verdict":locked["verdict"],"status":"research_preview",
+              "polarity":locked.get("polarity","undetermined"),"strength":locked.get("strength",0),
+              "rank":1,"symbolic_title":locked.get("symbolic_title","研究断章"),
+              "manifestation_period":locked.get("manifestation_period","待验"),
+              "judgement":{"dominant_side":locked.get("dominant_side","undetermined")},
+              "evidence_summaries":case.get("approved_evidence_summaries",[]),
+              "counterevidence_summaries":case.get("approved_counterevidence_summaries",[]),
+              "claims":case.get("approved_claims",[]),"ruleset_version":CONFIG["version"],
+              "prompt_version":"style-review-1.1","action_posture":locked.get("action_posture","observe"),
+              "allowed_esoteric_entities":case.get("allowed_esoteric_entities",[])}
+            try:
+                generated=provider.generate_with_metrics(approved_payload);prose=generated["content"]
+                usage=generated["usage"];model=generated["model"];source="deepseek"
+            except Exception:pass
+        try:report=merge_prose(locked,prose)
         except ValueError:
-            source="template";prose=TemplateProvider().generate({});report=merge_prose(row["result_json"],prose)
+            source="template";prose=TemplateProvider().generate({});report=merge_prose(locked,prose)
         conn.execute("""UPDATE research_reports SET report_encrypted=%s,prose_source=%s WHERE analysis_run_id=%s""",
                      (encrypt(report),source,analysis_id))
+        conn.execute("""INSERT INTO model_usage_records(id,analysis_run_id,provider,model,prompt_tokens,
+          completion_tokens,total_tokens,estimated_cost) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)""",
+          (uuid7(),analysis_id,source,model,usage["prompt_tokens"],usage["completion_tokens"],
+           usage["total_tokens"],_estimated_cost(usage)))
         result={"analysis_id":str(analysis_id),"prose_source":source,"locked_verdict_unchanged":True}
         module.complete(conn,idem,key,200,result);return result
 
@@ -192,6 +243,13 @@ def retry_prose(analysis_id:UUID,key:str=Header(alias="Idempotency-Key"),
 def _uuid(value):
     try:UUID(value);return True
     except (ValueError,TypeError):return False
+
+
+def _estimated_cost(usage):
+    input_rate=Decimal(os.getenv("DEEPSEEK_INPUT_USD_PER_MILLION","0"))
+    output_rate=Decimal(os.getenv("DEEPSEEK_OUTPUT_USD_PER_MILLION","0"))
+    return (Decimal(usage.get("prompt_tokens",0))*input_rate+
+      Decimal(usage.get("completion_tokens",0))*output_rate)/Decimal(1_000_000)
 
 
 @router.get("/analyses/{analysis_id}/signals")
@@ -229,9 +287,27 @@ def retrieval(analysis_id:UUID,token:str|None=Cookie(None,alias="__Host-session"
 def report(analysis_id:UUID,token:str|None=Cookie(None,alias="__Host-session")):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
-        module.runtime(conn,user);row=conn.execute("SELECT * FROM research_reports WHERE analysis_run_id=%s",(analysis_id,)).fetchone()
+        module.runtime(conn,user);row=conn.execute(
+          "SELECT * FROM research_reports WHERE analysis_run_id=%s AND deleted_at IS NULL",(analysis_id,)).fetchone()
         if not row:raise HTTPException(404,"report_not_found")
         return {"analysis_id":str(analysis_id),"mode":"research_preview",
           "banner":"研究预览 · 非生产命盘","report":json.loads(module.provider.decrypt(row["report_encrypted"]).decode()),
           "prose_source":row["prose_source"],"ruleset_version":row["ruleset_version"],
           "claim_snapshot":row["claim_snapshot"]}
+
+
+@router.delete("/analyses/{analysis_id}/report",status_code=204)
+def delete_report(analysis_id:UUID,key:str=Header(alias="Idempotency-Key"),
+                  token:str|None=Cookie(None,alias="__Host-session")):
+    module,user=pg(),owner(token);request={"analysis_id":str(analysis_id),"operation":"delete-report"}
+    with module.pool.connection() as conn,conn.transaction():
+        module.runtime(conn,user)
+        idem=module.idempotency(conn,user["id"],"DELETE","/api/v1/admin/research/analyses/{id}/report",
+          key,module.fingerprint(request))
+        if isinstance(idem,dict):return Response(status_code=204)
+        conn.execute("UPDATE research_reports SET deleted_at=now(),report_encrypted=%s WHERE analysis_run_id=%s",
+          (encrypt({"deleted":True}),analysis_id))
+        conn.execute("DELETE FROM generated_prose WHERE analysis_run_id=%s",(analysis_id,))
+        conn.execute("""INSERT INTO audit_events(actor_id,action,resource_type,resource_id,metadata_redacted)
+          VALUES(%s,'research.report.deleted','analysis_run',%s,'{}')""",(user["id"],analysis_id))
+        module.complete(conn,idem,key,204,{"deleted":True});return Response(status_code=204)

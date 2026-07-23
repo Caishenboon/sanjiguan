@@ -34,6 +34,13 @@ outputs/*
 !outputs/sprint1b2-test-summary.json
 !outputs/Sprint-2-交付说明.md
 !outputs/sprint2-test-summary.json
+!outputs/Sprint-3-交付说明.md
+!outputs/sprint3-test-summary.json
+!outputs/sprint3-desktop-1440.png
+!outputs/sprint3-mobile-390.png
+!outputs/sprint3-tablet-768.png
+!outputs/sprint3-wide-1920.png
+!outputs/sprint3-report-1440.png
 *.log
 !outputs/postgres16-evidence.redacted.log
 *.sqlite

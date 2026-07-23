@@ -1,0 +1,31 @@
+{
+  "sprint": "3",
+  "scope": "core-experience-private-research",
+  "local": {
+    "python_tests_passed": 66,
+    "python_tests_failed": 0,
+    "python_tests_skipped": 0,
+    "sprint3_contract_tests_passed": 6,
+    "web_production_build": "passed",
+    "responsive_viewports": [
+      "390x844",
+      "768x1024",
+      "1440x900",
+      "1920x1080",
+      "720px 200%-equivalent"
+    ],
+    "horizontal_overflow_failures": 0,
+    "reduced_motion": "passed"
+  },
+  "postgresql16": {
+    "local": "unavailable",
+    "required_ci": true
+  },
+  "security": {
+    "production_rules_active": false,
+    "member_viewer_research_access": false,
+    "ordinary_ci_uses_deepseek": false,
+    "sensitive_service_worker_cache_entries": 0
+  },
+  "note": "Final PostgreSQL 16 and full CI counts are reported from the Pull Request check run."
+}
