@@ -1,0 +1,14 @@
+{
+  "name": "三际观——宿世因缘与命势推演系统",
+  "short_name": "三际观",
+  "description": "大屏观三际，小屏录一念。",
+  "start_url": "/profile/demo",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#080b12",
+  "theme_color": "#080b12",
+  "icons": [
+    {"src": "/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any"},
+    {"src": "/icon-512.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}
