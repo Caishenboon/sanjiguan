@@ -23,4 +23,17 @@ provider=(ROOT/"packages/research_inference/providers.py").read_text("utf-8")
 if "NEXT_PUBLIC_" in provider:raise SystemExit("frontend-visible provider secret detected")
 for phrase in ("佛菩萨转世","高僧转世","前世概率"):
     if phrase in repo:raise SystemExit(f"forbidden output phrase: {phrase}")
+workflow=(ROOT/".github/workflows/deepseek-research-smoke.yml")
+if workflow.exists():
+    text=workflow.read_text("utf-8")
+    if "workflow_dispatch:" not in text or any(trigger in text for trigger in
+      ("\n  push:","\n  pull_request:","\n  schedule:","\n  workflow_run:")):
+        raise SystemExit("DeepSeek smoke must be manual-only")
+    if "permissions:\n  contents: read" not in text:
+        raise SystemExit("DeepSeek smoke permissions are not minimal")
+    if text.count("secrets.DEEPSEEK_API_KEY")!=1:
+        raise SystemExit("DeepSeek secret reference must appear exactly once")
+    if "retention-days: 7" not in text:
+        raise SystemExit("DeepSeek artifact retention gate failed")
+
 print("Sprint 2 gate passed: owner-only research preview; production rules remain disabled.")

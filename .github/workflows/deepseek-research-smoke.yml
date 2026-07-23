@@ -1,0 +1,43 @@
+name: DeepSeek Research Smoke Test
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: Official DeepSeek model identifier
+        required: true
+        default: deepseek-v4-flash
+        type: string
+      max_tokens:
+        description: Maximum output tokens per request
+        required: true
+        default: "900"
+        type: string
+permissions:
+  contents: read
+jobs:
+  synthetic-research-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      DEEPSEEK_BASE_URL: https://api.deepseek.com
+      DEEPSEEK_MODEL: ${{ inputs.model }}
+      LLM_TIMEOUT_SECONDS: "85"
+      LLM_MAX_RETRIES: "1"
+      LLM_MAX_TOKENS: ${{ inputs.max_tokens }}
+      LLM_MAX_REQUESTS: "6"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run three synthetic research cases
+        run: python scripts/run_deepseek_research_smoke.py
+      - name: Upload redacted summary only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deepseek-research-smoke-summary
+          path: deepseek-research-smoke-summary.json
+          if-no-files-found: error
+          retention-days: 7

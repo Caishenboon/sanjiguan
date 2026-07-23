@@ -1,7 +1,9 @@
 import json,unittest
 from pathlib import Path
 from packages.research_inference.engine import run_inference
-from packages.research_inference.providers import DeepSeekProvider,EmbeddingProvider,FakeProvider,merge_prose
+from packages.research_inference.providers import (
+    DeepSeekProvider,EmbeddingProvider,FakeProvider,merge_prose,sanitize_prose_payload,
+)
 
 ROOT=Path(__file__).resolve().parents[1]
 CONFIG=json.loads((ROOT/"knowledge/research/scoring-config.json").read_text("utf-8"))
@@ -65,3 +67,8 @@ class ResearchInferenceTests(unittest.TestCase):
     def test_providers_default_safe(self):
         self.assertFalse(DeepSeekProvider().configured)
         with self.assertRaisesRegex(RuntimeError,"embedding_disabled"):EmbeddingProvider().embed(["x"])
+
+    def test_provider_payload_is_rebuilt_from_allowlist(self):
+        clean=sanitize_prose_payload({"verdict":"decisive","profile_id":"forbidden",
+          "nested":{"email":"forbidden"},"evidence_summaries":["approved summary"]})
+        self.assertEqual({"verdict":"decisive","evidence_summaries":["approved summary"]},clean)
