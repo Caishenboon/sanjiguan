@@ -1,0 +1,45 @@
+name: DeepSeek Style Review Pack
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: Verified DeepSeek model identifier
+        required: true
+        default: deepseek-v4-flash
+        type: string
+      max_tokens:
+        description: Maximum output tokens per case
+        required: true
+        default: "900"
+        type: string
+permissions:
+  contents: read
+jobs:
+  nine-synthetic-cases:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      DEEPSEEK_BASE_URL: https://api.deepseek.com
+      DEEPSEEK_MODEL: ${{ inputs.model }}
+      LLM_TIMEOUT_SECONDS: "85"
+      LLM_MAX_RETRIES: "0"
+      LLM_MAX_TOKENS: ${{ inputs.max_tokens }}
+      LLM_MAX_REQUESTS: "12"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate nine-case synthetic style review pack
+        run: python scripts/run_deepseek_style_review.py
+      - name: Upload synthetic review documents
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deepseek-style-review
+          path: |
+            deepseek-style-review.md
+            deepseek-style-review.json
+          if-no-files-found: error
+          retention-days: 7
