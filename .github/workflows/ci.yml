@@ -55,9 +55,11 @@ jobs:
           python scripts/validate_sprint0.py
           python scripts/validate_sprint05.py
           python scripts/export_openapi.py
+          python scripts/export_sprint1b1_openapi.py
           python scripts/validate_sprint1a.py
           python scripts/validate_sprint1a5.py
           python scripts/validate_sprint1a6.py
+          python scripts/validate_sprint1b1.py
           python scripts/check_product_language.py
           python scripts/check_secrets.py
           python scripts/check_doc_links.py
@@ -72,7 +74,8 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm build
-      - name: Gitleaks
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Gitleaks full-history scan
+        run: >-
+          docker run --rm -v "$PWD:/repo"
+          zricethezav/gitleaks:v8.24.3
+          detect --source=/repo --no-banner --redact

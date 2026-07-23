@@ -28,6 +28,8 @@ outputs/*
 !outputs/Sprint-1A.6-交付说明.md
 !outputs/postgres16-evidence.json
 !outputs/test-summary.json
+!outputs/Sprint-1B-1-交付说明.md
+!outputs/sprint1b1-test-summary.json
 *.log
 !outputs/postgres16-evidence.redacted.log
 *.sqlite

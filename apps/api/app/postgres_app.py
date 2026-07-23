@@ -213,3 +213,7 @@ def delete_profile(profile_id: UUID, key: str = Header(alias="Idempotency-Key"),
         result = {"id": str(profile_id), "status": "soft_deleted"}
         complete(conn, claim, key, 202, result)
         return result
+
+
+from apps.api.app.evidence_routes import router as evidence_router
+app.include_router(evidence_router)
