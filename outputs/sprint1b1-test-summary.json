@@ -1,0 +1,16 @@
+{
+  "sprint": "1B-1",
+  "local_status": "passed",
+  "postgresql": {
+    "version": "16.14",
+    "migrations": "0001-0007 from empty database",
+    "integration": {"passed": 6, "failed": 0, "skipped": 0},
+    "http_e2e": {"passed": 2, "failed": 0, "skipped": 0}
+  },
+  "python_non_postgres": {"passed": 47, "failed": 0, "skipped": 0},
+  "memory_api": {"passed": 4, "failed": 0, "skipped": 0},
+  "web_production_build": "passed",
+  "secret_scan": "passed",
+  "static_gates": "passed",
+  "production_divination_rules": "disabled"
+}

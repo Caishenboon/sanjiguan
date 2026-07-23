@@ -1,0 +1,21 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sanjiguan.local/schemas/three-coin-divination.schema.json",
+  "type":"object","additionalProperties":false,
+  "required":["question","purpose","divination_at","timezone","location_precision","method_id",
+    "tosses","interrupted_retoss","repeated_due_to_dissatisfaction","method_version"],
+  "properties":{
+    "question":{"type":"string","minLength":1,"maxLength":2000},
+    "purpose":{"type":"string","minLength":1,"maxLength":1000},
+    "divination_at":{"type":"string","format":"date-time"},"timezone":{"type":"string","minLength":1},
+    "location_precision":{"enum":["none","region","city"]},
+    "method_id":{"const":"YIJING.THREE_COIN.PHYSICAL.V1"},
+    "tosses":{"type":"array","minItems":6,"maxItems":6,"items":{"type":"object",
+      "additionalProperties":false,"required":["line_no","coin_faces","was_retossed"],
+      "properties":{"line_no":{"type":"integer","minimum":1,"maximum":6},
+        "coin_faces":{"type":"array","minItems":3,"maxItems":3,
+          "items":{"enum":["heads","tails"]}},"was_retossed":{"type":"boolean"}}}},
+    "interrupted_retoss":{"type":"boolean"},"repeated_due_to_dissatisfaction":{"type":"boolean"},
+    "method_version":{"const":"1.0.0"}
+  }
+}

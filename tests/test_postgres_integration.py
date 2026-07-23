@@ -67,6 +67,36 @@ class PostgreSQLIntegrationTests(unittest.TestCase):
         ).fetchone()[0]
         self.assertEqual(1, rank_unique)
 
+    def test_sprint1b1_tables_force_rls_and_isolate_evidence(self):
+        tables = ("onboarding_sessions", "evidence_revisions", "life_events",
+                  "journal_evidence_links", "divination_sessions", "coin_tosses",
+                  "profile_completeness_snapshots")
+        rows = self.conn.execute(
+            """SELECT relname,relforcerowsecurity FROM pg_class
+               WHERE relname=ANY(%s) ORDER BY relname""", (list(tables),)
+        ).fetchall()
+        self.assertEqual(set(tables), {row[0] for row in rows})
+        self.assertTrue(all(row[1] for row in rows))
+
+        evidence_id = uuid4()
+        with self.runtime(self.member_a) as member:
+            member.execute(
+                """INSERT INTO evidence_items(id,profile_id,type,payload_encrypted,
+                   source_reliability,domain,title_ciphertext,structured_payload_encrypted,
+                   source_type,user_confidence,reliability_score,reliability_level)
+                   VALUES(%s,%s,'dream',%s,.5,'dream',%s,%s,'self_memory',.5,.5,'medium')""",
+                (evidence_id, self.profile_a, b"encrypted", b"encrypted", b"encrypted"),
+            )
+            member.commit()
+        with self.runtime(self.member_b) as other:
+            self.assertIsNone(other.execute(
+                "SELECT id FROM evidence_items WHERE id=%s", (evidence_id,)
+            ).fetchone())
+        with self.runtime(self.member_a) as member:
+            self.assertEqual(evidence_id, member.execute(
+                "SELECT id FROM evidence_items WHERE id=%s", (evidence_id,)
+            ).fetchone()[0])
+
     def test_migration_drift_is_rejected(self):
         version = "0001_sprint0_baseline.sql"
         checksum = self.conn.execute(

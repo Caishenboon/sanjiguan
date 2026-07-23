@@ -90,3 +90,38 @@ class PostgreSQLHttpE2E(unittest.TestCase):
             "SELECT count(*) FROM profiles WHERE id=%s AND deleted_at IS NOT NULL", (pid,)
         ).fetchone()[0]
         self.assertEqual(1, count)
+
+    def test_onboarding_evidence_completeness_and_physical_coin_recording(self):
+        self.login()
+        created = self.client.post("/api/v1/profiles", json=self.payload(),
+            headers={"Idempotency-Key": "e2e-evidence-profile-0001"})
+        self.assertEqual(201, created.status_code, created.text)
+        pid = created.json()["id"]
+        onboarding = self.client.put(f"/api/v1/profiles/{pid}/onboarding", json={
+            "current_step": 3, "step_states": {"sensation": "explicit_none"},
+            "draft": {"dream": {"answer_state": "unknown"}},
+        }, headers={"Idempotency-Key": "e2e-onboarding-0001"})
+        self.assertEqual(200, onboarding.status_code, onboarding.text)
+        evidence = self.client.post(f"/api/v1/profiles/{pid}/evidence", json={
+            "domain": "dream", "type": "repeated_dream", "title": "test-only encrypted title",
+            "raw_narrative": "test-only encrypted narrative", "structured_payload": {},
+            "frequency": 4, "intensity": 6, "vividness": 7, "duration_years": 1,
+            "source_type": "self_memory", "user_confidence": .6,
+            "independent_corroboration": False, "possible_ordinary_explanations": ["stress"],
+            "counterevidence": [],
+        }, headers={"Idempotency-Key": "e2e-evidence-create-0001"})
+        self.assertEqual(201, evidence.status_code, evidence.text)
+        self.assertIn("not_past_life_evidence", evidence.json()["meaning"])
+        completeness = self.client.get(f"/api/v1/profiles/{pid}/completeness")
+        self.assertEqual("explicit_none", completeness.json()["dimensions"]["sensation"])
+        tosses = [{"line_no": n, "coin_faces": ["heads", "tails", "tails"],
+                   "was_retossed": False} for n in range(1, 7)]
+        divination = self.client.post(f"/api/v1/profiles/{pid}/divinations/three-coin", json={
+            "question": "test question", "purpose": "test purpose",
+            "divination_at": datetime.now(timezone.utc).isoformat(), "timezone": "Asia/Shanghai",
+            "location_precision": "none", "method_id": "YIJING.THREE_COIN.PHYSICAL.V1",
+            "method_version": "1.0.0", "tosses": tosses,
+        }, headers={"Idempotency-Key": "e2e-three-coin-0001"})
+        self.assertEqual(201, divination.status_code, divination.text)
+        self.assertIsNone(divination.json()["interpretation"])
+        self.assertIsNone(divination.json()["scoring"])
