@@ -36,4 +36,19 @@ if workflow.exists():
     if "retention-days: 7" not in text:
         raise SystemExit("DeepSeek artifact retention gate failed")
 
+style_workflow=ROOT/".github/workflows/deepseek-style-review.yml"
+if style_workflow.exists():
+    text=style_workflow.read_text("utf-8")
+    if "workflow_dispatch:" not in text or any(trigger in text for trigger in
+      ("\n  push:","\n  pull_request:","\n  schedule:","\n  workflow_run:")):
+        raise SystemExit("DeepSeek style review must be manual-only")
+    if "permissions:\n  contents: read" not in text:
+        raise SystemExit("DeepSeek style review permissions are not minimal")
+    if text.count("secrets.DEEPSEEK_API_KEY")!=1:
+        raise SystemExit("DeepSeek style review secret reference must appear exactly once")
+    if 'LLM_MAX_REQUESTS: "12"' not in text or 'LLM_MAX_RETRIES: "0"' not in text:
+        raise SystemExit("DeepSeek style review request budget gate failed")
+    if "retention-days: 7" not in text:
+        raise SystemExit("DeepSeek style review artifact retention gate failed")
+
 print("Sprint 2 gate passed: owner-only research preview; production rules remain disabled.")

@@ -4,6 +4,7 @@ from packages.research_inference.engine import run_inference
 from packages.research_inference.providers import (
     DeepSeekProvider,EmbeddingProvider,FakeProvider,merge_prose,sanitize_prose_payload,
 )
+from scripts.run_deepseek_style_review import CASES as STYLE_CASES,automatic_checks
 
 ROOT=Path(__file__).resolve().parents[1]
 CONFIG=json.loads((ROOT/"knowledge/research/scoring-config.json").read_text("utf-8"))
@@ -72,3 +73,17 @@ class ResearchInferenceTests(unittest.TestCase):
         clean=sanitize_prose_payload({"verdict":"decisive","profile_id":"forbidden",
           "nested":{"email":"forbidden"},"evidence_summaries":["approved summary"]})
         self.assertEqual({"verdict":"decisive","evidence_summaries":["approved summary"]},clean)
+
+    def test_style_review_pack_is_fixed_and_synthetic(self):
+        self.assertEqual(9,len(STYLE_CASES))
+        self.assertEqual({"decisive","contested","insufficient"},
+                         {case["verdict"] for case in STYLE_CASES})
+        serialized=json.dumps(STYLE_CASES,ensure_ascii=False)
+        for forbidden in ("profile_id","user_id","email","display_name",
+                          "latitude","longitude","session"):
+            self.assertNotIn(forbidden,serialized)
+        prose={"image_text":"两象并立，各有所据。",
+          "plain_interpretation":"隐修与传播目前同时成立，现有证据不足以改成单一结论。",
+          "judgement":{"benefit":"保留两条路径","risk":"仓促定论",
+                       "instruction":"补充长期教化记录后复核"}}
+        self.assertTrue(automatic_checks(STYLE_CASES[3],prose)["contested_both_images_present"])
