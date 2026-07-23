@@ -1,0 +1,11 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"KnowledgeClaim","type":"object","additionalProperties":false,
+"required":["id","document_id","claim_text","claim_type","traditions","topics","locator","access_class","confidence","review_status","reviewer_ids","contradicts_claim_ids","supports_claim_ids","supersedes_claim_ids","allowed_uses"],
+"properties":{"id":{"type":"string","format":"uuid"},"document_id":{"type":"string","format":"uuid"},"claim_text":{"type":"string","minLength":1},
+"claim_type":{"enum":["traditional_statement","system_mapping","historical_rule","engineering_fact","scholarly_interpretation"]},
+"traditions":{"type":"array","items":{"type":"string"}},"topics":{"type":"array","items":{"type":"string"}},
+"locator":{"type":"object","properties":{"volume":{},"chapter":{},"section":{},"page":{},"line":{},"folio":{},"canonical_number":{},"quote_start":{},"quote_end":{}}},
+"source_excerpt":{"type":["string","null"]},"paraphrase":{"type":["string","null"]},
+"access_class":{"enum":["public_domain","open_license","licensed_internal","citation_only","copyright_restricted","practice_restricted","sealed","unknown"]},
+"confidence":{"enum":["verified","probable","uncertain","disputed"]},"review_status":{"enum":["draft","researched","reviewed","approved","rejected","retired"]},
+"reviewer_ids":{"type":"array"},"contradicts_claim_ids":{"type":"array"},"supports_claim_ids":{"type":"array"},"supersedes_claim_ids":{"type":"array"},
+"allowed_uses":{"type":"object","required":["rule_authoring","rag","direct_quote","report_citation"],"properties":{"rule_authoring":{"type":"boolean"},"rag":{"type":"boolean"},"direct_quote":{"type":"boolean"},"report_citation":{"type":"boolean"}}}}}

@@ -30,6 +30,8 @@ outputs/*
 !outputs/test-summary.json
 !outputs/Sprint-1B-1-交付说明.md
 !outputs/sprint1b1-test-summary.json
+!outputs/Sprint-1B-2-交付说明.md
+!outputs/sprint1b2-test-summary.json
 *.log
 !outputs/postgres16-evidence.redacted.log
 *.sqlite

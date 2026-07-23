@@ -125,3 +125,28 @@ class PostgreSQLHttpE2E(unittest.TestCase):
         self.assertEqual(201, divination.status_code, divination.text)
         self.assertIsNone(divination.json()["interpretation"])
         self.assertIsNone(divination.json()["scoring"])
+
+    def test_knowledge_admin_is_owner_only_and_sealed_is_metadata_only(self):
+        self.login()
+        self.assertEqual(403, self.client.get("/api/v1/admin/knowledge/documents").status_code)
+        owner_id, session_id, session_token = uuid4(), uuid4(), "owner-session-" + uuid4().hex
+        self.admin.execute("INSERT INTO users(id,email_ciphertext,role) VALUES(%s,%s,'owner')",
+                           (owner_id,b"owner"))
+        self.admin.execute("""INSERT INTO sessions(id,user_id,token_hash,expires_at)
+          VALUES(%s,%s,%s,%s)""",(session_id,owner_id,token_hash(session_token),
+          datetime.now(timezone.utc)+timedelta(hours=1)))
+        owner_client=TestClient(self.app_module.app,base_url="https://testserver")
+        owner_client.cookies.set("__Host-session",session_token)
+        sealed=owner_client.post("/api/v1/admin/knowledge/documents",json={
+          "title":"restricted metadata test","traditions":["nyingma"],
+          "knowledge_layer":"lineage_teaching","access_class":"sealed",
+          "license":{},"notes":"must be rejected"},
+          headers={"Idempotency-Key":"knowledge-sealed-reject-01"})
+        self.assertEqual(422,sealed.status_code,sealed.text)
+        created=owner_client.post("/api/v1/admin/knowledge/documents",json={
+          "title":"metadata-only test","traditions":["engineering"],
+          "knowledge_layer":"engineering_fact","access_class":"citation_only",
+          "license":{}},
+          headers={"Idempotency-Key":"knowledge-document-create-01"})
+        self.assertEqual(201,created.status_code,created.text)
+        self.assertFalse(created.json()["production_use"])

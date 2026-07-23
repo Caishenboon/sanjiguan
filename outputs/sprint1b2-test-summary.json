@@ -1,0 +1,5 @@
+{"sprint":"1B-2","status":"local_passed_ci_pending","postgresql_version":"16.14",
+"production_rules":"disabled","deepseek":"not_integrated","embedding":"not_implemented",
+"rag":"not_implemented","tests":{"postgresql_integration":7,"http_postgresql_e2e":3,
+"knowledge_governance":4,"failed":0,"skipped":0},
+"archetypes":{"count":8,"ordinary_livelihood":2,"ratio":0.25}}
