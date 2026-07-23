@@ -1,0 +1,37 @@
+Sprint 1A.6 PostgreSQL 16 redacted execution evidence
+=======================================================
+Run ID: local-pg16-919ec741-5e6b-4842-9df9-e2620c95cb47
+Workspace snapshot SHA-256: 68a5c07e2367c0a6cbad14a592d8b78c13786853a2a7dcc9f2aee45cd135be00
+Started UTC: 2026-07-23T09:47:29.608400+00:00
+Completed UTC: 2026-07-23T09:47:35.967948+00:00
+PostgreSQL: 16.14
+
+Migration pass 1:
+  PASS 0001_sprint0_baseline.sql
+  PASS 0002_sprint1a_foundation.sql
+  PASS 0003_sprint1a5_authorization.sql
+  PASS 0004_sprint1a6_rls_recursion_fix.sql
+  PASS 0005_sprint1a6_verdict_contract.sql
+  PASS 0006_sprint1a6_relationship_guards.sql
+
+Migration pass 2:
+  PASS no changes
+
+PostgreSQL integration:
+  PASS 5
+  FAIL 0
+  SKIP 0
+
+HTTP to PostgreSQL E2E:
+  PASS 1
+  FAIL 0
+  SKIP 0
+
+Cleanup:
+  PASS residual users = 0
+
+Redaction statement:
+  Local absolute paths, process identifiers, connection strings, database
+  credentials, session tokens, encryption keys, request bodies and environment
+  dumps are intentionally omitted. The original local log remains ignored and
+  preserved only in the local workspace.

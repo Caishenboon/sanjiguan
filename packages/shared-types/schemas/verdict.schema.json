@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.local/schemas/verdict.schema.json",
+  "title": "三际断章核心结论 v1.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id","analysis_run_id","subject","verdict","polarity","strength","rank","status",
+    "symbolic_title","image_text","plain_interpretation","manifestation_period","judgement",
+    "evidence_ids","counterevidence_ids","rule_ids","knowledge_chunk_ids","confidence",
+    "alternatives","provenance","locked_fields","ruleset_version","prompt_version"],
+  "properties": {
+    "id": {"type":"string","format":"uuid"},
+    "analysis_run_id": {"type":"string","format":"uuid"},
+    "subject": {"enum":["past_life","bardo","life_chart","relationship","practice","career","resource"]},
+    "verdict": {"type":"string","minLength":4,"maxLength":500},
+    "polarity": {"enum":["auspicious","adverse","mixed","neutral"]},
+    "neutral_reason": {"type":["string","null"],"minLength":4},
+    "strength": {"type":"integer","minimum":0,"maximum":100},
+    "rank": {"type":"integer","minimum":1},
+    "status": {"enum":["decisive","provisional","contested","insufficient"]},
+    "insufficiency_reason": {"type":["string","null"],"minLength":4},
+    "symbolic_title": {"type":"string","minLength":1},
+    "image_text": {"type":"string","minLength":1},
+    "plain_interpretation": {"type":"string","minLength":1},
+    "manifestation_period": {"$ref":"timing-window.schema.json"},
+    "judgement": {
+      "type":"object","additionalProperties":false,
+      "required":["benefit","risk","dominant_side","instruction"],
+      "properties":{
+        "benefit":{"type":"string"},"risk":{"type":"string"},
+        "dominant_side":{"enum":["benefit","risk","balanced"]},"instruction":{"type":"string"}
+      }
+    },
+    "evidence_ids":{"type":"array","items":{"type":"string","format":"uuid"},"uniqueItems":true},
+    "counterevidence_ids":{"type":"array","items":{"type":"string","format":"uuid"},"uniqueItems":true},
+    "rule_ids":{"type":"array","items":{"type":"string","minLength":1},"uniqueItems":true},
+    "knowledge_chunk_ids":{"type":"array","items":{"type":"string","format":"uuid"},"uniqueItems":true},
+    "confidence":{"type":"object","additionalProperties":false,
+      "required":["score","level","system_count","data_completeness"],
+      "properties":{"score":{"type":"number","minimum":0,"maximum":1},
+        "level":{"enum":["decisive","strong","moderate","insufficient"]},
+        "system_count":{"type":"integer","minimum":0},
+        "data_completeness":{"type":"number","minimum":0,"maximum":1}}
+    },
+    "alternatives":{"type":"array","items":{"type":"object","additionalProperties":false,
+      "required":["rank","verdict","score","score_gap","evidence_ids","deciding_evidence"],
+      "properties":{"rank":{"enum":[1,2]},"verdict":{"type":"string","minLength":1},
+        "score":{"type":"number"},"score_gap":{"type":"number","minimum":0},
+        "evidence_ids":{"type":"array","items":{"type":"string","format":"uuid"}},
+        "deciding_evidence":{"type":"string","minLength":1}}}},
+    "provenance":{"type":"object","additionalProperties":false,
+      "required":["verdict_source","prose_source","review_status","reviewer_id"],
+      "properties":{
+        "verdict_source":{"enum":["rule_engine","human_override"]},
+        "prose_source":{"enum":["template","llm","human"]},
+        "review_status":{"enum":["unreviewed","machine_checked","human_reviewed"]},
+        "reviewer_id":{"type":["string","null"],"format":"uuid"},
+        "override_reason":{"type":["string","null"]},
+        "original_machine_verdict":{"type":["object","null"]},
+        "audit_event_id":{"type":["string","null"],"format":"uuid"}
+      }
+    },
+    "locked_fields":{"const":["verdict","polarity","strength","rank","status",
+      "manifestation_period","judgement.dominant_side","evidence_ids","counterevidence_ids","rule_ids"]},
+    "ruleset_version":{"type":"string","minLength":1},
+    "prompt_version":{"type":["string","null"]}
+  },
+  "allOf":[
+    {"if":{"properties":{"polarity":{"const":"mixed"}}},"then":{"properties":{"judgement":{"properties":{"dominant_side":{"enum":["benefit","risk"]}}}}}},
+    {"if":{"properties":{"polarity":{"const":"neutral"},"status":{"const":"decisive"}},"required":["polarity","status"]},
+     "then":{"required":["neutral_reason"],"properties":{"neutral_reason":{"type":"string","minLength":4}}}},
+    {"if":{"properties":{"status":{"const":"contested"}}},"then":{"properties":{"alternatives":{
+      "minItems":2,"maxItems":2,"contains":{"properties":{"rank":{"const":1}},"required":["rank"]},
+      "allOf":[{"contains":{"properties":{"rank":{"const":2}},"required":["rank"]}}]}}}},
+    {"if":{"properties":{"status":{"const":"insufficient"}}},"then":{
+      "required":["insufficiency_reason"],"properties":{
+        "insufficiency_reason":{"type":"string","minLength":4},
+        "manifestation_period":{"properties":{"precision":{"const":"unknown"}}}}}},
+    {"if":{"properties":{"status":{"const":"decisive"}}},"then":{"properties":{"verdict":{
+      "not":{"pattern":"(可能|也许|似乎|大概|或许|一切皆有可能)"}}}}},
+    {"if":{"properties":{"provenance":{"properties":{"prose_source":{"const":"llm"}}}}},"then":{
+      "properties":{"prompt_version":{"type":"string","minLength":1}}}},
+    {"if":{"properties":{"provenance":{"properties":{"prose_source":{"const":"template"}}}}},"then":{
+      "properties":{"prompt_version":{"type":"null"}}}},
+    {
+      "if": {
+        "properties": {
+          "provenance": {
+            "properties": {"verdict_source": {"const": "human_override"}}
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "provenance": {
+            "required": ["reviewer_id","override_reason","original_machine_verdict","audit_event_id"],
+            "properties": {
+              "reviewer_id": {"type":"string","format":"uuid"},
+              "override_reason": {"type":"string","minLength":4},
+              "original_machine_verdict": {"type":"object"},
+              "audit_event_id": {"type":"string","format":"uuid"}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

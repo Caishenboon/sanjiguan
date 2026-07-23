@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://samsara.local/schemas/analysis-result.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["meta", "top_hypotheses", "past_life_nodes", "bardo_chain", "hexagram_path", "life_chart", "relationships", "evidence_index", "counterevidence_index", "warnings"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_id", "ruleset_version", "input_hash", "random_seed", "data_completeness", "birth_time_sensitivity"],
+      "properties": {
+        "run_id": {"type": "string", "format": "uuid"},
+        "ruleset_version": {"type": "string"},
+        "input_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "random_seed": {"type": "integer"},
+        "data_completeness": {"type": "number", "minimum": 0, "maximum": 1},
+        "birth_time_sensitivity": {"enum": ["none", "low", "medium", "high", "unknown"]}
+      }
+    },
+    "top_hypotheses": {"type": "array", "items": {"$ref": "#/$defs/hypothesis"}},
+    "past_life_nodes": {"type": "array", "items": {"type": "object"}},
+    "bardo_chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["links", "breaks"],
+      "properties": {
+        "links": {"type": "array", "items": {"type": "object"}},
+        "breaks": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "hexagram_path": {"type": "object"},
+    "life_chart": {"type": "object", "required": ["scenarios"], "properties": {"scenarios": {"type": "array"}}},
+    "relationships": {"type": "array"},
+    "evidence_index": {"type": "object"},
+    "counterevidence_index": {"type": "object"},
+    "warnings": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "hypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["archetype_id", "resonance_score", "confidence_level", "positive_evidence_ids", "counterevidence_ids", "system_coverage", "why_may_be_false"],
+      "properties": {
+        "archetype_id": {"type": "string"},
+        "resonance_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "confidence_level": {"enum": ["open", "medium_resonance", "strong_resonance"]},
+        "positive_evidence_ids": {"type": "array", "items": {"type": "string"}},
+        "counterevidence_ids": {"type": "array", "items": {"type": "string"}},
+        "system_coverage": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "why_may_be_false": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

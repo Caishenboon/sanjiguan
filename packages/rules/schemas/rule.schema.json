@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://samsara.local/schemas/rule.schema.json",
+  "title": "Auditable deterministic rule",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "version", "status", "system", "method_id", "target", "description", "conditions", "contribution", "counter_conditions", "sources"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*(\\.[A-Z0-9_]+){2,}$"},
+    "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+(-[0-9A-Za-z.-]+)?$"},
+    "status": {"enum": ["draft", "active", "retired"]},
+    "system": {"enum": ["bazi", "ziwei", "yijing", "karma", "bardo", "dream", "relation", "archetype", "scoring", "timeline"]},
+    "method_id": {"type": "string", "minLength": 3},
+    "target": {"type": "string", "minLength": 1},
+    "description": {"type": "string", "minLength": 1},
+    "source_class": {"enum": ["deterministic_calculation", "traditional", "commentary", "system_interpretation", "modern_research"]},
+    "conditions": {"$ref": "#/$defs/conditionGroup"},
+    "contribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["score", "tags"],
+      "properties": {
+        "score": {"type": "number", "minimum": -1, "maximum": 1},
+        "tags": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "counter_conditions": {"type": "array", "items": {"$ref": "#/$defs/condition"}},
+    "counter_penalty": {"type": "number", "minimum": 0, "maximum": 0.5},
+    "reliability_cap": {"type": "number", "minimum": 0, "maximum": 1},
+    "explanation_key": {"type": "string"},
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "claim_layer", "review_status"],
+        "properties": {
+          "source_id": {"type": "string"},
+          "locator": {"type": "string"},
+          "claim_layer": {"enum": ["calculation_spec", "traditional", "commentary", "system_interpretation", "modern_research"]},
+          "license_status": {"type": "string"},
+          "review_status": {"enum": ["pending", "approved", "rejected"]}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operator"],
+      "properties": {
+        "operator": {"enum": ["tag_any", "tag_all", "field_eq", "field_in", "gte", "lte", "exists", "not_exists"]},
+        "field": {"type": "string"},
+        "value": {},
+        "values": {"type": "array"},
+        "tags": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "conditionGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "all": {"type": "array", "items": {"anyOf": [{"$ref": "#/$defs/condition"}, {"$ref": "#/$defs/conditionGroup"}]}},
+        "any": {"type": "array", "items": {"anyOf": [{"$ref": "#/$defs/condition"}, {"$ref": "#/$defs/conditionGroup"}]}},
+        "none": {"type": "array", "items": {"anyOf": [{"$ref": "#/$defs/condition"}, {"$ref": "#/$defs/conditionGroup"}]}}
+      },
+      "minProperties": 1
+    }
+  }
+}

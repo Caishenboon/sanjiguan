@@ -1,0 +1,10 @@
+title = "Samsara Engine secret scanning"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Only explicit empty placeholders are allowed."
+paths = [
+  '''\.env\.example$'''
+]

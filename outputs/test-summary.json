@@ -1,0 +1,13 @@
+{
+  "generated_at_utc": "2026-07-23T09:47:35.967948+00:00",
+  "counting_policy": "passed excludes skipped; each unittest test method is one test; Web build is one build verification; each static command is one gate",
+  "python_unit": {"passed": 44, "failed": 0, "skipped": 0},
+  "postgres_integration": {"passed": 5, "failed": 0, "skipped": 0},
+  "api_memory": {"passed": 4, "failed": 0, "skipped": 0},
+  "api_postgres_e2e": {"passed": 1, "failed": 0, "skipped": 0},
+  "web": {"passed": 1, "failed": 0, "skipped": 0},
+  "static_gates": {"passed": 8, "failed": 0},
+  "total_test_methods_passed": 54,
+  "total_skipped": 0,
+  "note": "The prior 41/42 discrepancy came from adding test_encryption_provider after the earlier 41-test run. Sprint 1A.6 uses category-specific runs and never counts skipped tests as passed."
+}

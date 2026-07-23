@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://samsara.local/schemas/signal.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["signal_id", "system", "rule_id", "target_tags", "polarity", "strength", "reliability", "evidence_ids", "explanation_key"],
+  "properties": {
+    "signal_id": {"type": "string", "minLength": 1},
+    "system": {"enum": ["bazi", "ziwei", "yijing", "karma", "bardo", "dream", "relation"]},
+    "rule_id": {"type": "string", "minLength": 1},
+    "target_tags": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+    "polarity": {"enum": [-1, 0, 1]},
+    "strength": {"type": "number", "minimum": 0, "maximum": 1},
+    "reliability": {"type": "number", "minimum": 0, "maximum": 1},
+    "time_scope": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "from_age": {"type": "number", "minimum": 0},
+        "to_age": {"type": "number", "minimum": 0}
+      }
+    },
+    "evidence_ids": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+    "explanation_key": {"type": "string", "minLength": 1}
+  }
+}

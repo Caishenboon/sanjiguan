@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.local/schemas/evidence-reference.schema.json",
+  "title": "证契引用",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "source_type", "summary"],
+  "properties": {
+    "id": {"type": "string", "format": "uuid"},
+    "kind": {"enum": ["evidence", "counterevidence"]},
+    "source_type": {"enum": ["rule_output", "user_record", "event", "knowledge_source", "human_review"]},
+    "summary": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "source_id": {"type": ["string", "null"]},
+    "reliability": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+  }
+}

@@ -1,0 +1,38 @@
+:root {
+  color-scheme: dark;
+  --ink: #080b12;
+  --indigo: #111a32;
+  --gold: #bd9b61;
+  --cinnabar: #a6463d;
+  --lotus: #eee9dc;
+  --bluegray: #8292a4;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; color: var(--lotus); background:
+  radial-gradient(circle at 70% 10%, #182340 0, transparent 36%), var(--ink);
+  font-family: "Noto Serif SC", "Songti SC", Georgia, serif;
+}
+a { color: inherit; }
+a:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+.home, .shell { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 72px 0; position: relative; }
+.home { min-height: 100vh; display: grid; align-content: center; }
+.eyebrow { color: var(--gold); letter-spacing: .35em; }
+h1 { font-size: clamp(3.5rem, 12vw, 8rem); line-height: .9; margin: .2em 0; font-weight: 500; }
+.subtitle { font-size: clamp(1.1rem, 3vw, 1.8rem); color: var(--bluegray); }
+blockquote { margin: 2rem 0; font-size: 1.15rem; border-left: 2px solid var(--cinnabar); padding-left: 1rem; }
+.boundary, .demo { color: var(--bluegray); }
+.actions, .grid, .systems { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 28px; }
+.primary, .secondary, .card { border: 1px solid #3c4658; padding: 14px 20px; text-decoration: none; }
+.primary { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+.card { flex: 1 1 220px; background: rgba(17,26,50,.65); }
+.card h2, .section h2 { color: var(--gold); font-weight: 500; }
+.section { border-top: 1px solid #30394a; padding: 18px 0; }
+.badge { border: 1px solid var(--cinnabar); padding: 4px 8px; display: inline-block; }
+@media (max-width: 540px) {
+  .home, .shell { padding: 40px 0; }
+  .actions a { width: 100%; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,9 @@
+# 架构决策记录索引
+
+- ADR-0001：模块化 monorepo 与服务边界（Accepted）
+- ADR-0002：确定性引擎与 LLM 隔离（Accepted）
+- ADR-0003：规则集激活门禁（Accepted）
+- ADR-0004：敏感数据与密钥管理（Accepted）
+- ADR-0005：PostgreSQL 16、pgvector、UUIDv7 与 RLS（Proposed）
+
+“Accepted”只表示工程边界已冻结，不代表任何术数流派已确认。

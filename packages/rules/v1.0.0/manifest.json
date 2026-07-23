@@ -1,0 +1,13 @@
+{
+  "name": "samsara-core",
+  "version": "1.0.0-draft",
+  "status": "draft",
+  "production_activatable": false,
+  "methods": {
+    "bazi": {"method_id": "BAZI.UNCONFIRMED", "enabled": false},
+    "ziwei": {"method_id": "ZIWEI.UNCONFIRMED", "enabled": false},
+    "yijing": {"method_id": "YIJING.UNCONFIRMED", "enabled": false}
+  },
+  "blocked_by": ["D-002", "D-003", "D-005"],
+  "rules": []
+}

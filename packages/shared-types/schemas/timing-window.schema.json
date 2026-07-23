@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.local/schemas/timing-window.schema.json",
+  "title": "应期",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["from_age", "to_age", "from_date", "to_date", "precision", "basis"],
+  "properties": {
+    "from_age": {"type": ["number", "null"], "minimum": 0, "maximum": 150},
+    "to_age": {"type": ["number", "null"], "minimum": 0, "maximum": 150},
+    "from_date": {"type": ["string", "null"], "format": "date"},
+    "to_date": {"type": ["string", "null"], "format": "date"},
+    "precision": {"enum": ["exact", "year", "window", "phase", "unknown"]},
+    "basis": {"type": "string", "minLength": 1}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"precision": {"const": "exact"}}},
+      "then": {
+        "properties": {
+          "from_date": {"type": "string", "format": "date"},
+          "to_date": {"type": "string", "format": "date"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"precision": {"const": "unknown"}}},
+      "then": {
+        "properties": {
+          "from_age": {"type": "null"}, "to_age": {"type": "null"},
+          "from_date": {"type": "null"}, "to_date": {"type": "null"}
+        }
+      }
+    }
+  ]
+}

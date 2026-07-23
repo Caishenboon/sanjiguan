@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://samsara.local/schemas/birth-time-normalization.schema.json",
+  "title": "Birth time astronomical normalization result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["original", "historical_utc_offset_minutes", "dst_offset_minutes", "longitude_correction_minutes", "equation_of_time_minutes", "total_apparent_correction_minutes", "candidates", "boundary_difference", "correction_chain", "warnings", "prohibited_conclusions"],
+  "properties": {
+    "original": {"$ref": "birth-record.schema.json"},
+    "historical_utc_offset_minutes": {"type": ["integer", "null"]},
+    "dst_offset_minutes": {"type": ["integer", "null"]},
+    "longitude_correction_minutes": {"type": ["number", "null"]},
+    "equation_of_time_minutes": {"type": ["number", "null"]},
+    "total_apparent_correction_minutes": {"type": ["number", "null"]},
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidate_id", "basis", "local_datetime", "utc_datetime", "method_id", "is_primary_chart"],
+        "properties": {
+          "candidate_id": {"type": "string"},
+          "basis": {"enum": ["civil", "local_mean_solar", "local_apparent_solar", "unknown_interval"]},
+          "local_datetime": {"type": ["string", "null"], "format": "date-time"},
+          "utc_datetime": {"type": ["string", "null"], "format": "date-time"},
+          "method_id": {"type": "string"},
+          "is_primary_chart": {"const": false}
+        }
+      }
+    },
+    "boundary_difference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["crosses_double_hour_boundary", "crosses_civil_date_boundary", "crosses_solar_term_boundary", "sensitive_rules"],
+      "properties": {
+        "crosses_double_hour_boundary": {"type": "boolean"},
+        "crosses_civil_date_boundary": {"type": "boolean"},
+        "crosses_solar_term_boundary": {"type": "boolean"},
+        "sensitive_rules": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "correction_chain": {"type": "array", "items": {"type": "object"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "prohibited_conclusions": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "workflow_name": "Local PostgreSQL 16 Sprint 1A.6 Evidence",
+  "run_id": "local-pg16-919ec741-5e6b-4842-9df9-e2620c95cb47",
+  "commit_sha": null,
+  "commit_note": "No commit or remote exists; workspace_tree_sha256 is the reproducibility identifier.",
+  "workspace_tree_sha256": "68a5c07e2367c0a6cbad14a592d8b78c13786853a2a7dcc9f2aee45cd135be00",
+  "run_link": null,
+  "run_location": "local isolated PostgreSQL binary cluster",
+  "started_at_utc": "2026-07-23T09:47:29.608400+00:00",
+  "completed_at_utc": "2026-07-23T09:47:35.967948+00:00",
+  "postgresql_version": "16.14",
+  "database": "sanjiguan_evidence",
+  "migration_first_run": [
+    "applied 0001_sprint0_baseline.sql",
+    "applied 0002_sprint1a_foundation.sql",
+    "applied 0003_sprint1a5_authorization.sql",
+    "applied 0004_sprint1a6_rls_recursion_fix.sql",
+    "applied 0005_sprint1a6_verdict_contract.sql",
+    "applied 0006_sprint1a6_relationship_guards.sql"
+  ],
+  "migration_second_run_changes": [],
+  "migrations": [
+    {
+      "version": "0001_sprint0_baseline.sql",
+      "checksum": "0c34af48e1815d6c14bf8f9fb3e01403f1f1959a76fa770b81d36f71ea5598f1"
+    },
+    {
+      "version": "0002_sprint1a_foundation.sql",
+      "checksum": "9a9d66d70f1100fc21f5b5cfea4bdfeceed4d82fb4f94942dfb50c5c654a4789"
+    },
+    {
+      "version": "0003_sprint1a5_authorization.sql",
+      "checksum": "7df42b53b80474d710525d607654ea275ade4c8f2b59d0ad4827095e8f63f9e4"
+    },
+    {
+      "version": "0004_sprint1a6_rls_recursion_fix.sql",
+      "checksum": "2927d7b343dddfea9f0f7bcc86f1576a2c86d9220cd62ddc6bb6d044d79b6239"
+    },
+    {
+      "version": "0005_sprint1a6_verdict_contract.sql",
+      "checksum": "6a51cf3ab30cad84b23e77f21b6aac72d60da5caf07b3cb1703ef0d61d91e111"
+    },
+    {
+      "version": "0006_sprint1a6_relationship_guards.sql",
+      "checksum": "616ede6efdfd833143677ea1e6a7975630ff4a6ba7528e8687c6d34c5261c137"
+    }
+  ],
+  "postgres_integration": {
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0
+  },
+  "api_postgres_e2e": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "residual_users_after_tests": 0
+}

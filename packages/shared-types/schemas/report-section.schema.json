@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.local/schemas/report-section.schema.json",
+  "title": "三际断章章节",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "order", "fixture", "verdicts"],
+  "properties": {
+    "id": {"type": "string", "format": "uuid"},
+    "title": {"type": "string", "minLength": 1},
+    "order": {"type": "integer", "minimum": 1},
+    "fixture": {"type": "boolean"},
+    "verdicts": {"type": "array", "items": {"$ref": "verdict.schema.json"}}
+  }
+}

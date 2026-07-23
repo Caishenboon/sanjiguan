@@ -1,0 +1,215 @@
+openapi: 3.1.0
+info:
+  title: Samsara Engine API
+  version: 0.1.0-draft
+  description: Sprint 0 contract draft; no divination rules are active.
+servers:
+  - url: /api/v1
+security:
+  - sessionCookie: []
+paths:
+  /me:
+    get:
+      operationId: getMe
+      responses:
+        "200": {description: Current user}
+        "401": {$ref: "#/components/responses/Error"}
+  /profiles:
+    post:
+      operationId: createProfile
+      parameters: [{$ref: "#/components/parameters/IdempotencyKey"}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/ProfileCreate"}
+      responses:
+        "201": {description: Created}
+        "400": {$ref: "#/components/responses/Error"}
+    get:
+      operationId: listProfiles
+      responses:
+        "200": {description: Profiles visible to current user}
+  /profiles/{profileId}:
+    parameters:
+      - {$ref: "#/components/parameters/ProfileId"}
+    get:
+      operationId: getProfile
+      responses:
+        "200": {description: Profile}
+        "404": {$ref: "#/components/responses/Error"}
+    patch:
+      operationId: updateProfile
+      parameters: [{$ref: "#/components/parameters/IdempotencyKey"}]
+      responses:
+        "200": {description: Updated}
+    delete:
+      operationId: deleteProfile
+      parameters: [{$ref: "#/components/parameters/IdempotencyKey"}]
+      responses:
+        "202": {description: Deletion workflow queued}
+  /profiles/{profileId}/birth-time/normalize:
+    parameters:
+      - {$ref: "#/components/parameters/ProfileId"}
+    post:
+      operationId: normalizeBirthTime
+      description: Returns civil, local mean solar, and local apparent solar candidates without choosing a chart or calculating pillars.
+      parameters: [{$ref: "#/components/parameters/IdempotencyKey"}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                solar_term_instants_utc:
+                  type: array
+                  items: {type: string, format: date-time}
+      responses:
+        "200":
+          description: Auditable astronomical correction and boundary sensitivity
+        "409": {$ref: "#/components/responses/Error"}
+        "422": {$ref: "#/components/responses/Error"}
+  /profiles/{profileId}/analyses:
+    parameters:
+      - {$ref: "#/components/parameters/ProfileId"}
+    post:
+      operationId: createAnalysis
+      parameters: [{$ref: "#/components/parameters/IdempotencyKey"}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/AnalysisCreate"}
+      responses:
+        "202":
+          description: Queued
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/AnalysisAccepted"}
+        "409": {$ref: "#/components/responses/Error"}
+        "422": {$ref: "#/components/responses/Error"}
+  /analyses/{runId}:
+    get:
+      operationId: getAnalysis
+      parameters:
+        - {$ref: "#/components/parameters/RunId"}
+      responses:
+        "200": {description: Structured analysis; usable without LLM report}
+        "404": {$ref: "#/components/responses/Error"}
+  /analyses/{runId}/report:
+    post:
+      operationId: generateReport
+      parameters:
+        - {$ref: "#/components/parameters/RunId"}
+        - {$ref: "#/components/parameters/IdempotencyKey"}
+      responses:
+        "202": {description: Explanation queued; deterministic result is unchanged}
+  /admin/rulesets/{rulesetId}/activate:
+    post:
+      operationId: activateRuleset
+      parameters:
+        - name: rulesetId
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - {$ref: "#/components/parameters/IdempotencyKey"}
+      responses:
+        "200": {description: Activated after all gates pass}
+        "409":
+          description: Blocked by unconfirmed method, unapproved source, checksum, tests, or approval gate
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/ErrorEnvelope"}
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-session
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema: {type: string, minLength: 16, maxLength: 128}
+    ProfileId:
+      name: profileId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    RunId:
+      name: runId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+  schemas:
+    ProfileCreate:
+      type: object
+      additionalProperties: false
+      required: [consent_version, birth]
+      properties:
+        display_name: {type: string, maxLength: 100}
+        consent_version: {type: string}
+        birth:
+          type: object
+          additionalProperties: false
+          required: [calendar_type, local_date, local_time, timezone_id, timezone_database, timezone_database_version, time_precision, place, user_confirmed, captured_at]
+          properties:
+            calendar_type: {enum: [gregorian, lunar]}
+            local_date: {type: string, format: date}
+            local_time: {type: [string, "null"], format: time}
+            timezone_id: {type: string}
+            timezone_database: {const: IANA}
+            timezone_database_version: {type: string}
+            time_precision: {enum: [minute, double_hour, half_day, unknown]}
+            user_confirmed: {type: boolean}
+            captured_at: {type: string, format: date-time}
+            place:
+              type: object
+              required: [latitude, longitude, coordinate_source]
+              properties:
+                label: {type: [string, "null"]}
+                latitude: {type: number, minimum: -90, maximum: 90}
+                longitude: {type: number, minimum: -180, maximum: 180}
+                coordinate_source: {type: string}
+    AnalysisCreate:
+      type: object
+      additionalProperties: false
+      required: [mode, focus, ruleset_version, birth_time_strategy, report_language]
+      properties:
+        mode: {enum: [full, structural_only]}
+        focus:
+          type: array
+          items: {enum: [past_life, bardo, life_chart, relationship]}
+          uniqueItems: true
+        ruleset_version: {type: string}
+        birth_time_strategy: {enum: [exact, sensitivity]}
+        report_language: {enum: [zh-CN]}
+    AnalysisAccepted:
+      type: object
+      required: [run_id, status, events_url]
+      properties:
+        run_id: {type: string, format: uuid}
+        status: {const: queued}
+        events_url: {type: string}
+    ErrorEnvelope:
+      type: object
+      additionalProperties: false
+      required: [error]
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required: [code, message, request_id]
+          properties:
+            code: {type: string}
+            message: {type: string}
+            request_id: {type: string}
+  responses:
+    Error:
+      description: Stable redacted error
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/ErrorEnvelope"}

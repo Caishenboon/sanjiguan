@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://samsara.local/schemas/solar-term-instant.schema.json",
+  "title": "Astronomical solar longitude instant",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["target_longitude_degrees", "instant_utc", "method_id", "accuracy_bound", "interpretation"],
+  "properties": {
+    "target_longitude_degrees": {"type": "integer", "minimum": 0, "maximum": 345, "multipleOf": 15},
+    "instant_utc": {"type": "string", "format": "date-time"},
+    "method_id": {"const": "ASTRONOMY_ENGINE.SUN_LONGITUDE.V2_1_19"},
+    "accuracy_bound": {"const": "library angular accuracy <= 1 arcminute; time tolerance verified per golden source"},
+    "interpretation": {"const": "astronomical_instant_only_no_bazi_conclusion"}
+  }
+}
