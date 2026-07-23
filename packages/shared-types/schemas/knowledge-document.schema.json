@@ -1,0 +1,11 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://sanjiguan.local/schemas/knowledge-document.schema.json","title":"KnowledgeDocument","type":"object","additionalProperties":false,
+"required":["id","title","traditions","knowledge_layer","access_class","license","language","review_status","reviewer_ids"],
+"properties":{"id":{"type":"string","format":"uuid"},"title":{"type":"string","minLength":1},"original_title":{"type":["string","null"]},
+"author":{"type":["string","null"]},"translator":{"type":["string","null"]},"editor":{"type":["string","null"]},
+"edition":{"type":["string","null"]},"publication_year":{"type":["integer","null"]},"traditions":{"type":"array","items":{"enum":["common_buddhist_foundation","nyingma","kagyu","sakya","gelug","bon","han_buddhism","theravada","yijing","bazi","ziwei","astronomy","engineering"]}},
+"knowledge_layer":{"enum":["canonical_text","traditional_commentary","lineage_teaching","modern_scholarship","historical_source","system_interpretation","engineering_fact","case_pattern"]},
+"access_class":{"enum":["public_domain","open_license","licensed_internal","citation_only","copyright_restricted","practice_restricted","sealed","unknown"]},
+"license":{"type":"object","required":["name","version","url","attribution_required","expires_at"]},"source_uri":{"type":["string","null"]},
+"catalog_identifier":{"type":["string","null"]},"checksum":{"type":["string","null"],"pattern":"^[a-f0-9]{64}$"},
+"language":{"type":"string"},"review_status":{"enum":["draft","researched","reviewed","approved","rejected","retired"]},
+"reviewer_ids":{"type":"array","items":{"type":"string","format":"uuid"}},"notes":{"type":["string","null"]}}}

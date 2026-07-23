@@ -1,0 +1,8 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://sanjiguan.local/schemas/rule-draft.schema.json","title":"ResearchRuleDraft","type":"object","additionalProperties":false,
+"required":["id","name","domain","status","production_activatable","method_id","description","traditional_basis_claim_ids","system_mapping_claim_ids","engineering_basis_claim_ids","conditions","positive_contributions","negative_contributions","counter_conditions","hard_conflicts","missing_data_behavior","output_tags","allowed_subjects","language_keys","version","review"],
+"properties":{"id":{"type":"string"},"name":{"type":"string"},"domain":{"enum":["bazi","ziwei","yijing","karma","bardo","archetype","relationship","life_chart"]},
+"status":{"enum":["draft","research","reviewed","approved","retired"]},"production_activatable":{"const":false},"method_id":{"type":"string"},
+"description":{"type":"string"},"traditional_basis_claim_ids":{"type":"array"},"system_mapping_claim_ids":{"type":"array"},"engineering_basis_claim_ids":{"type":"array"},
+"conditions":{"type":"object"},"positive_contributions":{"type":"array"},"negative_contributions":{"type":"array"},"counter_conditions":{"type":"array","minItems":1},
+"hard_conflicts":{"type":"array"},"missing_data_behavior":{"enum":["lower_confidence","not_applicable","block"]},"output_tags":{"type":"array"},
+"allowed_subjects":{"type":"array"},"language_keys":{"type":"array"},"version":{"type":"string"},"review":{"type":"object"}}}

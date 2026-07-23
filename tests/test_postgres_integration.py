@@ -97,6 +97,24 @@ class PostgreSQLIntegrationTests(unittest.TestCase):
                 "SELECT id FROM evidence_items WHERE id=%s", (evidence_id,)
             ).fetchone()[0])
 
+    def test_sprint1b2_knowledge_workbench_is_owner_only(self):
+        tables = ("knowledge_claims","knowledge_reviews","rule_drafts",
+                  "archetype_research_records","reviewer_qualifications")
+        forced = self.conn.execute("""SELECT relname,relforcerowsecurity FROM pg_class
+          WHERE relname=ANY(%s)""",(list(tables),)).fetchall()
+        self.assertEqual(set(tables),{row[0] for row in forced})
+        self.assertTrue(all(row[1] for row in forced))
+        with self.runtime(self.member_a) as member:
+            self.assertEqual([],member.execute("SELECT id FROM knowledge_claims").fetchall())
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                member.execute("""INSERT INTO knowledge_topics(id,slug,label)
+                                  VALUES(%s,'blocked','blocked')""",(uuid4(),))
+        with self.runtime(self.owner,"owner") as owner:
+            tid=uuid4()
+            owner.execute("INSERT INTO knowledge_topics(id,slug,label) VALUES(%s,'allowed','allowed')",(tid,))
+            owner.commit()
+            self.assertEqual(tid,owner.execute("SELECT id FROM knowledge_topics WHERE id=%s",(tid,)).fetchone()[0])
+
     def test_migration_drift_is_rejected(self):
         version = "0001_sprint0_baseline.sql"
         checksum = self.conn.execute(
