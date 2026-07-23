@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.local/sanji-engine/engine-result/1.0.0",
+  "title": "Sanji Engine Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "engine_api_version",
+    "engine_version",
+    "run_id",
+    "ruleset_bundle_id",
+    "ruleset_bundle_hash",
+    "input_hash",
+    "output_hash",
+    "status",
+    "module_results",
+    "trace",
+    "trace_hash",
+    "replay_manifest",
+    "disabled_modules"
+  ],
+  "properties": {
+    "schema_version": {"const": "engine-result/1.0.0"},
+    "engine_api_version": {"const": "1.0"},
+    "engine_version": {"type": "string"},
+    "run_id": {"type": "string"},
+    "ruleset_bundle_id": {"type": "string"},
+    "ruleset_bundle_hash": {"type": "string", "pattern": "^sha256:"},
+    "input_hash": {"type": "string", "pattern": "^sha256:"},
+    "output_hash": {"type": "string", "pattern": "^sha256:"},
+    "status": {"enum": ["complete", "complete_with_disabled_modules"]},
+    "module_results": {"type": "object"},
+    "trace": {"type": "array"},
+    "trace_hash": {"type": "string", "pattern": "^sha256:"},
+    "replay_manifest": {"type": "object"},
+    "disabled_modules": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}}
+  }
+}

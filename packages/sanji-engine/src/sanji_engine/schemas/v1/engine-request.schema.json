@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.local/sanji-engine/engine-request/1.0.0",
+  "title": "Sanji Engine Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "engine_api_version",
+    "run_id",
+    "run_mode",
+    "requested_modules",
+    "input_snapshot",
+    "ruleset_bundle_id",
+    "data_versions",
+    "deterministic_context"
+  ],
+  "properties": {
+    "schema_version": {"const": "engine-request/1.0.0"},
+    "engine_api_version": {"const": "1.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "run_mode": {"enum": ["research_preview", "replay"]},
+    "requested_modules": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "calendar",
+          "bazi",
+          "ziwei",
+          "yijing",
+          "signals",
+          "inference",
+          "past-life",
+          "bardo",
+          "relationship",
+          "life-chart"
+        ]
+      }
+    },
+    "input_snapshot": {"type": "object"},
+    "ruleset_bundle_id": {"const": "core-boundary-0.1.0"},
+    "data_versions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tzdb", "ephemeris", "calendar_dataset"],
+      "properties": {
+        "tzdb": {"type": "string", "minLength": 1},
+        "ephemeris": {"type": "string", "minLength": 1},
+        "calendar_dataset": {"type": "string", "minLength": 1}
+      }
+    },
+    "deterministic_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["as_of", "random_method", "random_seed"],
+      "properties": {
+        "as_of": {"type": "string", "format": "date-time"},
+        "random_method": {"const": "none"},
+        "random_seed": {"type": "null"}
+      }
+    },
+    "requested_trace_level": {"enum": ["full"], "default": "full"}
+  }
+}

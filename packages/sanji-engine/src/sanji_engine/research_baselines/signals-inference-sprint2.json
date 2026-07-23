@@ -1,0 +1,10 @@
+{
+  "schema_version": "research-baseline/1.0.0",
+  "baseline_id": "signals-inference-sprint2",
+  "baseline_class": "research_baseline",
+  "case_count": 30,
+  "aggregate_locked_hash": "7453f8100c0f8ffdc16bdb0bc35ba3ad5f2a9808b5c291072cde503176ea9c4d",
+  "authority": "NOT_A_TRADITIONAL_GOLDEN_CASE",
+  "production_approved": false,
+  "meaning": "Migration drift detector only; it does not approve weights, correctness, or production use."
+}
