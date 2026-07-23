@@ -1,4 +1,5 @@
 import importlib
+import json
 import os
 import unittest
 from datetime import datetime, timedelta, timezone
@@ -150,3 +151,45 @@ class PostgreSQLHttpE2E(unittest.TestCase):
           headers={"Idempotency-Key":"knowledge-document-create-01"})
         self.assertEqual(201,created.status_code,created.text)
         self.assertFalse(created.json()["production_use"])
+
+    def test_owner_only_research_preview_pipeline_is_replayable(self):
+        self.login()
+        self.assertEqual(403,self.client.get("/api/v1/admin/research/analyses").status_code)
+        owner_id,session_id,profile_id,ruleset_id=uuid4(),uuid4(),uuid4(),uuid4()
+        session_token="research-owner-"+uuid4().hex
+        self.admin.execute("INSERT INTO users(id,email_ciphertext,role) VALUES(%s,%s,'owner')",(owner_id,b"owner"))
+        self.admin.execute("INSERT INTO sessions(id,user_id,token_hash,expires_at) VALUES(%s,%s,%s,%s)",
+          (session_id,owner_id,token_hash(session_token),datetime.now(timezone.utc)+timedelta(hours=1)))
+        self.admin.execute("""INSERT INTO profiles(id,owner_id,timezone,calendar_type,birth_date_ciphertext,
+          birth_time_precision,consent_version,research_profile) VALUES(%s,%s,'UTC','gregorian',%s,
+          'unknown','research-fixture',true)""",(profile_id,owner_id,b"synthetic"))
+        self.admin.execute("""INSERT INTO rulesets(id,name,version,status,checksum,manifest_json)
+          VALUES(%s,%s,'0.1.0-research','draft',%s,%s)""",
+          (ruleset_id,"research-fixture-"+uuid4().hex,"1"*64,
+           json.dumps({"enabled":False,"production_activatable":False})))
+        client=TestClient(self.app_module.app,base_url="https://testserver")
+        client.cookies.set("__Host-session",session_token)
+        payload={"profile_id":str(profile_id),"ruleset_id":str(ruleset_id),"mode":"research_preview",
+          "synthetic_or_research":True,"is_synthetic":True,"random_seed":42,"completeness":.9,
+          "ruleset_snapshot":{"version":"0.1.0-research"},"claim_snapshot":[],"signals":[
+            {"id":str(uuid4()),"domain":domain,"tag":"caregiving","direction":"support","strength":.8,
+             "source_reliability":.8,"relevance":.8,"independence_group":f"care-{domain}",
+             "source_evidence_ids":[],"time_scope":{},"ordinary_explanation_present":False}
+            for domain in ("karma","vow","dream")]}
+        created=client.post("/api/v1/admin/research/analyses",json=payload,
+          headers={"Idempotency-Key":"research-create-fixture-01"})
+        self.assertEqual(201,created.status_code,created.text)
+        analysis_id=created.json()["id"]
+        run=client.post(f"/api/v1/admin/research/analyses/{analysis_id}/run",
+          headers={"Idempotency-Key":"research-run-fixture-0001"})
+        self.assertEqual(200,run.status_code,run.text)
+        replay=client.post(f"/api/v1/admin/research/analyses/{analysis_id}/run",
+          headers={"Idempotency-Key":"research-run-fixture-0001"})
+        self.assertEqual(run.json()["locked_hash"],replay.json()["locked_hash"])
+        report=client.get(f"/api/v1/admin/research/analyses/{analysis_id}/report")
+        self.assertEqual("研究预览 · 非生产命盘",report.json()["banner"])
+        retry=client.post(f"/api/v1/admin/research/analyses/{analysis_id}/retry-prose",
+          headers={"Idempotency-Key":"research-retry-prose-01"})
+        self.assertEqual(200,retry.status_code,retry.text)
+        self.assertEqual("template",retry.json()["prose_source"])
+        self.assertTrue(retry.json()["locked_verdict_unchanged"])

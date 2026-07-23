@@ -115,6 +115,23 @@ class PostgreSQLIntegrationTests(unittest.TestCase):
             owner.commit()
             self.assertEqual(tid,owner.execute("SELECT id FROM knowledge_topics WHERE id=%s",(tid,)).fetchone()[0])
 
+    def test_sprint2_research_tables_force_owner_only_rls(self):
+        tables=("analysis_stage_runs","normalized_signals","hypothesis_contributions",
+                "hypothesis_conflicts","bardo_chain_links","retrieval_runs","retrieval_results",
+                "prompt_runs","generated_prose","research_reports","evaluation_cases","evaluation_results")
+        rows=self.conn.execute("""SELECT relname,relforcerowsecurity FROM pg_class
+          WHERE relname=ANY(%s)""",(list(tables),)).fetchall()
+        self.assertEqual(set(tables),{row[0] for row in rows})
+        self.assertTrue(all(row[1] for row in rows))
+        with self.runtime(self.member_a) as member:
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                member.execute("""INSERT INTO evaluation_cases(id,group_name,fixture_json,expected_json,checksum)
+                  VALUES('blocked','test','{}','{}',%s)""",("0"*64,))
+        with self.runtime(self.owner,"owner") as owner:
+            owner.execute("""INSERT INTO evaluation_cases(id,group_name,fixture_json,expected_json,checksum)
+              VALUES('owner-case','test','{}','{}',%s)""",("1"*64,))
+            owner.commit()
+
     def test_migration_drift_is_rejected(self):
         version = "0001_sprint0_baseline.sql"
         checksum = self.conn.execute(
