@@ -31,15 +31,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Generate nine-case synthetic style review pack
-        run: python scripts/run_deepseek_style_review.py
-      - name: Upload synthetic review documents
+      - name: Generate Prompt 1.1 nine-case review pack
+        run: python scripts/run_deepseek_style_review_v1_1.py
+      - name: Upload Prompt 1.1 review pack
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: deepseek-style-review
+          name: deepseek-style-review-v1-1
           path: |
-            deepseek-style-review.md
-            deepseek-style-review.json
+            deepseek-style-review-v1.1.md
+            deepseek-style-review-v1.1.json
+            deepseek-style-diff-v1.0-v1.1.md
           if-no-files-found: error
           retention-days: 7

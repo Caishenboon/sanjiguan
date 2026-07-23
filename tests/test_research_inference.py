@@ -5,6 +5,9 @@ from packages.research_inference.providers import (
     DeepSeekProvider,EmbeddingProvider,FakeProvider,merge_prose,sanitize_prose_payload,
 )
 from scripts.run_deepseek_style_review import CASES as STYLE_CASES,automatic_checks
+from scripts.run_deepseek_style_review_v1_1 import (
+    CASES as STYLE_CASES_V11,checks as checks_v11,model_payload,
+)
 
 ROOT=Path(__file__).resolve().parents[1]
 CONFIG=json.loads((ROOT/"knowledge/research/scoring-config.json").read_text("utf-8"))
@@ -87,3 +90,19 @@ class ResearchInferenceTests(unittest.TestCase):
           "judgement":{"benefit":"保留两条路径","risk":"仓促定论",
                        "instruction":"补充长期教化记录后复核"}}
         self.assertTrue(automatic_checks(STYLE_CASES[3],prose)["contested_both_images_present"])
+
+    def test_style_review_v11_separates_metadata_and_locks_actions(self):
+        self.assertEqual(9,len(STYLE_CASES_V11))
+        serialized=json.dumps([model_payload(case) for case in STYLE_CASES_V11],ensure_ascii=False)
+        for marker in ("虚构","合成","fixture","synthetic"):
+            self.assertNotIn(marker,serialized)
+        self.assertTrue(all(case["allowed_esoteric_entities"]==[] for case in STYLE_CASES_V11))
+        self.assertTrue(all(case["action_posture"] in
+          {"advance","hold","slow","stop","observe"} for case in STYLE_CASES_V11))
+        invalid={"image_text":"象曰：水火未济，坎离相争。",
+          "plain_interpretation":"持家与医者两路相争，当前相差二分。现有资料仍不足，待家庭结构稳定后再行判断，不应把暂时数据不足写成不可改变的结论。",
+          "judgement":{"benefit":"保留两路","risk":"过早决定",
+                       "instruction":"现阶段待验，补足长期记录后复核。"}}
+        gate=checks_v11(STYLE_CASES_V11[4],invalid)
+        self.assertFalse(gate["hard_gate_passed"])
+        self.assertIn("水火未济",gate["unauthorized_esoteric_entities"])
