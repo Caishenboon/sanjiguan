@@ -1,0 +1,10 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://sanjiguan.local/schemas/normalized-signal.schema.json",
+"title":"NormalizedSignal","type":"object","additionalProperties":false,
+"required":["id","analysis_run_id","domain","source_evidence_ids","tag","direction","strength","source_reliability","relevance","independence_group","time_scope","ordinary_explanation_present","ruleset_version"],
+"properties":{"id":{"type":"string","format":"uuid"},"analysis_run_id":{"type":"string","format":"uuid"},
+"domain":{"enum":["ming","karma","vow","dream","relation","life_event","sensation"]},
+"source_evidence_ids":{"type":"array","items":{"type":"string","format":"uuid"}},"tag":{"type":"string"},
+"direction":{"enum":["support","oppose"]},"strength":{"type":"number","minimum":0,"maximum":1},
+"source_reliability":{"type":"number","minimum":0,"maximum":1},"relevance":{"type":"number","minimum":0,"maximum":1},
+"independence_group":{"type":"string"},"time_scope":{"type":"object"},"ordinary_explanation_present":{"type":"boolean"},
+"ruleset_version":{"type":"string"}}}

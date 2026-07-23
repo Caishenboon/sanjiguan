@@ -1,0 +1,8 @@
+{"sprint":"2","status":"local_passed_ci_pending","mode":"research_preview",
+"tests":{"passed":73,"failed":0,"skipped":0,"postgresql_integration":8,
+"http_postgresql_e2e":4,"research_inference":6},
+"fixtures":{"total":30,"clear":10,"contested":8,"insufficient":6,"ordinary":6},
+"hard_gates":{"determinism":true,"duplicate_signal_resistance":true,
+"counterevidence_reduces_score":true,"locked_field_override_rate":0,
+"restricted_leakage_rate":0,"grandiose_identity_rate":0},
+"production_rules":"disabled","deepseek_key":"not_configured","embedding":"disabled"}

@@ -219,3 +219,5 @@ from apps.api.app.evidence_routes import router as evidence_router
 app.include_router(evidence_router)
 from apps.api.app.knowledge_routes import router as knowledge_router
 app.include_router(knowledge_router)
+from apps.api.app.research_routes import router as research_router
+app.include_router(research_router)

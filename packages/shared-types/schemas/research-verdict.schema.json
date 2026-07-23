@@ -1,0 +1,6 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://sanjiguan.local/schemas/research-verdict.schema.json",
+"title":"ResearchPreviewVerdict","type":"object","additionalProperties":false,
+"required":["verdict","status","ranked_hypotheses","past_life_nodes","ruleset_version","claim_snapshot","random_seed"],
+"properties":{"verdict":{"enum":["decisive","provisional","contested","insufficient"]},"status":{"const":"research_preview"},
+"ranked_hypotheses":{"type":"array","maxItems":5},"past_life_nodes":{"type":"array"},
+"ruleset_version":{"type":"string"},"claim_snapshot":{"type":"array"},"random_seed":{"type":"integer"}}}
