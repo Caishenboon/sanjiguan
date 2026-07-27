@@ -4,7 +4,7 @@ const mainNav=[["三际录","/profile/demo"],["六象合参","/profile/demo/anal
 ["中阴之门","/profile/demo/bardo"],["命势长图","/profile/demo/life-chart"],
 ["缘契图","/profile/demo/relationships"],["观照录","/profile/demo/journal"],
 ["历次命卷","/profile/demo/versions"]];
-const ownerNav=[["研究推演","/admin/research/analyses"],["实物三钱","/admin/research/three-coin"],["知识工坊","/admin/knowledge"],
+const ownerNav=[["研究推演","/admin/research/analyses"],["八字方法","/admin/research/bazi-methods"],["实物三钱","/admin/research/three-coin"],["知识工坊","/admin/knowledge"],
 ["规则工坊","/admin/rules"],["评测","/admin/evaluations"]];
 export default function AppShell({children,title,owner=false}:{children:React.ReactNode,title:string,owner?:boolean}){
  return <div className="app-shell">
