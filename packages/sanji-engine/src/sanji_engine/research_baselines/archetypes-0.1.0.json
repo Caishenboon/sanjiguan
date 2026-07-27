@@ -1,0 +1,10 @@
+[
+  {"id":"AR.RESEARCH.ORDINARY.CAREGIVER","name":"日常照护者","category":"ordinary_livelihood","tags":["caregiving","family_duty","protection"],"hard_conflicts":[],"grandiosity_risk":false},
+  {"id":"AR.RESEARCH.ORDINARY.TRADESPERSON","name":"日常手艺与营生者","category":"ordinary_livelihood","tags":["craft","livelihood","trade"],"hard_conflicts":[],"grandiosity_risk":false},
+  {"id":"AR.RESEARCH.CRAFT","name":"工艺创作者","category":"craft_art","tags":["craft","art","making"],"hard_conflicts":[],"grandiosity_risk":false},
+  {"id":"AR.RESEARCH.MIGRATION","name":"迁徙适应者","category":"migration_exile","tags":["migration","travel","displacement"],"hard_conflicts":[],"grandiosity_risk":false},
+  {"id":"AR.RESEARCH.RELATIONSHIP_VOW","name":"关系承诺承担者","category":"relationship_vow","tags":["relationship","promise","attachment"],"hard_conflicts":[],"grandiosity_risk":false},
+  {"id":"AR.RESEARCH.UNFINISHED","name":"未竟事务承载者","category":"unfinished_pattern","tags":["unfinished","repetition","loss"],"hard_conflicts":[],"grandiosity_risk":false},
+  {"id":"AR.RESEARCH.HEALING","name":"照护与保护实践者","category":"healing_protection","tags":["healing","caregiving","protection"],"hard_conflicts":["medical_fabrication"],"grandiosity_risk":false},
+  {"id":"AR.RESEARCH.WISDOM","name":"知识传递者","category":"wisdom_transmission","tags":["teaching","knowledge","practice"],"hard_conflicts":[],"grandiosity_risk":false}
+]

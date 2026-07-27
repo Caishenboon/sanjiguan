@@ -40,10 +40,16 @@
       }
     },
     "input_snapshot": {"type": "object"},
-    "ruleset_bundle_id": {"const": "core-boundary-0.1.0"},
+    "ruleset_bundle_id": {
+      "enum": [
+        "core-boundary-0.1.0",
+        "research-baseline-0.2.0",
+        "research-baseline-0.2.0-revoked-fixture"
+      ]
+    },
     "data_versions": {
       "type": "object",
-      "additionalProperties": false,
+      "additionalProperties": {"type": "string"},
       "required": ["tzdb", "ephemeris", "calendar_dataset"],
       "properties": {
         "tzdb": {"type": "string", "minLength": 1},

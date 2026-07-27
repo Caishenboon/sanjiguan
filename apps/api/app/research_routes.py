@@ -189,8 +189,18 @@ def run_analysis(analysis_id:UUID,key:str=Header(alias="Idempotency-Key"),
           completion_tokens,total_tokens,estimated_cost) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)""",
           (uuid7(),analysis_id,source,model,usage["prompt_tokens"],usage["completion_tokens"],
            usage["total_tokens"],_estimated_cost(usage)))
-        conn.execute("UPDATE analysis_runs SET status='complete',result_json=%s,output_hash=%s,completed_at=now() WHERE id=%s",
-                     (json.dumps(locked),deterministic["locked_hash"],analysis_id))
+        engine=deterministic["_engine"]
+        conn.execute("""UPDATE analysis_runs SET status='complete',result_json=%s,output_hash=%s,
+          engine_api_version=%s,engine_core_version=%s,engine_schema_versions=%s,
+          ruleset_bundle_id=%s,ruleset_bundle_hash=%s,engine_data_versions=%s,
+          canonicalization_version=%s,trace_hash=%s,replay_manifest=%s,
+          replay_manifest_hash=%s,completed_at=now() WHERE id=%s""",
+          (json.dumps(locked),deterministic["locked_hash"],engine["engine_api_version"],
+           engine["engine_core_version"],json.dumps(engine["engine_schema_versions"]),
+           engine["ruleset_bundle_id"],engine["ruleset_bundle_hash"],
+           json.dumps(engine["engine_data_versions"]),engine["canonicalization_version"],
+           engine["trace_hash"],json.dumps(engine["replay_manifest"]),
+           engine["replay_manifest_hash"],analysis_id))
         result={"id":str(analysis_id),"status":"complete","verdict":locked["verdict"],
                 "locked_hash":deterministic["locked_hash"],"notice":deterministic["notice"]}
         module.complete(conn,idem,key,200,result);return result
