@@ -67,25 +67,6 @@ class SanjiEngineResearchTests(unittest.TestCase):
             self.assertEqual("research_baseline", bundle["modules"][module]["baseline_class"])
             self.assertFalse(bundle["modules"][module]["production_activatable"])
 
-    def test_research_envelope_component_diagnostics(self):
-        result = execute(request_for(self.case))
-        print(
-            "RESEARCH_ENVELOPE_COMPONENTS",
-            json.dumps(
-                {
-                    "input_hash": result["input_hash"],
-                    "ruleset_bundle_hash": result["ruleset_bundle_hash"],
-                    "trace_hash": result["trace_hash"],
-                    "replay_manifest_hash": result["replay_manifest"]["content_hash"],
-                    "signals_content_hash": result["module_results"]["signals"]["content_hash"],
-                    "inference_content_hash": result["module_results"]["inference"]["content_hash"],
-                    "module_results_hash": content_hash(result["module_results"]),
-                    "output_hash": result["output_hash"],
-                },
-                sort_keys=True,
-            ),
-        )
-
     def test_cross_platform_hash_order_status_trace_and_replay(self):
         fixture = json.loads(
             (

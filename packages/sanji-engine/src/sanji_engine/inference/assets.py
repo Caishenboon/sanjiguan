@@ -1,17 +1,30 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from importlib.resources import files
 
+from ..canonical import content_hash
+
+
+def _hash_safe(value):
+    if isinstance(value, float):
+        return str(value)
+    if isinstance(value, dict):
+        return {key: _hash_safe(child) for key, child in value.items()}
+    if isinstance(value, list):
+        return [_hash_safe(child) for child in value]
+    return value
+
 
 def _asset(name: str) -> tuple[object, str]:
-    raw = (
+    value = json.loads(
         files("sanji_engine")
         .joinpath(f"research_baselines/{name}")
-        .read_bytes()
+        .read_text(encoding="utf-8")
     )
-    return json.loads(raw), f"sha256:{hashlib.sha256(raw).hexdigest()}"
+    # Hash parsed canonical content, not checkout bytes. Git may materialize
+    # JSON as LF or CRLF, but those transport line endings are not domain data.
+    return value, content_hash(_hash_safe(value))
 
 
 def load_research_assets() -> tuple[list[dict], dict, dict[str, str]]:

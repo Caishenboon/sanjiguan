@@ -17,6 +17,10 @@
 - CI matrix commands are separate fail-fast steps. This closes an inherited
   workflow defect where a failed Windows unittest command could be masked by a
   later successful gate in the same multiline step.
+- Research JSON asset hashes now use canonical parsed content instead of raw
+  checkout bytes. This removes a discovered CRLF/LF envelope-hash difference;
+  Signals/Inference domain hash, Trace, 30-case outputs, weights, ranks and
+  verdicts remain unchanged.
 
 ## Acceptance commands
 
