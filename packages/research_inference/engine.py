@@ -102,5 +102,23 @@ def run_inference(case: dict, archetypes: list[dict], config: dict) -> dict:
         "locked_verdict": _decode_legacy_numerics(inference["locked_verdict"]),
         "locked_hash": inference["legacy_locked_hash"],
         "stages": inference["legacy_stages"],
+        "_engine": {
+            "engine_api_version": envelope["engine_api_version"],
+            "engine_core_version": envelope["engine_version"],
+            "engine_schema_versions": {
+                "request": request["schema_version"],
+                "result": envelope["schema_version"],
+                "replay_manifest": envelope["replay_manifest"]["schema_version"],
+            },
+            "ruleset_bundle_id": envelope["ruleset_bundle_id"],
+            "ruleset_bundle_hash": envelope["ruleset_bundle_hash"],
+            "engine_data_versions": request["data_versions"],
+            "canonicalization_version": envelope["replay_manifest"][
+                "canonicalization_version"
+            ],
+            "trace_hash": envelope["trace_hash"],
+            "replay_manifest": envelope["replay_manifest"],
+            "replay_manifest_hash": envelope["replay_manifest"]["content_hash"],
+        },
         "notice": "研究成断，尚未进入生产规则。",
     }

@@ -22,6 +22,47 @@ ARCHETYPES_PATH = ROOT / "knowledge/research/inference-archetypes.json"
 BASELINE_PATH = ROOT / "tests/fixtures/signals-inference-research-baseline.json"
 
 
+def structured_diff(expected, actual, path="$", limit=50):
+    differences = []
+    if type(expected) is not type(actual):
+        return [{"path": path, "expected": expected, "actual": actual,
+                 "allowed": False, "handling": "migration_blocked"}]
+    if isinstance(expected, dict):
+        for key in sorted(set(expected) | set(actual)):
+            if len(differences) >= limit:
+                break
+            child = f"{path}.{key}"
+            if key not in expected or key not in actual:
+                differences.append({
+                    "path": child, "expected": expected.get(key, "<missing>"),
+                    "actual": actual.get(key, "<missing>"), "allowed": False,
+                    "handling": "migration_blocked",
+                })
+            else:
+                differences.extend(
+                    structured_diff(expected[key], actual[key], child, limit - len(differences))
+                )
+    elif isinstance(expected, list):
+        if len(expected) != len(actual):
+            differences.append({
+                "path": path + ".length", "expected": len(expected),
+                "actual": len(actual), "allowed": False,
+                "handling": "migration_blocked",
+            })
+        for index, (old, new) in enumerate(zip(expected, actual)):
+            if len(differences) >= limit:
+                break
+            differences.extend(
+                structured_diff(old, new, f"{path}[{index}]", limit - len(differences))
+            )
+    elif expected != actual:
+        differences.append({
+            "path": path, "expected": expected, "actual": actual,
+            "allowed": False, "handling": "migration_blocked",
+        })
+    return differences
+
+
 def case_payload(spec: dict) -> dict:
     tags = [spec["tag"]] + ([spec["second_tag"]] if spec.get("second_tag") else [])
     signals = []
@@ -115,6 +156,11 @@ def main() -> None:
         return
     expected = json.loads(BASELINE_PATH.read_text("utf-8"))
     if actual != expected:
+        print(json.dumps({
+            "status": "drift",
+            "baseline_id": expected.get("baseline_id"),
+            "differences": structured_diff(expected, actual),
+        }, ensure_ascii=False, indent=2))
         raise SystemExit("signals/inference research baseline drift")
     print(
         f"{actual['case_count']} / {actual['case_count']} equivalent: "

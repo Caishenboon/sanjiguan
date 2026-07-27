@@ -42,6 +42,29 @@ def main() -> None:
             if "sanji_engine." in text and "sanji_engine.public" not in text:
                 fail(f"application imports an internal engine module: {path}")
 
+    adapter = ROOT / "packages/research_inference/engine.py"
+    adapter_tree = ast.parse(adapter.read_text("utf-8"))
+    forbidden_adapter_names = {
+        "DOMAIN_WEIGHTS", "score_candidate", "normalize_weights",
+        "build_candidates", "decide_verdict", "rank_candidates",
+    }
+    defined = {
+        node.name for node in ast.walk(adapter_tree)
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+    }
+    assigned = {
+        target.id
+        for node in ast.walk(adapter_tree)
+        if isinstance(node, (ast.Assign, ast.AnnAssign))
+        for target in (
+            node.targets if isinstance(node, ast.Assign) else [node.target]
+        )
+        if isinstance(target, ast.Name)
+    }
+    leaked = sorted((defined | assigned) & forbidden_adapter_names)
+    if leaked:
+        fail(f"legacy adapter contains algorithm definitions: {leaked}")
+
     bundle = sanji_engine.inspect_ruleset("core-boundary-0.1.0")
     prohibited = (
         "bazi", "ziwei", "yijing", "past-life", "bardo",
@@ -51,6 +74,18 @@ def main() -> None:
         item = bundle["modules"][module]
         if item["enabled"] or item["status"] != "draft":
             fail(f"{module} is not draft + disabled")
+
+    research = sanji_engine.inspect_ruleset("research-baseline-0.2.0")
+    if research["status"] != "research_active" or research["production_activatable"]:
+        fail("research baseline is not explicitly non-production")
+    for module in ("signals", "inference"):
+        item = research["modules"][module]
+        if (
+            not item["enabled"]
+            or item["baseline_class"] != "research_baseline"
+            or item["production_activatable"]
+        ):
+            fail(f"{module} research-baseline gate is invalid")
 
     baseline = json.loads(
         (CORE / "research_baselines/signals-inference-sprint2.json").read_text("utf-8")
