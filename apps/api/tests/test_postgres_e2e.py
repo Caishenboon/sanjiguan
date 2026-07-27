@@ -200,3 +200,95 @@ class PostgreSQLHttpE2E(unittest.TestCase):
         self.assertEqual(200,retry.status_code,retry.text)
         self.assertEqual("template",retry.json()["prose_source"])
         self.assertTrue(retry.json()["locked_verdict_unchanged"])
+
+    def test_owner_bazi_four_pillars_is_engine_backed_encrypted_and_idempotent(self):
+        self.login()
+        owner_id, session_id, profile_id = uuid4(), uuid4(), uuid4()
+        token = "bazi-owner-" + uuid4().hex
+        self.admin.execute(
+            "INSERT INTO users(id,email_ciphertext,role) VALUES(%s,%s,'owner')",
+            (owner_id, b"owner"),
+        )
+        self.admin.execute(
+            "INSERT INTO sessions(id,user_id,token_hash,expires_at) VALUES(%s,%s,%s,%s)",
+            (session_id, owner_id, token_hash(token),
+             datetime.now(timezone.utc) + timedelta(hours=1)),
+        )
+        self.admin.execute(
+            """INSERT INTO profiles(id,owner_id,timezone,calendar_type,birth_date_ciphertext,
+              birth_time_precision,consent_version,research_profile)
+              VALUES(%s,%s,'Asia/Shanghai','gregorian',%s,'minute','research-fixture',true)""",
+            (profile_id, owner_id, b"synthetic"),
+        )
+        client = TestClient(self.app_module.app, base_url="https://testserver")
+        client.cookies.set("__Host-session", token)
+        payload = {
+            "profile_record_id": str(profile_id),
+            "profile_id": "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+            "profile_version": "1.0.0",
+            "birth_record": {
+                "local_date": "2024-01-01", "local_time": "12:00:00",
+                "calendar_type": "gregorian", "time_precision": "second",
+                "timezone_id": "Asia/Shanghai",
+                "place": {"latitude": "31.230400", "longitude": "121.473700",
+                          "name": "Synthetic", "precision": "exact_test_coordinate"},
+                "user_confirmed": True,
+            },
+            "input_provenance": {"all_fields": "synthetic_e2e"},
+        }
+        compare_payload = {
+            "profiles": [{
+                "profile_id": payload["profile_id"],
+                "profile_version": payload["profile_version"],
+            }],
+            "birth_record": payload["birth_record"],
+            "input_provenance": payload["input_provenance"],
+        }
+        blocked = self.client.post(
+            "/api/v1/admin/research/bazi-four-pillars/compare",
+            json=compare_payload,
+        )
+        self.assertEqual(403, blocked.status_code)
+        headers = {"Idempotency-Key": "bazi-four-pillars-e2e-0001"}
+        first = client.post(
+            "/api/v1/admin/research/bazi-four-pillars/execute",
+            json=payload, headers=headers,
+        )
+        self.assertEqual(201, first.status_code, first.text)
+        body = first.json()
+        self.assertEqual("研究预览 · 方法未审校 · 非生产命盘", body["banner"])
+        bazi = body["result"]["module_results"]["bazi"]["result"]
+        self.assertEqual("UNCONFIRMED", bazi["review_status"])
+        self.assertFalse(bazi["production_activatable"])
+        self.assertIsNone(bazi["interpretation"])
+        replayed = client.post(
+            "/api/v1/admin/research/bazi-four-pillars/execute",
+            json=payload, headers=headers,
+        )
+        self.assertEqual(body["id"], replayed.json()["id"])
+        row = self.admin.execute(
+            """SELECT count(*),min(octet_length(input_snapshot_encrypted)),
+              min(octet_length(engine_result_encrypted))
+              FROM bazi_research_runs WHERE owner_id=%s""",
+            (owner_id,),
+        ).fetchone()
+        self.assertEqual(1, row[0])
+        self.assertGreater(row[1], 0)
+        self.assertGreater(row[2], 0)
+        comparison = client.post(
+            "/api/v1/admin/research/bazi-four-pillars/compare",
+            json={
+                "profiles": [
+                    {"profile_id": item, "profile_version": "1.0.0"}
+                    for item in (
+                        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+                        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+                        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1",
+                    )
+                ],
+                "birth_record": payload["birth_record"],
+                "input_provenance": payload["input_provenance"],
+            },
+        )
+        self.assertEqual(200, comparison.status_code, comparison.text)
+        self.assertEqual(3, len(comparison.json()["results"]))

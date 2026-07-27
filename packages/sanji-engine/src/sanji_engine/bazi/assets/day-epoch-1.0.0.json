@@ -1,0 +1,21 @@
+{
+  "schema_version": "bazi-day-epoch/1.0.0",
+  "asset_version": "bazi-day-epoch/1.0.0",
+  "calendar": "proleptic_gregorian",
+  "anchor_date": "1949-10-01",
+  "anchor_cycle_index": 0,
+  "anchor_ganzhi": "甲子",
+  "calculation": "floor_julian_day_number_at_local_midnight_then_modulo_60",
+  "engineering_status": "research_anchor_pending_qualified_traditional_review",
+  "source_attested": false,
+  "source_notes": [
+    "The Julian-day conversion is an engineering calendar calculation.",
+    "The sexagenary anchor is versioned explicitly and must not be promoted without qualified review."
+  ],
+  "independent_checkpoints": [
+    {"date": "1949-10-01", "cycle_index": 0, "ganzhi": "甲子"},
+    {"date": "1984-02-02", "cycle_index": 2, "ganzhi": "丙寅"},
+    {"date": "2000-01-07", "cycle_index": 0, "ganzhi": "甲子"},
+    {"date": "2024-01-01", "cycle_index": 0, "ganzhi": "甲子"}
+  ]
+}

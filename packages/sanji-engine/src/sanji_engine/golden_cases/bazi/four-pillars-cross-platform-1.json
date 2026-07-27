@@ -1,0 +1,78 @@
+{
+  "fixture_version": "bazi-four-pillars-cross-platform/1.0.0",
+  "synthetic": true,
+  "profile_id": "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+  "profile_version": "1.0.0",
+  "birth_record_overrides": {
+    "local_date": "2024-01-01",
+    "local_time": "12:00:00"
+  },
+  "expected": {
+    "output_hash": "sha256:cb322b8144853afdc62434b518307bca67dda029409710e3c1f9811f5f32fed7",
+    "trace_hash": "sha256:8e646cbe8fcf53c1e36517bac54117070c8e53c74c60bca4ad68d7e2f50cb483",
+    "domain_hash": "sha256:71413a83a0a095f2988a0be355b0b8dc572e7c3cb05f6912c62d08806621d799",
+    "pillars": {
+      "year": {
+        "stem": "癸",
+        "branch": "卯",
+        "ganzhi": "癸卯",
+        "stem_index": 9,
+        "branch_index": 3,
+        "cycle_index": 39,
+        "boundary_policy": "lichun_astronomical_instant",
+        "boundary_instant_utc": "2024-02-04T08:26:49.630617+00:00",
+        "boundary_wall_datetime": "2024-02-04T16:26:49.630617",
+        "comparison_basis": "civil",
+        "comparison": "before"
+      },
+      "month": {
+        "stem": "甲",
+        "branch": "子",
+        "ganzhi": "甲子",
+        "stem_index": 0,
+        "branch_index": 0,
+        "cycle_index": 0,
+        "solar_month_index": 10,
+        "previous_jie": {
+          "name": "大雪",
+          "longitude": 255,
+          "instant_utc": "2023-12-07T09:33:12.285400+00:00",
+          "wall_datetime": "2023-12-07T17:33:12.285400"
+        },
+        "next_jie": {
+          "name": "小寒",
+          "longitude": 285,
+          "instant_utc": "2024-01-05T20:49:19.758974+00:00",
+          "wall_datetime": "2024-01-06T04:49:19.758974"
+        },
+        "comparison_basis": "civil",
+        "derivation": "year_stem_group_then_yin_month_offset"
+      },
+      "day": {
+        "stem": "甲",
+        "branch": "子",
+        "ganzhi": "甲子",
+        "stem_index": 0,
+        "branch_index": 0,
+        "cycle_index": 0,
+        "day_serial_jdn": 2460311,
+        "effective_date": "2024-01-01",
+        "day_epoch_version": "bazi-day-epoch/1.0.0",
+        "rollover_policy": "midnight",
+        "rollover_applied": false
+      },
+      "hour": {
+        "stem": "庚",
+        "branch": "午",
+        "ganzhi": "庚午",
+        "stem_index": 6,
+        "branch_index": 6,
+        "cycle_index": 6,
+        "double_hour_index": 6,
+        "boundary_policy": "23-01_then_two_hour_start_inclusive",
+        "hour_stem_day": "2024-01-01",
+        "derivation": "day_stem_group_then_zi_hour_offset"
+      }
+    }
+  }
+}

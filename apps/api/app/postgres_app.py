@@ -221,3 +221,5 @@ from apps.api.app.knowledge_routes import router as knowledge_router
 app.include_router(knowledge_router)
 from apps.api.app.research_routes import router as research_router
 app.include_router(research_router)
+from apps.api.app.bazi_research_routes import router as bazi_research_router
+app.include_router(bazi_research_router)

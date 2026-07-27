@@ -10,5 +10,6 @@
 - ADR-0008：Signals/Inference 研究基线迁移（Accepted）
 - ADR-0009：实物三钱机械引擎（Accepted for research）
 - ADR-0010：八字方法档案与验证基座（Accepted for research）
+- ADR-0011：八字多 Profile 基础四柱机械引擎（Accepted for research）
 
 “Accepted”只表示工程边界已冻结，不代表任何术数流派已确认。
