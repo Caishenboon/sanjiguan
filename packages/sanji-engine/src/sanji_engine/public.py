@@ -25,6 +25,8 @@ from .errors import (
     SCHEMA_UNSUPPORTED,
 )
 from .rulesets import load_bundle
+from .yijing import cast_physical_three_coin
+from .yijing.assets import ASSET_VERSION as YIJING_ASSET_VERSION
 
 __all__ = ["validate_request", "execute", "replay", "inspect_ruleset"]
 
@@ -100,6 +102,11 @@ def validate_request(request: dict) -> dict:
             INPUT_INVALID,
             "signals and inference must be requested together for this research baseline",
         )
+    if "yijing" in modules and len(modules) != 1:
+        raise EngineError(
+            INPUT_INVALID,
+            "physical three-coin yijing must be requested as an isolated mechanical module",
+        )
     context = _require_mapping(value["deterministic_context"], "deterministic_context")
     if context.get("random_method") != "none" or context.get("random_seed") is not None:
         raise EngineError(
@@ -117,6 +124,11 @@ def validate_request(request: dict) -> dict:
     if missing_versions:
         raise EngineError(
             INPUT_INVALID, "data versions are incomplete", {"fields": missing_versions}
+        )
+    if "yijing" in modules and data_versions.get("yijing_hexagram_mapping") != YIJING_ASSET_VERSION:
+        raise EngineError(
+            REPLAY_DATA_VERSION_MISMATCH,
+            "yijing hexagram mapping data version is unavailable",
         )
     _require_mapping(value["input_snapshot"], "input_snapshot")
     _validate_hash_safe(value)
@@ -402,6 +414,7 @@ def execute(request: dict) -> dict:
     trace: list[dict] = []
     disabled_modules: list[str] = []
     research_metadata: dict = {}
+    yijing_metadata: dict = {}
     research_requested = {"signals", "inference"} <= set(
         validated["requested_modules"]
     )
@@ -411,6 +424,31 @@ def execute(request: dict) -> dict:
             validated["input_snapshot"]
         )
         trace.extend(research_trace)
+    yijing_result = None
+    if "yijing" in validated["requested_modules"]:
+        definition = bundle["modules"]["yijing"]
+        if definition["enabled"]:
+            result, yijing_trace, yijing_metadata = cast_physical_three_coin(
+                validated["input_snapshot"]
+            )
+            result["ruleset_id"] = bundle["bundle_id"]
+            result["ruleset_status"] = bundle["status"]
+            yijing_metadata["yijing_domain_hash"] = content_hash(result)
+            module = {
+                "module_id": "yijing",
+                "module_version": "0.1.0",
+                "method_id": definition["method_id"],
+                "method_status": "traditional_mechanical",
+                "production_activatable": False,
+                "result": result,
+                "trace_step_ids": [step["step_id"] for step in yijing_trace],
+                "rule_refs": [definition["method_id"]],
+                "source_refs": definition["source_ids"],
+                "uncertainties": ["INTERPRETATION_OUT_OF_SCOPE"],
+                "sensitivity_flags": [],
+            }
+            yijing_result = {**module, "content_hash": content_hash(module)}
+            trace.extend(yijing_trace)
     for module_id in validated["requested_modules"]:
         definition = bundle["modules"][module_id]
         if module_id == "calendar" and definition["enabled"]:
@@ -420,6 +458,8 @@ def execute(request: dict) -> dict:
             trace.extend(module_trace)
         elif module_id in research_results and definition["enabled"]:
             module_results[module_id] = research_results[module_id]
+        elif module_id == "yijing" and yijing_result is not None:
+            module_results[module_id] = yijing_result
         else:
             module_results[module_id] = disabled_result(module_id, definition)
             disabled_modules.append(module_id)
@@ -442,6 +482,11 @@ def execute(request: dict) -> dict:
             "inference": bundle["modules"]["inference"]["method_id"],
         }
         manifest_base["domain_result_hashes"] = research_metadata
+    if yijing_result is not None:
+        manifest_base["method_versions"] = {
+            "yijing": bundle["modules"]["yijing"]["method_id"],
+        }
+        manifest_base["domain_result_hashes"] = yijing_metadata
     replay_manifest = {
         **manifest_base,
         "content_hash": content_hash(manifest_base),

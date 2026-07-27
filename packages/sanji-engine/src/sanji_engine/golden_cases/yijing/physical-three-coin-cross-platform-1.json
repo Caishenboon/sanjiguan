@@ -1,0 +1,15 @@
+{
+  "schema_version": "yijing-three-coin-determinism/1.0.0",
+  "case_id": "YIJING-PHYSICAL-SYNTHETIC-01",
+  "classification": "synthetic_mechanical_golden_case",
+  "input_line_values_bottom_to_top": [6, 7, 8, 9, 6, 7],
+  "expected": {
+    "output_hash": "sha256:101e7a519a130fa2e4bd5bc77e560c9d6ad2509e9c14ac8caa0d80af05ff7f67",
+    "trace_hash": "sha256:a007ab97b5f3e27e1cf5bf7826ad12643e6985efbff2690e263b672546af2ab4",
+    "yijing_domain_hash": "sha256:11b3cd663da5ccd85e5d2862ca9d9e188e6421e1a6aa2e30e6701703a937d788",
+    "base_hexagram": {"key": "010101", "sequence": 64, "name": "未济"},
+    "transformed_hexagram": {"key": "110011", "sequence": 61, "name": "中孚"},
+    "moving_lines": [1, 4, 5]
+  },
+  "scope": "Mechanical cast only; no interpretation, auspiciousness or timing."
+}

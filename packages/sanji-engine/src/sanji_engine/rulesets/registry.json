@@ -3,6 +3,8 @@
   "bundles": {
     "core-boundary-0.1.0": "core-boundary-0.1.0.json",
     "research-baseline-0.2.0": "research-baseline-0.2.0.json",
-    "research-baseline-0.2.0-revoked-fixture": "research-baseline-0.2.0-revoked-fixture.json"
+    "research-baseline-0.2.0-revoked-fixture": "research-baseline-0.2.0-revoked-fixture.json",
+    "yijing-three-coin-mechanical-0.1.0": "yijing-three-coin-mechanical-0.1.0.json",
+    "yijing-three-coin-mechanical-0.1.0-revoked-fixture": "yijing-three-coin-mechanical-0.1.0-revoked-fixture.json"
   }
 }

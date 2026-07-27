@@ -25,4 +25,5 @@ sanji_engine = [
   "rulesets/*.json",
   "golden_cases/**/*.json",
   "research_baselines/*.json",
+  "yijing/assets/*.json",
 ]

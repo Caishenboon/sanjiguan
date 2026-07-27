@@ -87,6 +87,45 @@ def main() -> None:
         ):
             fail(f"{module} research-baseline gate is invalid")
 
+    yijing = sanji_engine.inspect_ruleset("yijing-three-coin-mechanical-0.1.0")
+    mechanical = yijing["modules"]["yijing"]
+    if (
+        yijing["system_class"] != "traditional_mechanical"
+        or yijing["production_activatable"]
+        or not mechanical["enabled"]
+        or mechanical["production_activatable"]
+        or mechanical["interpretation_enabled"]
+    ):
+        fail("physical three-coin ruleset exceeds mechanical research scope")
+    for module in ("bazi", "ziwei", "past-life", "bardo", "relationship", "life-chart"):
+        if yijing["modules"][module]["enabled"]:
+            fail(f"{module} was activated by the three-coin ruleset")
+
+    application_sources = [
+        ROOT / "apps/api/app/evidence_routes.py",
+        ROOT / "packages/evidence/three_coin.py",
+    ]
+    forbidden_algorithm_symbols = {
+        "LINE_STATES", "TRIGRAMS", "cast_physical_three_coin",
+        "assemble_trigrams", "lookup_hexagram",
+    }
+    for path in application_sources:
+        tree = ast.parse(path.read_text("utf-8"))
+        names = {
+            node.name for node in ast.walk(tree)
+            if isinstance(node, (ast.FunctionDef, ast.ClassDef))
+        }
+        assigned = {
+            target.id
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Assign)
+            for target in node.targets
+            if isinstance(target, ast.Name)
+        }
+        leaked = sorted((names | assigned) & forbidden_algorithm_symbols)
+        if leaked:
+            fail(f"application contains duplicate yijing mechanics: {path}: {leaked}")
+
     baseline = json.loads(
         (CORE / "research_baselines/signals-inference-sprint2.json").read_text("utf-8")
     )
