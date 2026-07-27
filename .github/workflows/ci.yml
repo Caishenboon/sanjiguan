@@ -117,6 +117,8 @@ jobs:
         working-directory: packages/oracle-adapters/src/oracle_adapters/ziwei/iztro
         run: pnpm install --frozen-lockfile
       - name: Execute Oracle differential tests
+        env:
+          SANJI_IZTRO_RUNTIME_DIR: packages/oracle-adapters/src/oracle_adapters/ziwei/iztro
         run: python -m unittest tests.test_oracle_adapters -v
       - name: Storybook build and accessibility stories
         working-directory: packages/sanji-ui

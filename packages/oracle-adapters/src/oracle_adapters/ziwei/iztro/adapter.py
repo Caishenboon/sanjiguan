@@ -1,12 +1,18 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 from pathlib import Path
 
 
 def execute(value: dict) -> dict:
-    runner = Path(__file__).with_name("runner.mjs")
+    runtime_dir = Path(
+        os.environ.get("SANJI_IZTRO_RUNTIME_DIR", Path(__file__).parent)
+    ).resolve()
+    runner = runtime_dir / "runner.mjs"
+    if not runner.is_file():
+        raise RuntimeError("configured iztro runtime does not contain runner.mjs")
     completed = subprocess.run(
         ["node", str(runner)],
         input=json.dumps(value, ensure_ascii=False),
@@ -15,6 +21,7 @@ def execute(value: dict) -> dict:
         capture_output=True,
         check=False,
         timeout=30,
+        cwd=runtime_dir,
     )
     if completed.returncode:
         raise RuntimeError(completed.stderr.strip() or "iztro runner failed")
