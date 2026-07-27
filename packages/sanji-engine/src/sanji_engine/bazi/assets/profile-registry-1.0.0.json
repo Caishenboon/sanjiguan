@@ -1,0 +1,20 @@
+{
+  "content_hash": "sha256:ea8024925a22ad993ea56d2f21ab38e287c615336ea475a2e078d4cae866f364",
+  "production_activatable": false,
+  "profiles": {
+    "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+      "content_hash": "sha256:c2f36236be9e7657946579170addcd9fbea0da5aecc73fb8d1d813ee124c0a95",
+      "filename": "apparent-zichu-candidate-0.1.0.json"
+    },
+    "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+      "content_hash": "sha256:eeafaf4f34c24fa6d6742a6c332145de8d29ff8b2e9f292ae9d75df9fe6f9137",
+      "filename": "civil-midnight-candidate-0.1.0.json"
+    },
+    "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+      "content_hash": "sha256:0247f39e9f0eba2c5e7b4523a20ea7f20351d06fc2c31df90cbf519c66cbfa8f",
+      "filename": "dual-split-zi-candidate-0.1.0.json"
+    }
+  },
+  "schema_version": "bazi-method-profile-registry/1.0.0",
+  "status": "research_only"
+}

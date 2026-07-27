@@ -1,7 +1,8 @@
 # 三际观——宿世因缘与命势推演系统
 
-内部工程名继续使用 `samsara-engine`。当前状态为 Sprint 1A.5 工程基础；
-八字、紫微、易经、密宗、中阴、宿世身份、因缘评分和命势 K 线生产规则均未激活。
+内部工程名继续使用 `samsara-engine`。确定性核心位于 `packages/sanji-engine`；
+八字、紫微、解释性易经、密宗、中阴、宿世身份、因缘评分和命势 K 线生产规则均未激活。
+八字方法档案与边界案例只用于 Owner 审校，不生成四柱。
 
 ## API
 
@@ -54,6 +55,8 @@ work/.venv/Scripts/python -m unittest discover -s tests -p "test_*.py"
 work/.venv/Scripts/python -m unittest discover -s apps/api/tests -p "test_*.py"
 work/.venv/Scripts/python scripts/validate_sprint1a5.py
 work/.venv/Scripts/python scripts/validate_sprint1a6.py
+work/.venv/Scripts/python scripts/validate_sanji_engine.py
+work/.venv/Scripts/python scripts/validate_bazi_method_foundation.py
 work/.venv/Scripts/python scripts/check_doc_links.py
 ```
 

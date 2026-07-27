@@ -14,6 +14,11 @@
 | ID | 等级 | 来源 | 用途 | 使用边界 |
 |---|---|---|---|---|
 | S-TIME-001 | A1 | [USNO Equation of Time](https://aa.usno.navy.mil/faq/eqtime) | 视/平太阳时、经度差、均时差 | 天文定义，不裁定八字流派 |
+| S-TIME-002 | A1 | [IANA tzdb theory](https://data.iana.org/time-zones/tzdb/theory.html) | named-zone、DST、历史 offset 与早期资料限制 | 早期资料会修订，需地点交叉核验 |
+| S-TIME-003 | A1 | [HKO 24 Solar Terms](https://www.hko.gov.hk/en/gts/time/24solarterms.htm) | 黄经 15°、十二中气与十二节气 | 不裁定八字年/月柱边界 |
+| S-TIME-004 | A1 | [HKO Solar Term Instants](https://www.hko.gov.hk/en/gts/astronomy/Solar_Term.htm) | 节气瞬时交叉核验入口 | 命理包含侧仍需审校 |
+| S-BAZI-001 | A2 | [《事林廣記·續集·卷十一》](https://zh.wikisource.org/wiki/%E4%BA%8B%E6%9E%97%E5%BB%A3%E8%A8%98/%E7%BA%8C%E9%9B%86/%E5%8D%B711) | 某一传本的起运/顺逆主张 | 需版本与流派审校；不支撑 D-002 |
+| S-BAZI-002 | A2 | [《珞琭子三命消息賦注》](https://zh.wikisource.org/wiki/%E7%8F%9E%E7%90%AD%E5%AD%90%E4%B8%89%E5%91%BD%E6%B6%88%E6%81%AF%E8%B3%A6%E6%B3%A8) | 某一注本的顺逆主张 | 不能单独冻结现代方法 |
 | S-TIME-002 | A1 | [NREL Solar Position Algorithm](https://midcdmz.nrel.gov/spa/) | 高精度太阳位置实现/测试 | 需遵循软件许可；不是命理规则 |
 | S-TIME-003 | A1 | [IANA Time Zone Database](https://www.iana.org/time-zones) | 历史时区、DST | 1970 年前数据有已知局限 |
 | S-TIME-004 | A1 | [IANA tz theory](https://data.iana.org/time-zones/theory.html) | 时区数据准确性边界 | 历史出生时间需保留不确定性 |

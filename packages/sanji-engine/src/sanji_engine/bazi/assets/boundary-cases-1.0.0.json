@@ -1,0 +1,4024 @@
+{
+  "asset_id": "bazi-boundary-cases-0.1.0",
+  "case_count": 74,
+  "cases": [
+    {
+      "case_id": "TIME-MODERN",
+      "category": "time_and_timezone",
+      "classification": "mechanically_verified",
+      "content_hash": "sha256:a41b52c8993a881549e7bf4c6091465f5dc02bb64016205dba4585deb54610a2",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "LOCAL_APPARENT_SOLAR_TIME",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "CIVIL_TIME_ONLY",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "DUAL_CIVIL_APPARENT_SENSITIVITY"
+        },
+        "dimensions": [
+          "solar_time_mode",
+          "historical_legal_time"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": true,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "1990-01-15",
+        "local_time": "08:30:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "scenario": "ordinary modern time",
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "mechanically_verified",
+      "source_claim_ids": [
+        "C-ENG-001",
+        "C-ENG-002",
+        "C-ENG-004"
+      ]
+    },
+    {
+      "case_id": "TIME-DST-START",
+      "category": "time_and_timezone",
+      "classification": "mechanically_verified",
+      "content_hash": "sha256:fe8597fbfab0fc1f7d5a1cd7e839163dc9dd2d0e7c07c9648e252fda6592e46e",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "LOCAL_APPARENT_SOLAR_TIME",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "CIVIL_TIME_ONLY",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "DUAL_CIVIL_APPARENT_SENSITIVITY"
+        },
+        "dimensions": [
+          "solar_time_mode",
+          "historical_legal_time"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": true,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-03-10",
+        "local_time": "02:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "scenario": "DST spring gap",
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "America/New_York",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "mechanically_verified",
+      "source_claim_ids": [
+        "C-ENG-001",
+        "C-ENG-002",
+        "C-ENG-004"
+      ]
+    },
+    {
+      "case_id": "TIME-DST-END",
+      "category": "time_and_timezone",
+      "classification": "mechanically_verified",
+      "content_hash": "sha256:7a55937767c0757025b4d45204e34b02c025586af7a08ecf9aff4a3a1c707d22",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "LOCAL_APPARENT_SOLAR_TIME",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "CIVIL_TIME_ONLY",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "DUAL_CIVIL_APPARENT_SENSITIVITY"
+        },
+        "dimensions": [
+          "solar_time_mode",
+          "historical_legal_time"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": true,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-11-03",
+        "local_time": "01:30:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "scenario": "DST fall fold",
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "America/New_York",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "mechanically_verified",
+      "source_claim_ids": [
+        "C-ENG-001",
+        "C-ENG-002",
+        "C-ENG-004"
+      ]
+    },
+    {
+      "case_id": "TIME-HISTORICAL-ZONE",
+      "category": "time_and_timezone",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:e6ca96b264cf4ec3305bc3143f10213b6c7aac03a7b341e6f8ccefcd008482e0",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "LOCAL_APPARENT_SOLAR_TIME",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "CIVIL_TIME_ONLY",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "DUAL_CIVIL_APPARENT_SENSITIVITY"
+        },
+        "dimensions": [
+          "solar_time_mode",
+          "historical_legal_time"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "1949-05-28",
+        "local_time": "00:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "scenario": "historical legal offset",
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-001",
+        "C-ENG-002",
+        "C-ENG-004"
+      ]
+    },
+    {
+      "case_id": "TIME-LONGITUDE",
+      "category": "time_and_timezone",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:a48015be12bde12c861c1d18560efb447673c6045e04cff10e67e5316d3868dd",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "LOCAL_APPARENT_SOLAR_TIME",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "CIVIL_TIME_ONLY",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "DUAL_CIVIL_APPARENT_SENSITIVITY"
+        },
+        "dimensions": [
+          "solar_time_mode",
+          "historical_legal_time"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "1990-01-15",
+        "local_time": "08:30:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "scenario": "longitude from zone meridian",
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-001",
+        "C-ENG-002",
+        "C-ENG-004"
+      ]
+    },
+    {
+      "case_id": "TIME-MEAN-CROSS-HOUR",
+      "category": "time_and_timezone",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:abd5e0dc028565c36b38c0168050300c2ed4f669e70e6967167270e36e1af23a",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "LOCAL_APPARENT_SOLAR_TIME",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "CIVIL_TIME_ONLY",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "DUAL_CIVIL_APPARENT_SENSITIVITY"
+        },
+        "dimensions": [
+          "solar_time_mode",
+          "historical_legal_time"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "1990-01-15",
+        "local_time": "00:30:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "scenario": "mean-solar crosses hour",
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-001",
+        "C-ENG-002",
+        "C-ENG-004"
+      ]
+    },
+    {
+      "case_id": "TIME-APPARENT-CROSS-DAY",
+      "category": "time_and_timezone",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:5002348d915a398ab4b640c4dd95318c268e58568c8efadded8cfa5dee5e6028",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "LOCAL_APPARENT_SOLAR_TIME",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "CIVIL_TIME_ONLY",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "DUAL_CIVIL_APPARENT_SENSITIVITY"
+        },
+        "dimensions": [
+          "solar_time_mode",
+          "historical_legal_time"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "1990-02-11",
+        "local_time": "00:02:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "scenario": "apparent-solar crosses date",
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-001",
+        "C-ENG-002",
+        "C-ENG-004"
+      ]
+    },
+    {
+      "case_id": "TIME-PRE-GREGORIAN-REFORM",
+      "category": "time_and_timezone",
+      "classification": "pending_manual_review",
+      "content_hash": "sha256:1ae70bb2d6f660b4aa19201d615ed41c62f45d4e7bb8991367ece524cc655290",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "RESEARCH_WINDOW_1900_2099",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "RESEARCH_WINDOW_1900_2099",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "RESEARCH_WINDOW_1900_2099"
+        },
+        "dimensions": [
+          "historical_calendar_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "1500-02-04",
+        "local_time": "12:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "scenario": "calendar reform semantics are deliberately unresolved",
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Europe/Rome",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-001",
+        "C-ENG-005",
+        "C-GAP-003"
+      ]
+    },
+    {
+      "case_id": "YEAR-LICHUN-BEFORE",
+      "category": "year_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:ad4305279f3f0f7c73e334f4f80b789059bd811f94bba30919b062c8948cfb6b",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "year_boundary_policy": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "year_boundary_policy": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "year_boundary_policy": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "year_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "00:00:00",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-02-04T08:26:49.630617+00:00",
+        "synthetic": true,
+        "test_instant_utc": "2024-02-04T08:26:48.630617+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "YEAR-LICHUN-AT",
+      "category": "year_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:b504f340e274aa2773e1173f9446fc91a56da1082757c639cc0d51f2c87f9966",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "year_boundary_policy": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "year_boundary_policy": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "year_boundary_policy": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "year_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "00:00:00",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-02-04T08:26:49.630617+00:00",
+        "synthetic": true,
+        "test_instant_utc": "2024-02-04T08:26:49.630617+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "YEAR-LICHUN-AFTER",
+      "category": "year_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:4c1f0cc8076e87cea3ce9a75c7a46d2397394a2deb1c86b86cee780b01a09919",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "year_boundary_policy": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "year_boundary_policy": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "year_boundary_policy": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "year_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "00:00:00",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-02-04T08:26:49.630617+00:00",
+        "synthetic": true,
+        "test_instant_utc": "2024-02-04T08:26:50.630617+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "YEAR-LICHUN-CROSS-TIMEZONE",
+      "category": "year_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:ed68f6f41d6fb09dbb781262c73d89951e55f5233cd47e933fa602061594d7ae",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE"
+        },
+        "dimensions": [
+          "year_boundary_policy",
+          "historical_legal_time"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-03",
+        "local_time": "16:30:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-02-04T08:26:49.630617+00:00",
+        "scenario": "civil date and solar-term instant differ by timezone",
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "America/Los_Angeles",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-001",
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-LICHUN-BEFORE",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:69fbfcf34cb77e9f22826b9653251152fd35605d83370683ccff30353ffd8d93",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "08:26:49.630617",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-02-04T08:26:49.630617+00:00",
+        "synthetic": true,
+        "target_longitude": 315,
+        "term_name": "LICHUN",
+        "test_instant_utc": "2024-02-04T08:26:48.630617+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-LICHUN-AT",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:74cf11e5eb7a057bf2ab508e951c3c3015bc79a23cc47964e4c82ba1a10edff5",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "08:26:49.630617",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-02-04T08:26:49.630617+00:00",
+        "synthetic": true,
+        "target_longitude": 315,
+        "term_name": "LICHUN",
+        "test_instant_utc": "2024-02-04T08:26:49.630617+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-LICHUN-AFTER",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:02fd1fec50908e83b9646e7bc24f02dfd0f6c5a539b11b2340902856494aaa9b",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "08:26:49.630617",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-02-04T08:26:49.630617+00:00",
+        "synthetic": true,
+        "target_longitude": 315,
+        "term_name": "LICHUN",
+        "test_instant_utc": "2024-02-04T08:26:50.630617+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-JINGZHE-BEFORE",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:acc57d5353b581043f3fc6a01b2f3770d43f93f1ea367a11a5417318e19d3495",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-03-05",
+        "local_time": "02:22:28.877388",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-03-05T02:22:28.877388+00:00",
+        "synthetic": true,
+        "target_longitude": 345,
+        "term_name": "JINGZHE",
+        "test_instant_utc": "2024-03-05T02:22:27.877388+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-JINGZHE-AT",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:652584e51bc248c78b18e9930f8481eac550f12654f3f6620a5349c075a94819",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-03-05",
+        "local_time": "02:22:28.877388",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-03-05T02:22:28.877388+00:00",
+        "synthetic": true,
+        "target_longitude": 345,
+        "term_name": "JINGZHE",
+        "test_instant_utc": "2024-03-05T02:22:28.877388+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-JINGZHE-AFTER",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:76598255e866c5c204eda28ba6d0ffdebb43c8bb799b2298305330b28b62d03d",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-03-05",
+        "local_time": "02:22:28.877388",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-03-05T02:22:28.877388+00:00",
+        "synthetic": true,
+        "target_longitude": 345,
+        "term_name": "JINGZHE",
+        "test_instant_utc": "2024-03-05T02:22:29.877388+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-QINGMING-BEFORE",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:4d704c4685cb010737755deaff039bbc42732894f885f5f8d3f72425ce3e65c9",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-04-04",
+        "local_time": "07:02:14.725973",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-04-04T07:02:14.725973+00:00",
+        "synthetic": true,
+        "target_longitude": 15,
+        "term_name": "QINGMING",
+        "test_instant_utc": "2024-04-04T07:02:13.725973+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-QINGMING-AT",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:78411b57e43a4d5b55704a476b57c7a9195786d47471a518d7b376ae3988941a",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-04-04",
+        "local_time": "07:02:14.725973",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-04-04T07:02:14.725973+00:00",
+        "synthetic": true,
+        "target_longitude": 15,
+        "term_name": "QINGMING",
+        "test_instant_utc": "2024-04-04T07:02:14.725973+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-QINGMING-AFTER",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:7f388f1b0792a0c6894904cb13a4e32fee0813e672d4d186b2080ca63e164203",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-04-04",
+        "local_time": "07:02:14.725973",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-04-04T07:02:14.725973+00:00",
+        "synthetic": true,
+        "target_longitude": 15,
+        "term_name": "QINGMING",
+        "test_instant_utc": "2024-04-04T07:02:15.725973+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-LIXIA-BEFORE",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:03b3d0e3b66b1f00c4ff4c86a7325bbf16e9026a36e5d059df435ca4d649eac0",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-05-05",
+        "local_time": "00:10:08.464761",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-05-05T00:10:08.464761+00:00",
+        "synthetic": true,
+        "target_longitude": 45,
+        "term_name": "LIXIA",
+        "test_instant_utc": "2024-05-05T00:10:07.464761+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-LIXIA-AT",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:e01aa7bc821bef7bb1f40aed16231a4a6ba46e09cde81bcb612615b87989d7f2",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-05-05",
+        "local_time": "00:10:08.464761",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-05-05T00:10:08.464761+00:00",
+        "synthetic": true,
+        "target_longitude": 45,
+        "term_name": "LIXIA",
+        "test_instant_utc": "2024-05-05T00:10:08.464761+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-LIXIA-AFTER",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:84df232a08e75d813b030ad95660b396ca4519f885da41e9dc2d5c524adc308c",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-05-05",
+        "local_time": "00:10:08.464761",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-05-05T00:10:08.464761+00:00",
+        "synthetic": true,
+        "target_longitude": 45,
+        "term_name": "LIXIA",
+        "test_instant_utc": "2024-05-05T00:10:09.464761+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-MANGZHONG-BEFORE",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:e2375f722319b4d069edb97678bd13ff4422232a4a14b45b5655ce6d5d938dad",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-06-05",
+        "local_time": "04:09:54.092283",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-06-05T04:09:54.092283+00:00",
+        "synthetic": true,
+        "target_longitude": 75,
+        "term_name": "MANGZHONG",
+        "test_instant_utc": "2024-06-05T04:09:53.092283+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-MANGZHONG-AT",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:8ed84594a0803b44b931862546da4b04719463fba35a2533b13cf4e797bc680f",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-06-05",
+        "local_time": "04:09:54.092283",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-06-05T04:09:54.092283+00:00",
+        "synthetic": true,
+        "target_longitude": 75,
+        "term_name": "MANGZHONG",
+        "test_instant_utc": "2024-06-05T04:09:54.092283+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-MANGZHONG-AFTER",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:2133f5df67a3984096e008b20baa9fa4ced1a84358aee371e4b5092d4b943914",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-06-05",
+        "local_time": "04:09:54.092283",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-06-05T04:09:54.092283+00:00",
+        "synthetic": true,
+        "target_longitude": 75,
+        "term_name": "MANGZHONG",
+        "test_instant_utc": "2024-06-05T04:09:55.092283+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-XIAOSHU-BEFORE",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:96530c1da43d221bd7a5e3d37f6070b79f56e1cb34e8fdc302a4aa0b14281d2f",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-07-06",
+        "local_time": "14:20:07.101612",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-07-06T14:20:07.101612+00:00",
+        "synthetic": true,
+        "target_longitude": 105,
+        "term_name": "XIAOSHU",
+        "test_instant_utc": "2024-07-06T14:20:06.101612+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-XIAOSHU-AT",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:727becf95202bfd2e2d77928f8763fb24f32cda6796cd3e8ca7bfaa424574aa6",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-07-06",
+        "local_time": "14:20:07.101612",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-07-06T14:20:07.101612+00:00",
+        "synthetic": true,
+        "target_longitude": 105,
+        "term_name": "XIAOSHU",
+        "test_instant_utc": "2024-07-06T14:20:07.101612+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-XIAOSHU-AFTER",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:3b5de17029eb183f82c1ee41f7b69090fe5da2d0857a8d6037b839b4aa4e2e10",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-07-06",
+        "local_time": "14:20:07.101612",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-07-06T14:20:07.101612+00:00",
+        "synthetic": true,
+        "target_longitude": 105,
+        "term_name": "XIAOSHU",
+        "test_instant_utc": "2024-07-06T14:20:08.101612+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-LIQIU-BEFORE",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:f900acd81a9c1ed8b5ee4a7eb61329b8695b9011bfa525e621bb7b4cda3b8ed9",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-08-07",
+        "local_time": "00:09:30.136986",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-08-07T00:09:30.136986+00:00",
+        "synthetic": true,
+        "target_longitude": 135,
+        "term_name": "LIQIU",
+        "test_instant_utc": "2024-08-07T00:09:29.136986+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-LIQIU-AT",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:18cd8373785e4c0b75923bb54148c1de66fd87e595322932a528048ae582ec77",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-08-07",
+        "local_time": "00:09:30.136986",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-08-07T00:09:30.136986+00:00",
+        "synthetic": true,
+        "target_longitude": 135,
+        "term_name": "LIQIU",
+        "test_instant_utc": "2024-08-07T00:09:30.136986+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-LIQIU-AFTER",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:45028d4dd0d950f3cf6237701afb4ce07b427a302c7b2cbfcf3545765d06531c",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-08-07",
+        "local_time": "00:09:30.136986",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-08-07T00:09:30.136986+00:00",
+        "synthetic": true,
+        "target_longitude": 135,
+        "term_name": "LIQIU",
+        "test_instant_utc": "2024-08-07T00:09:31.136986+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-BAILU-BEFORE",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:2ca983c288af17ba054124bff45aeda5d2c56a13a246413f3a940aa01be90f9c",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-09-07",
+        "local_time": "03:11:41.910223",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-09-07T03:11:41.910223+00:00",
+        "synthetic": true,
+        "target_longitude": 165,
+        "term_name": "BAILU",
+        "test_instant_utc": "2024-09-07T03:11:40.910223+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-BAILU-AT",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:bdf420ea5bb2c8d2f13e61a4ef0b7e99282d5a29c48b6a55b364a7b8ccd183af",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-09-07",
+        "local_time": "03:11:41.910223",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-09-07T03:11:41.910223+00:00",
+        "synthetic": true,
+        "target_longitude": 165,
+        "term_name": "BAILU",
+        "test_instant_utc": "2024-09-07T03:11:41.910223+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-BAILU-AFTER",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:825b60aafaac86069da007f29fbb806b6435d8e0a575b075377b643ac58bdc7d",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-09-07",
+        "local_time": "03:11:41.910223",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-09-07T03:11:41.910223+00:00",
+        "synthetic": true,
+        "target_longitude": 165,
+        "term_name": "BAILU",
+        "test_instant_utc": "2024-09-07T03:11:42.910223+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-HANLU-BEFORE",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:0580fbaab3af68a34dca7a9ef32eb5ee2e47fa08cae4aa15c64f9ddae8db40cb",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-10-07",
+        "local_time": "19:00:06.976024",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-10-07T19:00:06.976024+00:00",
+        "synthetic": true,
+        "target_longitude": 195,
+        "term_name": "HANLU",
+        "test_instant_utc": "2024-10-07T19:00:05.976024+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-HANLU-AT",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:4a00c5f25d8a9e676133002b6b4422f14ef65a074ed9f95f23d79924f7c1f1ff",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-10-07",
+        "local_time": "19:00:06.976024",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-10-07T19:00:06.976024+00:00",
+        "synthetic": true,
+        "target_longitude": 195,
+        "term_name": "HANLU",
+        "test_instant_utc": "2024-10-07T19:00:06.976024+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-HANLU-AFTER",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:ce5595fbebfc5126039ad68e3f24e34e471f5ae47d4b593ac9d553b332137638",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-10-07",
+        "local_time": "19:00:06.976024",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-10-07T19:00:06.976024+00:00",
+        "synthetic": true,
+        "target_longitude": 195,
+        "term_name": "HANLU",
+        "test_instant_utc": "2024-10-07T19:00:07.976024+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-LIDONG-BEFORE",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:8f3f928a0bf21f4bf90ed36a3327098c67f12dcb246aa69fd379878a800ec1b3",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-11-06",
+        "local_time": "22:19:55.550103",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-11-06T22:19:55.550103+00:00",
+        "synthetic": true,
+        "target_longitude": 225,
+        "term_name": "LIDONG",
+        "test_instant_utc": "2024-11-06T22:19:54.550103+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-LIDONG-AT",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:0226073e8ac6e9e734e2b8749de7bef56c2b82b636980c97ad8537aed56c25be",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-11-06",
+        "local_time": "22:19:55.550103",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-11-06T22:19:55.550103+00:00",
+        "synthetic": true,
+        "target_longitude": 225,
+        "term_name": "LIDONG",
+        "test_instant_utc": "2024-11-06T22:19:55.550103+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-LIDONG-AFTER",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:f39814a5e97822cd11220c88c89151809aeb7aeb4d067e3e539cecf9032dc9c3",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-11-06",
+        "local_time": "22:19:55.550103",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-11-06T22:19:55.550103+00:00",
+        "synthetic": true,
+        "target_longitude": 225,
+        "term_name": "LIDONG",
+        "test_instant_utc": "2024-11-06T22:19:56.550103+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-DAXUE-BEFORE",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:5f57957bb60f4c1acc08070d61ffafb763a8f165365b3cfcd87106eede82ff08",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-12-06",
+        "local_time": "15:16:48.690458",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-12-06T15:16:48.690458+00:00",
+        "synthetic": true,
+        "target_longitude": 255,
+        "term_name": "DAXUE",
+        "test_instant_utc": "2024-12-06T15:16:47.690458+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-DAXUE-AT",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:d85e1533803956ebec7cbfe7078fa0bd730731dde2baf984124055adcf9d8482",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-12-06",
+        "local_time": "15:16:48.690458",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-12-06T15:16:48.690458+00:00",
+        "synthetic": true,
+        "target_longitude": 255,
+        "term_name": "DAXUE",
+        "test_instant_utc": "2024-12-06T15:16:48.690458+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-DAXUE-AFTER",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:cdeb64bafc8c60fada02d78214cab8d56332de777c9c007108cfa1a24770a5ab",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-12-06",
+        "local_time": "15:16:48.690458",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-12-06T15:16:48.690458+00:00",
+        "synthetic": true,
+        "target_longitude": 255,
+        "term_name": "DAXUE",
+        "test_instant_utc": "2024-12-06T15:16:49.690458+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-XIAOHAN-BEFORE",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:adaf71d1805e81b173d0b66d33ff83045618d3b7dad72a11627bddbc4a643e43",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-01-05",
+        "local_time": "20:49:19.758975",
+        "offset_seconds": -1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-01-05T20:49:19.758975+00:00",
+        "synthetic": true,
+        "target_longitude": 285,
+        "term_name": "XIAOHAN",
+        "test_instant_utc": "2024-01-05T20:49:18.758975+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-XIAOHAN-AT",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:b1e60232d90f462095edbaff924bf288428511bddfe1ac6264900a84e9ffa902",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-01-05",
+        "local_time": "20:49:19.758975",
+        "offset_seconds": 0,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-01-05T20:49:19.758975+00:00",
+        "synthetic": true,
+        "target_longitude": 285,
+        "term_name": "XIAOHAN",
+        "test_instant_utc": "2024-01-05T20:49:19.758975+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-XIAOHAN-AFTER",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:a501efe2943e792b353e78708da8949de3986015e8036e35c69c63676e8e6f3b",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "month_boundary_policy": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+          }
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-01-05",
+        "local_time": "20:49:19.758975",
+        "offset_seconds": 1,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "reference_instant_utc": "2024-01-05T20:49:19.758975+00:00",
+        "synthetic": true,
+        "target_longitude": 285,
+        "term_name": "XIAOHAN",
+        "test_instant_utc": "2024-01-05T20:49:20.758975+00:00",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-ZHONGQI-CONTROL",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:7fab97b531e3adf4d5d03c009dd5fe2f25b6d12b09c183ff42a5a4bc5a88f93d",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-04-04",
+        "local_time": "00:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "scenario": "control distinguishing jie, zhongqi, and civil midnight",
+        "synthetic": true,
+        "target_longitude": 330,
+        "term_name": "YUSHUI",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "MONTH-MIDNIGHT-TERM",
+      "category": "month_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:bd1e8bcf08a017e0b33f7cb05e0d84e311cb3fc118c4731cf51a09c8a4271464",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+        },
+        "dimensions": [
+          "month_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-04-04",
+        "local_time": "00:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "scenario": "control distinguishing jie, zhongqi, and civil midnight",
+        "synthetic": true,
+        "target_longitude": 15,
+        "term_name": "SYNTHETIC_MIDNIGHT_QINGMING",
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-003",
+        "C-GAP-004"
+      ]
+    },
+    {
+      "case_id": "DAY-225900",
+      "category": "day_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:7644096a365ba6c91c26f86609ec48a8effd1c9458deb2f56ae9a4a3db96ac00",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "DAY_BOUNDARY_23_ZICHU",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "DAY_BOUNDARY_00_CIVIL",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "LATE_EARLY_ZI_SPLIT"
+        },
+        "dimensions": [
+          "day_rollover_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "22:59:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "DAY-230000",
+      "category": "day_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:bbe79a1a81cc71a1b78350a383cc9660628c2acc4cc9011df713f87b795d4546",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "DAY_BOUNDARY_23_ZICHU",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "DAY_BOUNDARY_00_CIVIL",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "LATE_EARLY_ZI_SPLIT"
+        },
+        "dimensions": [
+          "day_rollover_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "23:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "DAY-235900",
+      "category": "day_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:7cbf182089bff2bb39e8e95357c95e531e3675c5fe4fc2caa93fc2e70cdcbdc7",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "DAY_BOUNDARY_23_ZICHU",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "DAY_BOUNDARY_00_CIVIL",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "LATE_EARLY_ZI_SPLIT"
+        },
+        "dimensions": [
+          "day_rollover_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "23:59:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "DAY-000000",
+      "category": "day_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:f77cd84836e7cf4ea011404271de4bf9912257c48f74f9b4abfc6680ea71afba",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "DAY_BOUNDARY_23_ZICHU",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "DAY_BOUNDARY_00_CIVIL",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "LATE_EARLY_ZI_SPLIT"
+        },
+        "dimensions": [
+          "day_rollover_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "00:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "DAY-005900",
+      "category": "day_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:9befbd774c82b10f5ca5160ed23510247ef9e6e20ae01c090eb556ec5008edde",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "DAY_BOUNDARY_23_ZICHU",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "DAY_BOUNDARY_00_CIVIL",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "LATE_EARLY_ZI_SPLIT"
+        },
+        "dimensions": [
+          "day_rollover_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "00:59:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "DAY-010000",
+      "category": "day_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:d50bd0cf82824d47fc1328156cb0729bd8092156715ac5de44d7a37fa2f430f7",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "DAY_BOUNDARY_23_ZICHU",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "DAY_BOUNDARY_00_CIVIL",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "LATE_EARLY_ZI_SPLIT"
+        },
+        "dimensions": [
+          "day_rollover_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "01:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "DAY-APPARENT-CORRECTION-CROSS",
+      "category": "day_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:29824dce224b511f292890f2c8c4b5dcfe211c474dc5261d45be892347e7fdc3",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "day_rollover_policy": "DAY_BOUNDARY_23_ZICHU",
+            "solar_time_mode": "LOCAL_APPARENT_SOLAR_TIME"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "day_rollover_policy": "DAY_BOUNDARY_00_CIVIL",
+            "solar_time_mode": "CIVIL_TIME_ONLY"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "day_rollover_policy": "LATE_EARLY_ZI_SPLIT",
+            "solar_time_mode": "DUAL_CIVIL_APPARENT_SENSITIVITY"
+          }
+        },
+        "dimensions": [
+          "solar_time_mode",
+          "day_rollover_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "00:02:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "scenario": "local apparent correction crosses a candidate day boundary",
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-002",
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-BOUNDARY-0100",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:dc0d1a4c89f282efe6951037efa70550048417988ab3e349b33e4725179133d3",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "APPARENT_SOLAR_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "CIVIL_TIME_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "DUAL_TIME_CANDIDATE_HOURS"
+          }
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "01:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-BOUNDARY-0300",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:d77736466f6dc52567afa1f776e09f2af4936550f35c37c15dcc26b4d46eb59e",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "APPARENT_SOLAR_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "CIVIL_TIME_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "DUAL_TIME_CANDIDATE_HOURS"
+          }
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "03:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-BOUNDARY-0500",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:a4a3201ae659faba430541437a74042e1b6de7ff0820ecbcc6d8b85c19d95b59",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "APPARENT_SOLAR_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "CIVIL_TIME_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "DUAL_TIME_CANDIDATE_HOURS"
+          }
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "05:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-BOUNDARY-0700",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:630844430fd87d0e90a5cef07a05e21b7b2c5705b11a7c228b1f57c9a15d540d",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "APPARENT_SOLAR_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "CIVIL_TIME_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "DUAL_TIME_CANDIDATE_HOURS"
+          }
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "07:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-BOUNDARY-0900",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:542b7cd29215d43084b6e700a5a4acf4ad1fe03034037b55f1c866aa0106920b",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "APPARENT_SOLAR_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "CIVIL_TIME_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "DUAL_TIME_CANDIDATE_HOURS"
+          }
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "09:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-BOUNDARY-1100",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:fd4dba5323369354444c0260f643dd065e0aff04a0f163e749090ff7546247d2",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "APPARENT_SOLAR_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "CIVIL_TIME_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "DUAL_TIME_CANDIDATE_HOURS"
+          }
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "11:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-BOUNDARY-1300",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:1c603b45d6b935e0e1b0a5b8ab73e9bcec703b91b19d244667e283cf7da632a5",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "APPARENT_SOLAR_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "CIVIL_TIME_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "DUAL_TIME_CANDIDATE_HOURS"
+          }
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "13:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-BOUNDARY-1500",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:1ce7fca8413586e3142df4b40a1e297d44c0c5430bf98692dffeb2fbe0ffac5d",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "APPARENT_SOLAR_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "CIVIL_TIME_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "DUAL_TIME_CANDIDATE_HOURS"
+          }
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "15:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-BOUNDARY-1700",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:a2b94be2998782b119ada6f4f14445b69e65e4e44f7b80250ada7d6b62a05806",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "APPARENT_SOLAR_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "CIVIL_TIME_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "DUAL_TIME_CANDIDATE_HOURS"
+          }
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "17:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-BOUNDARY-1900",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:a43e9c599c7e6873a53c6691060bdabbee60a571b5005a3bd8b0ee453b8b6dd9",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "APPARENT_SOLAR_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "CIVIL_TIME_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "DUAL_TIME_CANDIDATE_HOURS"
+          }
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "19:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-BOUNDARY-2100",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:6f4bb7167ec5853b8374538100f6fe45e8e3b370854944b0355fd1ab9cf15246",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "APPARENT_SOLAR_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "CIVIL_TIME_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "DUAL_TIME_CANDIDATE_HOURS"
+          }
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "21:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-BOUNDARY-2300",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:0fc2733e00a8835cbb2bedc410fc704b15ea817fd794d13ea7e7d5ce3b8722ea",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "APPARENT_SOLAR_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "CIVIL_TIME_12_DOUBLE_HOURS"
+          },
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": {
+            "boundary_inclusion_policy": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+            "hour_boundary_policy": "DUAL_TIME_CANDIDATE_HOURS"
+          }
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "boundary_inclusion_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "23:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-ZI-BEFORE",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:ac5650df99a96e8855562a345a8daa2db11e1762d3123e5937dbb79318434c95",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "APPARENT_SOLAR_12_DOUBLE_HOURS",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "CIVIL_TIME_12_DOUBLE_HOURS",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "DUAL_TIME_CANDIDATE_HOURS"
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "unknown_time_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "22:59:59",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-ZI-AFTER",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:b9b0565027b80514d23951f4185ce7916f12e3cbd45d56f7ed6c879ca4d696f0",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "APPARENT_SOLAR_12_DOUBLE_HOURS",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "CIVIL_TIME_12_DOUBLE_HOURS",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "DUAL_TIME_CANDIDATE_HOURS"
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "unknown_time_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "23:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "second",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-IMPRECISE",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:0f7d692286566e1f640fba93d4e473e6e170dd059ccfbba74ce30d3385e837f8",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "APPARENT_SOLAR_12_DOUBLE_HOURS",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "CIVIL_TIME_12_DOUBLE_HOURS",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "DUAL_TIME_CANDIDATE_HOURS"
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "unknown_time_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "10:00:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "hour",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-UNKNOWN",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:f6f3506defd528d1a94a83ed5d5bdf7186d7e811a08e0778609ba1a3a95d2629",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "APPARENT_SOLAR_12_DOUBLE_HOURS",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "CIVIL_TIME_12_DOUBLE_HOURS",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "DUAL_TIME_CANDIDATE_HOURS"
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "unknown_time_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": null,
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "unknown",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    },
+    {
+      "case_id": "HOUR-MULTI-CANDIDATE",
+      "category": "hour_boundary",
+      "classification": "profile_discriminating",
+      "content_hash": "sha256:59fd86965e190f5f502f6726940fd67272d25b9fda79971dc4eace364c37a6e0",
+      "expected_difference": {
+        "assertion_scope": "method_policy_difference_only",
+        "by_profile": {
+          "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1": "APPARENT_SOLAR_12_DOUBLE_HOURS",
+          "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1": "CIVIL_TIME_12_DOUBLE_HOURS",
+          "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1": "DUAL_TIME_CANDIDATE_HOURS"
+        },
+        "dimensions": [
+          "hour_boundary_policy",
+          "unknown_time_policy"
+        ],
+        "pillar_values": null
+      },
+      "formal_gate_eligible": false,
+      "input": {
+        "calendar_type": "gregorian",
+        "local_date": "2024-02-04",
+        "local_time": "10:30:00",
+        "place": {
+          "latitude": "31.230400",
+          "longitude": "121.473700",
+          "name": "Synthetic",
+          "precision": "exact_test_coordinate"
+        },
+        "synthetic": true,
+        "time_precision": "two_hour_interval",
+        "timezone_id": "Asia/Shanghai",
+        "user_confirmed": true
+      },
+      "profile_ids": [
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "review_status": "pending_manual_review",
+      "source_claim_ids": [
+        "C-ENG-004",
+        "C-GAP-001"
+      ]
+    }
+  ],
+  "category_counts": {
+    "day_boundary": 7,
+    "hour_boundary": 17,
+    "month_boundary": 38,
+    "time_and_timezone": 8,
+    "year_boundary": 4
+  },
+  "classification_definitions": {
+    "mechanically_verified": "repeatable engineering behavior without disputed pillar rules",
+    "pending_manual_review": "excluded from formal gates pending qualified review",
+    "profile_discriminating": "shows policy differences without selecting a final method",
+    "source_attested": "reserved for located source cases with the source method stated"
+  },
+  "content_hash": "sha256:d7d521b8205a27d659957bafd4b993e4fe8fb29909e1b9f145a792de8e3a6db1",
+  "production_activatable": false,
+  "schema_version": "bazi-boundary-cases/1.0.0",
+  "status": "research_only"
+}

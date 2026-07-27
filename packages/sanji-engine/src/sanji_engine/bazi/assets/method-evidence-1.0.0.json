@@ -1,0 +1,331 @@
+{
+  "bundle_id": "bazi-method-evidence-0.1.0",
+  "claims": [
+    {
+      "claim": "Preserve historical civil time, calculate local apparent solar time, and only enter dual sensitivity when a boundary changes; never silently rewrite birth time.",
+      "claim_id": "C-OWNER-001",
+      "claim_type": "owner_decision",
+      "contradicts_claim_ids": [],
+      "locator_ids": [
+        "L-OWNER-D001"
+      ],
+      "missing_evidence": [],
+      "review_candidate_ready": true,
+      "review_status": "approved_owner_decision",
+      "supports_claim_ids": []
+    },
+    {
+      "claim": "IANA tzdb represents named-zone histories and DST transitions, with known limitations in early historical data.",
+      "claim_id": "C-ENG-001",
+      "claim_type": "engineering_fact",
+      "contradicts_claim_ids": [],
+      "locator_ids": [
+        "L-IANA-TZDB"
+      ],
+      "missing_evidence": [
+        "jurisdiction-specific pre-1970 corroboration when used"
+      ],
+      "review_candidate_ready": true,
+      "review_status": "researched",
+      "supports_claim_ids": [
+        "C-OWNER-001"
+      ]
+    },
+    {
+      "claim": "Local mean solar time varies by longitude and apparent solar time differs from it by the equation of time.",
+      "claim_id": "C-ENG-002",
+      "claim_type": "engineering_fact",
+      "contradicts_claim_ids": [],
+      "locator_ids": [
+        "L-USNO-EOT"
+      ],
+      "missing_evidence": [],
+      "review_candidate_ready": true,
+      "review_status": "researched",
+      "supports_claim_ids": [
+        "C-OWNER-001"
+      ]
+    },
+    {
+      "claim": "The 24 solar terms are defined at 15-degree longitude intervals and comprise alternating major and minor terms.",
+      "claim_id": "C-ENG-003",
+      "claim_type": "engineering_fact",
+      "contradicts_claim_ids": [],
+      "locator_ids": [
+        "L-HKO-TERMS",
+        "L-HKO-INSTANTS"
+      ],
+      "missing_evidence": [
+        "qualified BaZi ruling on which terms switch pillars"
+      ],
+      "review_candidate_ready": true,
+      "review_status": "researched",
+      "supports_claim_ids": []
+    },
+    {
+      "claim": "One public-domain received text states a three-days-to-one-year luck-start rule and a stem-yin-yang plus sex direction rule.",
+      "claim_id": "C-TRAD-001",
+      "claim_type": "traditional_statement",
+      "contradicts_claim_ids": [
+        "C-GAP-002"
+      ],
+      "locator_ids": [
+        "L-SHLG-JUAN11"
+      ],
+      "missing_evidence": [
+        "edition review",
+        "qualified school reviewer",
+        "counter-tradition corpus"
+      ],
+      "review_candidate_ready": false,
+      "review_status": "researched",
+      "supports_claim_ids": []
+    },
+    {
+      "claim": "A received commentary contains a direction statement for yang men and yin women.",
+      "claim_id": "C-TRAD-002",
+      "claim_type": "traditional_statement",
+      "contradicts_claim_ids": [
+        "C-GAP-002"
+      ],
+      "locator_ids": [
+        "L-LUOLUZI"
+      ],
+      "missing_evidence": [
+        "edition review",
+        "modern field and ethics decision"
+      ],
+      "review_candidate_ready": false,
+      "review_status": "researched",
+      "supports_claim_ids": [
+        "C-TRAD-001"
+      ]
+    },
+    {
+      "claim": "The migrated Calendar baseline emits civil, local mean and local apparent candidates and boundary sensitivity without selecting a BaZi chart.",
+      "claim_id": "C-ENG-004",
+      "claim_type": "engineering_fact",
+      "contradicts_claim_ids": [],
+      "locator_ids": [
+        "L-CALENDAR-CODE"
+      ],
+      "missing_evidence": [],
+      "review_candidate_ready": true,
+      "review_status": "verified_internal",
+      "supports_claim_ids": [
+        "C-OWNER-001"
+      ]
+    },
+    {
+      "claim": "Current date parsing uses Gregorian ISO dates and does not encode location-specific calendar-reform history.",
+      "claim_id": "C-ENG-005",
+      "claim_type": "engineering_fact",
+      "contradicts_claim_ids": [
+        "C-GAP-003"
+      ],
+      "locator_ids": [
+        "L-CALENDAR-CODE"
+      ],
+      "missing_evidence": [
+        "owner-approved historical support window"
+      ],
+      "review_candidate_ready": true,
+      "review_status": "verified_internal",
+      "supports_claim_ids": []
+    },
+    {
+      "claim": "No qualified source package currently freezes Zi-hour day rollover, early/late Zi, or correction order.",
+      "claim_id": "C-GAP-001",
+      "claim_type": "evidence_gap",
+      "contradicts_claim_ids": [],
+      "locator_ids": [
+        "L-D002"
+      ],
+      "missing_evidence": [
+        "qualified reviewer",
+        "located source set",
+        "signed boundary cases"
+      ],
+      "review_candidate_ready": false,
+      "review_status": "UNCONFIRMED",
+      "supports_claim_ids": []
+    },
+    {
+      "claim": "D-003 strength, luck-start and direction methods are not frozen; traditional attestations do not themselves create a production method.",
+      "claim_id": "C-GAP-002",
+      "claim_type": "evidence_gap",
+      "contradicts_claim_ids": [
+        "C-TRAD-001",
+        "C-TRAD-002"
+      ],
+      "locator_ids": [
+        "L-D003",
+        "L-SHLG-JUAN11",
+        "L-LUOLUZI"
+      ],
+      "missing_evidence": [
+        "qualified reviewer",
+        "method decision tree",
+        "authoritative cases"
+      ],
+      "review_candidate_ready": false,
+      "review_status": "UNCONFIRMED",
+      "supports_claim_ids": []
+    },
+    {
+      "claim": "The project has not frozen pre-Gregorian-reform civil-calendar semantics or a production historical support range.",
+      "claim_id": "C-GAP-003",
+      "claim_type": "evidence_gap",
+      "contradicts_claim_ids": [
+        "C-ENG-005"
+      ],
+      "locator_ids": [
+        "L-CALENDAR-CODE",
+        "L-IANA-TZDB"
+      ],
+      "missing_evidence": [
+        "historical calendar policy",
+        "jurisdictional reform data"
+      ],
+      "review_candidate_ready": false,
+      "review_status": "UNCONFIRMED",
+      "supports_claim_ids": []
+    },
+    {
+      "claim": "Astronomical solar-term instants are available, but year/month pillar use and exact-instant inclusion are not owner-frozen.",
+      "claim_id": "C-GAP-004",
+      "claim_type": "evidence_gap",
+      "contradicts_claim_ids": [
+        "C-ENG-003"
+      ],
+      "locator_ids": [
+        "L-HKO-TERMS",
+        "L-HKO-INSTANTS",
+        "L-D003"
+      ],
+      "missing_evidence": [
+        "qualified BaZi reviewer",
+        "source-attested boundary cases"
+      ],
+      "review_candidate_ready": false,
+      "review_status": "UNCONFIRMED",
+      "supports_claim_ids": []
+    }
+  ],
+  "content_hash": "sha256:caa5ce3b84c3e6593c7755590ae83118d5b58bba3acd91044d4f80f0509e9b9a",
+  "locators": [
+    {
+      "access_class": "repository_internal",
+      "location": "docs/decisions/product-owner-confirmation.md#D-001",
+      "locator_id": "L-OWNER-D001",
+      "source_id": "S-OWNER-DECISIONS",
+      "source_level": "A1_INTERNAL_OWNER_DECISION",
+      "tradition_tags": [
+        "engineering",
+        "product_governance"
+      ]
+    },
+    {
+      "access_class": "public",
+      "location": "https://data.iana.org/time-zones/tzdb/theory.html",
+      "locator_id": "L-IANA-TZDB",
+      "source_id": "S-IANA-TZDB",
+      "source_level": "A1_PRIMARY_TECHNICAL",
+      "tradition_tags": [
+        "engineering",
+        "timekeeping"
+      ]
+    },
+    {
+      "access_class": "public",
+      "location": "https://aa.usno.navy.mil/faq/eqtime#apparent-and-mean-solar-time",
+      "locator_id": "L-USNO-EOT",
+      "source_id": "S-USNO-EOT",
+      "source_level": "A1_PRIMARY_TECHNICAL",
+      "tradition_tags": [
+        "astronomy",
+        "engineering"
+      ]
+    },
+    {
+      "access_class": "public",
+      "location": "https://www.hko.gov.hk/en/gts/time/24solarterms.htm",
+      "locator_id": "L-HKO-TERMS",
+      "source_id": "S-HKO-SOLAR-TERMS",
+      "source_level": "A1_PRIMARY_TECHNICAL",
+      "tradition_tags": [
+        "astronomy",
+        "calendar"
+      ]
+    },
+    {
+      "access_class": "public",
+      "location": "https://www.hko.gov.hk/en/gts/astronomy/Solar_Term.htm",
+      "locator_id": "L-HKO-INSTANTS",
+      "source_id": "S-HKO-SOLAR-INSTANTS",
+      "source_level": "A1_PRIMARY_TECHNICAL",
+      "tradition_tags": [
+        "astronomy",
+        "calendar"
+      ]
+    },
+    {
+      "access_class": "public_domain",
+      "location": "https://zh.wikisource.org/wiki/事林廣記/續集/卷11#凡起大運",
+      "locator_id": "L-SHLG-JUAN11",
+      "source_id": "S-SHILIN-GUANGJI-JUAN11",
+      "source_level": "A2_PUBLIC_DOMAIN_PRIMARY_TEXT",
+      "tradition_tags": [
+        "bazi",
+        "historical_text"
+      ]
+    },
+    {
+      "access_class": "public_domain",
+      "location": "https://zh.wikisource.org/wiki/珞琭子三命消息賦注#男迎女送",
+      "locator_id": "L-LUOLUZI",
+      "source_id": "S-LUOLUZI-SANMING",
+      "source_level": "A2_PUBLIC_DOMAIN_PRIMARY_TEXT",
+      "tradition_tags": [
+        "bazi",
+        "historical_text"
+      ]
+    },
+    {
+      "access_class": "repository_internal",
+      "location": "packages/sanji-engine/src/sanji_engine/calendar",
+      "locator_id": "L-CALENDAR-CODE",
+      "source_id": "S-SANJI-CALENDAR-BASELINE",
+      "source_level": "A1_INTERNAL_ENGINE_FACT",
+      "tradition_tags": [
+        "engineering",
+        "calendar"
+      ]
+    },
+    {
+      "access_class": "repository_internal",
+      "location": "docs/decision-register.md#D-002",
+      "locator_id": "L-D002",
+      "source_id": "S-DECISION-REGISTER",
+      "source_level": "A1_INTERNAL_OWNER_DECISION",
+      "tradition_tags": [
+        "bazi",
+        "product_governance"
+      ]
+    },
+    {
+      "access_class": "repository_internal",
+      "location": "docs/decision-register.md#D-003",
+      "locator_id": "L-D003",
+      "source_id": "S-DECISION-REGISTER",
+      "source_level": "A1_INTERNAL_OWNER_DECISION",
+      "tradition_tags": [
+        "bazi",
+        "product_governance"
+      ]
+    }
+  ],
+  "production_activatable": false,
+  "schema_version": "bazi-method-evidence/1.0.0",
+  "status": "research_only"
+}

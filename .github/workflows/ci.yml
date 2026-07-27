@@ -12,18 +12,20 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Install sanji-engine independently
         run: python -m pip install packages/sanji-engine
       - name: Cross-platform deterministic core tests
-        run: python -m unittest tests.test_sanji_engine_core tests.test_sanji_engine_research tests.test_sanji_engine_yijing -v
+        run: python -m unittest tests.test_sanji_engine_core tests.test_sanji_engine_research tests.test_sanji_engine_yijing tests.test_sanji_engine_bazi_conformance -v
       - name: Signals inference 30-case equivalence
         run: python scripts/capture_signals_inference_baseline.py
       - name: Engine boundary and activation gates
-        run: python scripts/validate_sanji_engine.py
+        run: |
+          python scripts/validate_sanji_engine.py
+          python scripts/validate_bazi_method_foundation.py
   baseline:
     runs-on: ubuntu-latest
     services:
@@ -44,10 +46,10 @@ jobs:
       DATABASE_URL: postgresql://postgres:ci-ephemeral-only@localhost:5432/sanjiguan_test
       TEST_DATABASE_URL: postgresql://postgres:ci-ephemeral-only@localhost:5432/sanjiguan_test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install API test dependencies
@@ -84,15 +86,16 @@ jobs:
           python scripts/validate_sprint2.py
           python scripts/validate_sprint3.py
           python scripts/validate_sanji_engine.py
+          python scripts/validate_bazi_method_foundation.py
           python scripts/check_product_language.py
           python scripts/check_secrets.py
           python scripts/check_doc_links.py
       - name: Sprint 3 responsive, PWA, privacy, and accessibility contracts
         run: python -m unittest tests.test_sprint3_contract -v
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "22"
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4.4.0
         with:
           version: "11.9.0"
       - name: Web production build
