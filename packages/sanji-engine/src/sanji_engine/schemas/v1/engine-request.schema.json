@@ -48,7 +48,9 @@
         "yijing-three-coin-mechanical-0.1.0",
         "yijing-three-coin-mechanical-0.1.0-revoked-fixture",
         "bazi-method-foundation-0.1.0",
-        "bazi-four-pillars-research-1.0.0"
+        "bazi-four-pillars-research-1.0.0",
+        "ziwei-sanhe-research-1.0.0",
+        "ziwei-sanhe-research-1.0.0-revoked-fixture"
       ]
     },
     "data_versions": {
@@ -59,7 +61,10 @@
         "tzdb": {"type": "string", "minLength": 1},
         "ephemeris": {"type": "string", "minLength": 1},
         "calendar_dataset": {"type": "string", "minLength": 1},
-        "bazi_method_profiles": {"type": "string", "minLength": 1}
+        "bazi_method_profiles": {"type": "string", "minLength": 1},
+        "ziwei_profiles": {"type": "string", "minLength": 1},
+        "ziwei_transformations": {"type": "string", "minLength": 1},
+        "ziwei_source_claims": {"type": "string", "minLength": 1}
       }
     },
     "deterministic_context": {

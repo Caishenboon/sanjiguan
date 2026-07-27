@@ -1,0 +1,33 @@
+{
+  "schema_version": "ruleset-bundle/1.0.0",
+  "bundle_id": "ziwei-sanhe-research-1.0.0",
+  "bundle_version": "1.0.0",
+  "status": "research_active",
+  "system_class": "traditional_mechanical_research_candidate",
+  "license_status": "UNDECIDED",
+  "production_activatable": false,
+  "modules": {
+    "calendar": {"method_id":"CALENDAR.MIGRATION.BASELINE.V1","status":"research_active","enabled":false,"review_status":"ENGINEERING_VERIFIED"},
+    "signals": {"method_id":"SIGNALS.RESEARCH_BASELINE.0.1.0","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "inference": {"method_id":"INFERENCE.RESEARCH_BASELINE.0.1.0","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "bazi": {"method_id":"BAZI.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "ziwei": {
+      "method_id":"ZIWEI.SANHE.MECHANICAL.RESEARCH.V1",
+      "method_version":"1.0.0",
+      "status":"research_active",
+      "enabled":true,
+      "review_status":"UNCONFIRMED",
+      "production_activatable":false,
+      "profile_registry_version":"ziwei-profile-registry/1.0.0",
+      "transformation_asset_version":"birth-year-transformations-candidate/1.0.0",
+      "source_claim_asset_version":"ziwei-source-claim-registry/1.0.0",
+      "interpretation_enabled":false,
+      "source_ids":["ZW-CLAIM-MINGSHEN-001","ZW-CLAIM-WUXINGJU-001","ZW-CLAIM-MAJOR-STARS-001","ZW-CLAIM-SIHUA-001","ZW-CLAIM-DECADE-001"]
+    },
+    "yijing": {"method_id":"YIJING.DISABLED","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "past-life": {"method_id":"PAST_LIFE.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "bardo": {"method_id":"BARDO.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "relationship": {"method_id":"RELATIONSHIP.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "life-chart": {"method_id":"LIFE_CHART.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"}
+  }
+}

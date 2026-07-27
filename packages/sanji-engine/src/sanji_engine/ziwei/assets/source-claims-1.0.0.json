@@ -1,0 +1,52 @@
+{
+  "schema_version": "ziwei-source-claim-registry/1.0.0",
+  "review_status": "UNCONFIRMED",
+  "production_activatable": false,
+  "claims": [
+    {
+      "claim_id": "ZW-CLAIM-MINGSHEN-001",
+      "claim_type": "traditional_method_candidate",
+      "scope": "life_and_body_palace_placement",
+      "traditional_source": null,
+      "system_mapping": null,
+      "engineering_assumption": "The candidate formula is encoded only for deterministic differential research.",
+      "authority_status": "SOURCE_AND_LINEAGE_REVIEW_REQUIRED"
+    },
+    {
+      "claim_id": "ZW-CLAIM-WUXINGJU-001",
+      "claim_type": "traditional_method_candidate",
+      "scope": "five_element_bureau_from_life_palace_ganzhi_nayin",
+      "traditional_source": null,
+      "system_mapping": null,
+      "engineering_assumption": "The lookup is versioned and cannot be treated as an approved school selection.",
+      "authority_status": "SOURCE_AND_LINEAGE_REVIEW_REQUIRED"
+    },
+    {
+      "claim_id": "ZW-CLAIM-MAJOR-STARS-001",
+      "claim_type": "traditional_method_candidate",
+      "scope": "fourteen_major_star_mechanical_placement",
+      "traditional_source": null,
+      "system_mapping": null,
+      "engineering_assumption": "The candidate placement table supports reproducibility and Oracle comparison only.",
+      "authority_status": "SOURCE_AND_LINEAGE_REVIEW_REQUIRED"
+    },
+    {
+      "claim_id": "ZW-CLAIM-DECADE-001",
+      "claim_type": "traditional_method_candidate",
+      "scope": "decade_start_and_direction",
+      "traditional_source": null,
+      "system_mapping": null,
+      "engineering_assumption": "Direction and start-age candidates remain explicit Profile fields.",
+      "authority_status": "SOURCE_AND_LINEAGE_REVIEW_REQUIRED"
+    },
+    {
+      "claim_id": "ZW-CLAIM-SIHUA-001",
+      "claim_type": "traditional_method_candidate",
+      "scope": "birth_year_four_transformations",
+      "traditional_source": null,
+      "system_mapping": null,
+      "engineering_assumption": "The table is loaded as an unconfirmed candidate and must not produce interpretive conclusions.",
+      "authority_status": "SOURCE_AND_LINEAGE_REVIEW_REQUIRED"
+    }
+  ]
+}

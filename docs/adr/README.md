@@ -11,5 +11,6 @@
 - ADR-0009：实物三钱机械引擎（Accepted for research）
 - ADR-0010：八字方法档案与验证基座（Accepted for research）
 - ADR-0011：八字多 Profile 基础四柱机械引擎（Accepted for research）
+- ADR-0012：紫微研究引擎、差分 Oracle 与 Sanji UI 平台边界（Accepted for research）
 
 “Accepted”只表示工程边界已冻结，不代表任何术数流派已确认。
