@@ -14,6 +14,9 @@
 - Owner research preview that reads persisted Engine output without
   recalculation.
 - Ubuntu/Windows deterministic fixture and full 4096-state enumeration.
+- CI matrix commands are separate fail-fast steps. This closes an inherited
+  workflow defect where a failed Windows unittest command could be masked by a
+  later successful gate in the same multiline step.
 
 ## Acceptance commands
 
@@ -32,4 +35,3 @@ No software-random toss, automatic casting, judgment text, line text,
 auspiciousness, timing, DeepSeek interpretation, past-life mapping, bardo,
 relationship scoring, Bazi, Ziwei, formal Six Signals weighting, or life
 chart was implemented.
-
