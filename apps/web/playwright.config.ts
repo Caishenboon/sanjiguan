@@ -1,6 +1,4 @@
-import { defineConfig, devices } from "@playwright/test";
-
-const localChannel = process.env.CI ? undefined : "chrome";
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests/visual",
@@ -14,8 +12,34 @@ export default defineConfig({
     timeout: 120000,
   },
   projects: [
-    { name: "chromium-desktop-dark", use: { ...devices["Desktop Chrome"], channel: localChannel, colorScheme: "dark", viewport: { width: 1440, height: 1100 } } },
-    { name: "chromium-tablet-light", use: { ...devices["iPad (gen 7)"], browserName: "chromium", channel: localChannel, colorScheme: "light" } },
-    { name: "chromium-mobile-dark", use: { ...devices["iPhone 13"], browserName: "chromium", channel: localChannel, colorScheme: "dark" } },
+    {
+      name: "chromium-desktop-dark",
+      use: {
+        browserName: "chromium",
+        colorScheme: "dark",
+        viewport: { width: 1440, height: 1100 },
+        deviceScaleFactor: 1,
+      },
+    },
+    {
+      name: "chromium-tablet-light",
+      use: {
+        browserName: "chromium",
+        colorScheme: "light",
+        viewport: { width: 810, height: 1080 },
+        deviceScaleFactor: 1,
+      },
+    },
+    {
+      name: "chromium-mobile-dark",
+      use: {
+        browserName: "chromium",
+        colorScheme: "dark",
+        viewport: { width: 390, height: 844 },
+        deviceScaleFactor: 1,
+        isMobile: true,
+        hasTouch: true,
+      },
+    },
   ],
 });

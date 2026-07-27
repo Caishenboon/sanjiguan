@@ -14,7 +14,7 @@ for (const [name, path] of pages) {
     await page.goto(path);
     await expect(page.locator("main")).toBeVisible();
     await expect(page).toHaveScreenshot(`${name}.png`, {
-      fullPage: true,
+      fullPage: false,
       animations: "disabled",
     });
   });
@@ -31,5 +31,8 @@ test("empty error and disabled states remain readable", async ({ page }) => {
         <aside class="sanji-warning">研究禁用状态 · 不会返回占位计算</aside>
       </section>`;
   });
-  await expect(page).toHaveScreenshot("states-empty-error-disabled.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("states-empty-error-disabled.png", {
+    fullPage: false,
+    animations: "disabled",
+  });
 });
