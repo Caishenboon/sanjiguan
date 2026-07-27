@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sanji-oracle-adapters"
+version = "0.1.0"
+description = "Research-only external differential oracles for Sanji Engine"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+oracle_adapters = ["py.typed", "ziwei/iztro/*.mjs", "ziwei/iztro/*.json", "ziwei/iztro/*.yaml"]
