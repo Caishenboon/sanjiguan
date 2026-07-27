@@ -221,6 +221,8 @@ class ThreeCoinDivinationCreate(BaseModel):
     timezone: str
     location_precision: Literal["none", "region", "city"]
     method_id: Literal["YIJING.THREE_COIN.PHYSICAL.V1"]
+    coin_face_mapping_id: Literal["COIN_FACES.HEADS_3_TAILS_2.V1"]
+    coin_face_mapping_version: Literal["1.0.0"]
     tosses: list[CoinTossInput] = Field(min_length=6, max_length=6)
     interrupted_retoss: bool = False
     repeated_due_to_dissatisfaction: bool = False

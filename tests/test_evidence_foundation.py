@@ -2,7 +2,7 @@ import unittest
 
 from packages.evidence.completeness import DOMAINS, completeness_state, summarize_completeness
 from packages.evidence.reliability import assess_reliability
-from packages.evidence.three_coin import line_value, validate_six_tosses
+from packages.evidence.three_coin import map_coin_faces, validate_six_tosses
 
 
 class EvidenceFoundationTests(unittest.TestCase):
@@ -24,10 +24,13 @@ class EvidenceFoundationTests(unittest.TestCase):
         self.assertIn("not_fortune_or_spiritual_score", result["meaning"])
 
     def test_physical_three_coin_values_and_order(self):
-        self.assertEqual(line_value(["heads", "heads", "heads"]), 9)
+        self.assertEqual(map_coin_faces(["heads", "heads", "heads"]), [3, 3, 3])
         tosses = [{"line_no": i, "coin_faces": ["tails", "tails", "tails"],
                    "was_retossed": False} for i in range(1, 7)]
-        self.assertEqual([line["raw_value"] for line in validate_six_tosses(tosses)], [6] * 6)
+        self.assertEqual(
+            [line["coin_values"] for line in validate_six_tosses(tosses)],
+            [[2, 2, 2]] * 6,
+        )
         with self.assertRaisesRegex(ValueError, "six_lines"):
             validate_six_tosses(list(reversed(tosses)))
 

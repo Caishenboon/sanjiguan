@@ -6,6 +6,7 @@ import json
 from uuid import UUID
 
 from fastapi import APIRouter, Cookie, Header, HTTPException, Response
+from sanji_engine import execute
 
 from apps.api.app.core.ids import uuid7
 from apps.api.app.schemas.models import (
@@ -14,7 +15,9 @@ from apps.api.app.schemas.models import (
 )
 from packages.evidence.completeness import DOMAINS, completeness_state, summarize_completeness
 from packages.evidence.reliability import assess_reliability
-from packages.evidence.three_coin import validate_six_tosses
+from packages.evidence.three_coin import (
+    COIN_FACE_MAPPING_ID, COIN_FACE_MAPPING_VERSION, validate_six_tosses,
+)
 
 router = APIRouter(prefix="/api/v1")
 
@@ -403,6 +406,11 @@ def create_three_coin(profile_id: UUID, payload: ThreeCoinDivinationCreate, resp
         tosses = validate_six_tosses(data["tosses"])
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from exc
+    if (
+        data["coin_face_mapping_id"] != COIN_FACE_MAPPING_ID
+        or data["coin_face_mapping_version"] != COIN_FACE_MAPPING_VERSION
+    ):
+        raise HTTPException(422, "coin_face_mapping_version_not_supported")
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
         claim = _claim(conn, user, "POST", "/api/v1/profiles/{id}/divinations/three-coin", key, data)
@@ -410,21 +418,72 @@ def create_three_coin(profile_id: UUID, payload: ThreeCoinDivinationCreate, resp
             response.status_code = 201
             return claim
         did = uuid7()
+        engine_request = {
+            "schema_version": "engine-request/1.0.0",
+            "engine_api_version": "1.0",
+            "run_id": str(did),
+            "run_mode": "research_preview",
+            "requested_modules": ["yijing"],
+            "input_snapshot": {
+                "operation": "cast_physical_three_coin",
+                "method_id": "YIJING.THREE_COIN.PHYSICAL.MECHANICAL.V1",
+                "method_version": "1.0.0",
+                "input_order": "bottom_to_top",
+                "tosses": [
+                    {"line_position": toss["line_no"], "coin_values": toss["coin_values"]}
+                    for toss in tosses
+                ],
+            },
+            "ruleset_bundle_id": "yijing-three-coin-mechanical-0.1.0",
+            "data_versions": {
+                "tzdb": "not_used",
+                "ephemeris": "not_used",
+                "calendar_dataset": "not_used",
+                "yijing_hexagram_mapping": "king-wen-hexagrams/1.0.0",
+            },
+            "deterministic_context": {
+                "as_of": data["divination_at"],
+                "random_method": "none",
+                "random_seed": None,
+            },
+        }
+        engine_envelope = execute(engine_request)
+        engine_result = engine_envelope["module_results"]["yijing"]["result"]
+        line_results = {
+            line["line_position"]: line for line in engine_result["lines"]
+        }
         conn.execute(
             """INSERT INTO divination_sessions(id,profile_id,question_encrypted,purpose_encrypted,
                divination_at,timezone,location_precision,method_id,interrupted_retoss,
-               repeated_due_to_dissatisfaction,method_version)
-               VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+               repeated_due_to_dissatisfaction,method_version,coin_face_mapping_id,
+               coin_face_mapping_version,engine_result,engine_result_hash,replay_manifest,
+               replay_manifest_hash,trace_hash,ruleset_bundle_id,ruleset_bundle_hash,
+               mapping_asset_version,research_status)
+               VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
             (did, profile_id, _enc(data["question"]), _enc(data["purpose"]), data["divination_at"],
              data["timezone"], data["location_precision"], data["method_id"], data["interrupted_retoss"],
-             data["repeated_due_to_dissatisfaction"], data["method_version"]),
+             data["repeated_due_to_dissatisfaction"], data["method_version"],
+             COIN_FACE_MAPPING_ID, COIN_FACE_MAPPING_VERSION, json.dumps(engine_result),
+             engine_envelope["replay_manifest"]["domain_result_hashes"]["yijing_domain_hash"],
+             json.dumps(engine_envelope["replay_manifest"]),
+             engine_envelope["replay_manifest"]["content_hash"], engine_envelope["trace_hash"],
+             engine_envelope["ruleset_bundle_id"], engine_envelope["ruleset_bundle_hash"],
+             engine_result["mapping_asset"]["asset_version"], "research_active"),
         )
         for toss in tosses:
-            conn.execute("INSERT INTO coin_tosses VALUES(%s,%s,%s,%s,%s,%s,now())",
-                         (uuid7(), did, toss["line_no"], toss["coin_faces"], toss["raw_value"],
-                          toss["was_retossed"]))
+            line = line_results[toss["line_no"]]
+            conn.execute("""INSERT INTO coin_tosses(
+              id,divination_session_id,line_no,coin_faces,raw_value,was_retossed,
+              created_at,coin_values) VALUES(%s,%s,%s,%s,%s,%s,now(),%s)""",
+              (uuid7(), did, toss["line_no"], toss["coin_faces"], line["sum"],
+               toss["was_retossed"], toss["coin_values"]))
         result = {"id": str(did), "profile_id": str(profile_id), "method_id": data["method_id"],
                   "method_version": data["method_version"], "tosses": tosses,
+                  "coin_face_mapping_id": COIN_FACE_MAPPING_ID,
+                  "coin_face_mapping_version": COIN_FACE_MAPPING_VERSION,
+                  "engine_result": engine_result,
+                  "result_hash": engine_envelope["replay_manifest"]["domain_result_hashes"]["yijing_domain_hash"],
+                  "research_status": "research_active",
                   "interpretation": None, "scoring": None,
                   "notice": "仅记录实物三钱结果；未生成卦义、评分或命理结论。"}
         return _finish(conn, claim, key, 201, result)
@@ -436,7 +495,8 @@ def list_divinations(profile_id: UUID, token: str | None = Cookie(None, alias="_
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
         rows = conn.execute(
-            """SELECT id,divination_at,timezone,location_precision,method_id,method_version
+            """SELECT id,divination_at,timezone,location_precision,method_id,method_version,
+               research_status,engine_result_hash
                FROM divination_sessions WHERE profile_id=%s AND deleted_at IS NULL
                ORDER BY divination_at DESC""", (profile_id,)
         ).fetchall()
@@ -454,10 +514,15 @@ def get_divination(divination_id: UUID, token: str | None = Cookie(None, alias="
         if not row:
             raise HTTPException(404, "divination_not_found")
         tosses = conn.execute(
-            """SELECT line_no,coin_faces,raw_value,was_retossed FROM coin_tosses
+            """SELECT line_no,coin_faces,coin_values,raw_value,was_retossed FROM coin_tosses
                WHERE divination_session_id=%s ORDER BY line_no""", (divination_id,)
         ).fetchall()
         return {"id": str(row["id"]), "profile_id": str(row["profile_id"]),
                 "question": _dec(row["question_encrypted"], ""), "purpose": _dec(row["purpose_encrypted"], ""),
                 "method_id": row["method_id"], "method_version": row["method_version"],
-                "tosses": tosses, "interpretation": None, "scoring": None}
+                "coin_face_mapping_id": row["coin_face_mapping_id"],
+                "coin_face_mapping_version": row["coin_face_mapping_version"],
+                "tosses": tosses, "engine_result": row["engine_result"],
+                "result_hash": row["engine_result_hash"],
+                "research_status": row["research_status"] or "legacy_method_unknown",
+                "interpretation": None, "scoring": None}
