@@ -1,28 +1,41 @@
-"""Astronomical solar-longitude instants; no BaZi interpretation."""
+"""Compatibility adapter for the public sanji-engine Calendar contract."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime
 
-import astronomy
+from sanji_engine import execute
 
 SOLAR_TERM_LONGITUDES = tuple(range(0, 360, 15))
 
 
-def solar_term_instant(target_longitude: int, start_utc: datetime, limit_days: float = 20) -> datetime:
-    if target_longitude not in SOLAR_TERM_LONGITUDES:
-        raise ValueError("target_longitude must be a multiple of 15 in [0, 345]")
-    if start_utc.tzinfo is None:
-        raise ValueError("start_utc must be timezone-aware")
-    normalized = start_utc.astimezone(timezone.utc)
-    astro_start = astronomy.Time.Make(
-        normalized.year,
-        normalized.month,
-        normalized.day,
-        normalized.hour,
-        normalized.minute,
-        normalized.second + normalized.microsecond / 1_000_000,
-    )
-    result = astronomy.SearchSunLongitude(float(target_longitude), astro_start, limit_days)
-    if result is None:
-        raise ValueError("solar longitude not found in search window")
-    return result.Utc().replace(tzinfo=timezone.utc)
+def solar_term_instant(
+    target_longitude: int,
+    start_utc: datetime,
+    limit_days: float = 20,
+) -> datetime:
+    request = {
+        "schema_version": "engine-request/1.0.0",
+        "engine_api_version": "1.0",
+        "run_id": "calendar-solar-term-compatibility-adapter",
+        "run_mode": "research_preview",
+        "requested_modules": ["calendar"],
+        "input_snapshot": {
+            "operation": "solar_term_instant",
+            "target_longitude": target_longitude,
+            "search_start_utc": start_utc.isoformat(),
+            "limit_days": str(limit_days),
+        },
+        "ruleset_bundle_id": "core-boundary-0.1.0",
+        "data_versions": {
+            "tzdb": "runtime-zoneinfo",
+            "ephemeris": "astronomy-engine-2.1.19",
+            "calendar_dataset": "calendar-migration-baseline-1.0.0",
+        },
+        "deterministic_context": {
+            "as_of": "2000-01-01T00:00:00Z",
+            "random_method": "none",
+            "random_seed": None,
+        },
+    }
+    value = execute(request)["module_results"]["calendar"]["result"]["instant_utc"]
+    return datetime.fromisoformat(value)

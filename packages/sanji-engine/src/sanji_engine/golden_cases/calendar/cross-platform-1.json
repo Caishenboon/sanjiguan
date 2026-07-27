@@ -1,0 +1,13 @@
+{
+  "schema_version": "calendar-golden-case/1.0.0",
+  "case_id": "calendar-cross-platform-1",
+  "classification": "synthetic_engine_migration_golden",
+  "expected": {
+    "output_hash": "sha256:140541fc477d3ba5a56f6e6ac1c5d2ab927433abfdf823aea3b8f4871e346e07"
+  },
+  "provenance": {
+    "legacy_fixture": "tests/golden/sprint1a-time-fixtures.json",
+    "purpose": "Calendar migration and Windows/Linux drift detection",
+    "traditional_authority": false
+  }
+}

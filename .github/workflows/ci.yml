@@ -6,6 +6,22 @@ on:
 permissions:
   contents: read
 jobs:
+  sanji-engine-determinism:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install sanji-engine independently
+        run: python -m pip install packages/sanji-engine
+      - name: Cross-platform deterministic core contract
+        run: |
+          python -m unittest tests.test_sanji_engine_core -v
+          python scripts/validate_sanji_engine.py
   baseline:
     runs-on: ubuntu-latest
     services:
@@ -65,6 +81,7 @@ jobs:
           python scripts/export_sprint2_openapi.py
           python scripts/validate_sprint2.py
           python scripts/validate_sprint3.py
+          python scripts/validate_sanji_engine.py
           python scripts/check_product_language.py
           python scripts/check_secrets.py
           python scripts/check_doc_links.py

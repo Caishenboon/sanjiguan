@@ -1,0 +1,6 @@
+{
+  "schema_version": "ruleset-registry/1.0.0",
+  "bundles": {
+    "core-boundary-0.1.0": "core-boundary-0.1.0.json"
+  }
+}
