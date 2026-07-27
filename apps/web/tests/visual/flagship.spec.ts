@@ -1,5 +1,27 @@
 import { expect, test } from "@playwright/test";
 
+const deterministicFonts = [
+  { descriptor: '16px "Noto Sans SC"', sample: "三际观" },
+  { descriptor: '16px "Noto Serif SC"', sample: "三际观" },
+  { descriptor: '16px "Noto Sans Mono"', sample: "sha256abcdef0123456789" },
+] as const;
+
+async function requireDeterministicFonts(page: import("@playwright/test").Page) {
+  const availability = await page.evaluate(async (fonts) => {
+    await Promise.all(fonts.map(({ descriptor, sample }) => document.fonts.load(descriptor, sample)));
+    await document.fonts.ready;
+    return Object.fromEntries(
+      fonts.map(({ descriptor, sample }) => [
+        descriptor,
+        document.fonts.check(descriptor, sample),
+      ]),
+    );
+  }, deterministicFonts);
+  expect(availability).toEqual(
+    Object.fromEntries(deterministicFonts.map(({ descriptor }) => [descriptor, true])),
+  );
+}
+
 const pages = [
   ["home", "/"],
   ["research", "/admin/research"],
@@ -13,6 +35,7 @@ for (const [name, path] of pages) {
   test(`${name} fixed visual`, async ({ page }) => {
     await page.goto(path);
     await expect(page.locator("main")).toBeVisible();
+    await requireDeterministicFonts(page);
     await expect(page).toHaveScreenshot(`${name}.png`, {
       fullPage: false,
       animations: "disabled",
@@ -22,6 +45,7 @@ for (const [name, path] of pages) {
 
 test("empty error and disabled states remain readable", async ({ page }) => {
   await page.goto("/admin/research");
+  await requireDeterministicFonts(page);
   await page.evaluate(() => {
     const main = document.querySelector("main");
     if (main) main.innerHTML = `

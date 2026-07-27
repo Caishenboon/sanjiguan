@@ -8,13 +8,17 @@
     "start": "next start",
     "lint": "next lint",
     "storybook:build": "pnpm --dir ../../packages/sanji-ui build-storybook",
-    "test:visual": "playwright test"
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots"
   },
   "dependencies": {
+    "@fontsource/noto-sans-mono": "5.3.0",
+    "@fontsource/noto-sans-sc": "5.3.0",
+    "@fontsource/noto-serif-sc": "5.3.0",
+    "@sanji/ui": "file:../../packages/sanji-ui",
     "next": "16.2.11",
     "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "@sanji/ui": "file:../../packages/sanji-ui"
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
     "@types/node": "22.15.3",

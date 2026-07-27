@@ -14,10 +14,10 @@
 - 宿世研究：幽紫 `#9178c6`。
 - 愿力与支持证据：玉青 `#63b7a5`。
 - 逆证、风险与冲突：暗红 `#9c4f55`，不得装饰性滥用。
-- 字体：标题、象辞、断章使用 Source Han Serif / Noto Serif CJK
-  的部署获取版本；正文与表单使用 Source Han Sans / Noto Sans CJK；
-  Hash、版本、Trace 使用 Cascadia Mono / Noto Sans Mono。仓库不提交
-  字体二进制。Source Han 与 Noto 许可证在公开前复核。
+- 字体：标题、象辞、断章使用锁定的 Noto Serif SC；正文与表单使用
+  Noto Sans SC；Hash、版本、Trace 使用 Noto Sans Mono。三个字体通过
+  Fontsource `5.3.0` 构建依赖取得，均登记为 `OFL-1.1`；仓库不直接
+  提交字体二进制。视觉测试不得依赖系统字体 fallback。
 - 字号：正文 16px；说明 12–14px；页面标题 `clamp(40px,7vw,91px)`。
 - 内容栅格：最大 1180px，12 栏；8/4、4/4/4 与整栏组合。
 - 间距：4px 基数；组件主要间距 8/12/16/24/40/56。

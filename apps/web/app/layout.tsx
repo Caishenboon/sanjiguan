@@ -1,3 +1,11 @@
+import "@fontsource/noto-sans-sc/400.css";
+import "@fontsource/noto-sans-sc/500.css";
+import "@fontsource/noto-sans-sc/700.css";
+import "@fontsource/noto-serif-sc/400.css";
+import "@fontsource/noto-serif-sc/500.css";
+import "@fontsource/noto-serif-sc/700.css";
+import "@fontsource/noto-sans-mono/400.css";
+import "@fontsource/noto-sans-mono/700.css";
 import "./styles.css";
 import "@sanji/ui/styles.css";
 import ServiceWorkerRegistration from "../components/ServiceWorkerRegistration";

@@ -8,6 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@fontsource/noto-sans-mono':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/noto-sans-sc':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/noto-serif-sc':
+        specifier: 5.3.0
+        version: 5.3.0
       '@sanji/ui':
         specifier: file:../../packages/sanji-ui
         version: file:../../packages/sanji-ui(@types/react@19.1.10)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -41,6 +50,15 @@ packages:
 
   '@emnapi/runtime@1.11.2':
     resolution: {integrity: sha512-kyOl3X0DuTiT1h2ft8r2fYO8JYtU9a9Xis/zBSiGArNaagCOWx90N1k2wxp18czFDH+OgcWGb5ZP/XMt3dcyPA==}
+
+  '@fontsource/noto-sans-mono@5.3.0':
+    resolution: {integrity: sha512-DPZ+/Ng9HP5UKiALCKtoeGfA7zJzEjHFB/18OU/c3+4I9zZ3eMVAuFZb0SqzT89Yj7KNhJFYnYjyDaVKhdRuUg==}
+
+  '@fontsource/noto-sans-sc@5.3.0':
+    resolution: {integrity: sha512-HeqIlGm0+ohOKxZLuHj1qW6r6avHH0OWdKERAcSDI0RQ+MXrteuLKA+M+5eOA8rYy0MFvOR5AT0fQo2rUkye0Q==}
+
+  '@fontsource/noto-serif-sc@5.3.0':
+    resolution: {integrity: sha512-0/zaEFkidiWldE62rTeD74x8ygUsQvejiSNtO0LQxQk3qpaHnlMZ3w4C7yH80B4KTIg8VKeFP4oSgwWMchY9+g==}
 
   '@formatjs/ecma402-abstract@2.3.6':
     resolution: {integrity: sha512-HJnTFeRM2kVFVr5gr5kH1XP6K0JcJtE7Lzvtr3FS/so5f1kpsqqqxy5JF+FRaO6H2qmcMfAUIox7AJteieRtVw==}
@@ -1703,6 +1721,12 @@ snapshots:
     dependencies:
       tslib: 2.8.1
     optional: true
+
+  '@fontsource/noto-sans-mono@5.3.0': {}
+
+  '@fontsource/noto-sans-sc@5.3.0': {}
+
+  '@fontsource/noto-serif-sc@5.3.0': {}
 
   '@formatjs/ecma402-abstract@2.3.6':
     dependencies:

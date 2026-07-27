@@ -31,7 +31,7 @@ jobs:
           python scripts/validate_bazi_four_pillars.py
           python scripts/validate_ziwei_oracle_ui.py
   baseline:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     services:
       postgres:
         image: postgres:16
@@ -49,6 +49,9 @@ jobs:
     env:
       DATABASE_URL: postgresql://postgres:ci-ephemeral-only@localhost:5432/sanjiguan_test
       TEST_DATABASE_URL: postgresql://postgres:ci-ephemeral-only@localhost:5432/sanjiguan_test
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+      TZ: UTC
     steps:
       - uses: actions/checkout@v5
         with:
@@ -97,6 +100,7 @@ jobs:
           python scripts/validate_bazi_method_foundation.py
           python scripts/validate_bazi_four_pillars.py
           python scripts/validate_ziwei_oracle_ui.py
+          python scripts/validate_visual_regression.py
           python scripts/check_product_language.py
           python scripts/check_secrets.py
           python scripts/check_doc_links.py
@@ -128,10 +132,30 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm build-storybook
       - name: Playwright Chromium visual regression
+        id: visual_regression
+        continue-on-error: true
         working-directory: apps/web
         run: |
           pnpm exec playwright install --with-deps chromium
           pnpm test:visual
+      - name: Collect visual regression evidence
+        if: steps.visual_regression.outcome == 'failure'
+        run: |
+          mkdir -p apps/web/test-results/visual-evidence/expected
+          if [ -d apps/web/tests/visual/__screenshots__/linux ]; then
+            cp -R apps/web/tests/visual/__screenshots__/linux/. \
+              apps/web/test-results/visual-evidence/expected/
+          fi
+      - name: Upload visual regression evidence
+        if: steps.visual_regression.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-${{ runner.os }}-${{ github.run_id }}
+          path: |
+            apps/web/test-results/
+            apps/web/playwright-report/
+          if-no-files-found: error
+          retention-days: 14
       - name: Lighthouse quality budgets
         working-directory: apps/web
         run: pnpm exec lhci autorun --config=lighthouserc.json
@@ -140,3 +164,10 @@ jobs:
           docker run --rm -v "$PWD:/repo"
           zricethezav/gitleaks:v8.24.3
           detect --source=/repo --no-banner --redact
+      - name: Enforce visual regression result
+        if: always()
+        run: |
+          if [ "${{ steps.visual_regression.outcome }}" != "success" ]; then
+            echo "Visual regression failed; inspect the uploaded evidence artifact."
+            exit 1
+          fi

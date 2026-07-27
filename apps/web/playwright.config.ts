@@ -2,9 +2,13 @@ import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests/visual",
-  snapshotPathTemplate: "{testDir}/__screenshots__/{projectName}/{arg}{ext}",
+  snapshotPathTemplate: "{testDir}/__screenshots__/{platform}/{projectName}/{arg}{ext}",
   expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.012 } },
-  use: { baseURL: "http://127.0.0.1:3000", locale: "zh-CN" },
+  use: {
+    baseURL: "http://127.0.0.1:3000",
+    locale: "zh-CN",
+    timezoneId: "UTC",
+  },
   webServer: {
     command: "pnpm start",
     url: "http://127.0.0.1:3000",
