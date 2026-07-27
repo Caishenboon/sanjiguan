@@ -1,0 +1,38 @@
+{
+  "schema_version": "ruleset-bundle/1.0.0",
+  "bundle_id": "research-baseline-0.2.0",
+  "bundle_version": "0.2.0",
+  "status": "research_active",
+  "system_class": "sanji_original_research",
+  "license_status": "UNDECIDED",
+  "production_activatable": false,
+  "modules": {
+    "calendar": {
+      "method_id": "CALENDAR.MIGRATION.BASELINE.V1",
+      "status": "research_active",
+      "enabled": true,
+      "source_ids": ["IANA_TZDB", "NOAA_GENERAL_SOLAR_POSITION_CALCULATIONS", "ASTRONOMY_ENGINE_PINNED"]
+    },
+    "signals": {
+      "method_id": "SIGNALS.RESEARCH_BASELINE.0.1.0",
+      "status": "research_active",
+      "enabled": true,
+      "baseline_class": "research_baseline",
+      "production_activatable": false
+    },
+    "inference": {
+      "method_id": "INFERENCE.RESEARCH_BASELINE.0.1.0",
+      "status": "research_active",
+      "enabled": true,
+      "baseline_class": "research_baseline",
+      "production_activatable": false
+    },
+    "bazi": {"method_id":"BAZI.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "ziwei": {"method_id":"ZIWEI.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "yijing": {"method_id":"YIJING.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "past-life": {"method_id":"PAST_LIFE.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "bardo": {"method_id":"BARDO.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "relationship": {"method_id":"RELATIONSHIP.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "life-chart": {"method_id":"LIFE_CHART.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"}
+  }
+}
