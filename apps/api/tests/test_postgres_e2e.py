@@ -292,3 +292,71 @@ class PostgreSQLHttpE2E(unittest.TestCase):
         )
         self.assertEqual(200, comparison.status_code, comparison.text)
         self.assertEqual(3, len(comparison.json()["results"]))
+
+    def test_owner_ziwei_research_is_engine_backed_encrypted_and_idempotent(self):
+        self.login()
+        owner_id, session_id, profile_id = uuid4(), uuid4(), uuid4()
+        token = "ziwei-owner-" + uuid4().hex
+        self.admin.execute(
+            "INSERT INTO users(id,email_ciphertext,role) VALUES(%s,%s,'owner')",
+            (owner_id, b"owner"),
+        )
+        self.admin.execute(
+            "INSERT INTO sessions(id,user_id,token_hash,expires_at) VALUES(%s,%s,%s,%s)",
+            (session_id, owner_id, token_hash(token),
+             datetime.now(timezone.utc) + timedelta(hours=1)),
+        )
+        self.admin.execute(
+            """INSERT INTO profiles(id,owner_id,timezone,calendar_type,birth_date_ciphertext,
+              birth_time_precision,consent_version,research_profile)
+              VALUES(%s,%s,'Asia/Shanghai','lunar',%s,'double_hour','synthetic',true)""",
+            (profile_id, owner_id, b"synthetic"),
+        )
+        client = TestClient(self.app_module.app, base_url="https://testserver")
+        client.cookies.set("__Host-session", token)
+        payload = {
+            "profile_record_id": str(profile_id),
+            "profile_id": "ZIWEI.SANHE.MANUAL_LUNAR.LEAP_SAME_MONTH.V1",
+            "profile_version": "1.0.0",
+            "lunar_birth": {
+                "year": 2000, "month": 1, "day": 1, "is_leap_month": False,
+                "hour_branch_index": 0, "traditional_sex": "male",
+            },
+            "calendar_provenance": {
+                "conversion_method": "manual_verified_lunar_input",
+                "timezone_id": "Asia/Shanghai",
+                "historical_legal_time": "2000-02-05T00:30:00+08:00",
+                "user_confirmed": True,
+                "synthetic": True,
+            },
+            "target_year": 2026,
+        }
+        blocked = self.client.post(
+            "/api/v1/admin/research/ziwei/execute",
+            json=payload, headers={"Idempotency-Key": "ziwei-blocked-e2e"},
+        )
+        self.assertEqual(403, blocked.status_code)
+        headers = {"Idempotency-Key": "ziwei-research-e2e-0001"}
+        first = client.post(
+            "/api/v1/admin/research/ziwei/execute", json=payload, headers=headers
+        )
+        self.assertEqual(201, first.status_code, first.text)
+        body = first.json()
+        domain = body["result"]["module_results"]["ziwei"]["result"]
+        self.assertEqual("UNCONFIRMED", domain["review_status"])
+        self.assertFalse(domain["production_activatable"])
+        self.assertIsNone(domain["interpretation"])
+        replayed = client.post(
+            "/api/v1/admin/research/ziwei/execute", json=payload, headers=headers
+        )
+        self.assertEqual(body["id"], replayed.json()["id"])
+        row = self.admin.execute(
+            """SELECT count(*),min(octet_length(input_snapshot_encrypted)),
+              min(octet_length(engine_result_encrypted)),min(domain_hash)
+              FROM ziwei_research_runs WHERE owner_id=%s""",
+            (owner_id,),
+        ).fetchone()
+        self.assertEqual(1, row[0])
+        self.assertGreater(row[1], 0)
+        self.assertGreater(row[2], 0)
+        self.assertTrue(row[3].startswith("sha256:"))
