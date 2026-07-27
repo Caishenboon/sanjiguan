@@ -1,0 +1,38 @@
+{
+  "schema_version": "ruleset-bundle/1.0.0",
+  "bundle_id": "bazi-four-pillars-research-1.0.0",
+  "bundle_version": "1.0.0",
+  "status": "research_active",
+  "system_class": "traditional_mechanical_research_candidate",
+  "license_status": "UNDECIDED",
+  "production_activatable": false,
+  "modules": {
+    "calendar": {"method_id":"CALENDAR.MIGRATION.BASELINE.V1","status":"research_active","enabled":false,"review_status":"ENGINEERING_VERIFIED"},
+    "signals": {"method_id":"SIGNALS.RESEARCH_BASELINE.0.1.0","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "inference": {"method_id":"INFERENCE.RESEARCH_BASELINE.0.1.0","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "bazi": {
+      "method_id":"BAZI.FOUR_PILLARS.MECHANICAL.RESEARCH.V1",
+      "method_version":"1.0.0",
+      "status":"research_active",
+      "enabled":true,
+      "review_status":"UNCONFIRMED",
+      "production_activatable":false,
+      "profile_registry_version":"bazi-execution-profiles/1.0.0",
+      "day_epoch_version":"bazi-day-epoch/1.0.0",
+      "boundary_case_asset_version":"bazi-boundary-cases/1.0.0",
+      "interpretation_enabled":false,
+      "source_ids":[
+        "HKO_HEAVENLY_STEMS_EARTHLY_BRANCHES_TABLES",
+        "HKO_24_SOLAR_TERMS_LONGITUDES",
+        "USNO_JULIAN_DATE_INTEGER_CALENDAR_CONVERSION",
+        "BAZI_DAY_EPOCH_RESEARCH_ASSET_UNCONFIRMED"
+      ]
+    },
+    "ziwei": {"method_id":"ZIWEI.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "yijing": {"method_id":"YIJING.DISABLED","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "past-life": {"method_id":"PAST_LIFE.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "bardo": {"method_id":"BARDO.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "relationship": {"method_id":"RELATIONSHIP.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"},
+    "life-chart": {"method_id":"LIFE_CHART.UNCONFIRMED","status":"draft","enabled":false,"review_status":"UNCONFIRMED"}
+  }
+}

@@ -132,6 +132,45 @@ class PostgreSQLIntegrationTests(unittest.TestCase):
               VALUES('owner-case','test','{}','{}',%s)""",("1"*64,))
             owner.commit()
 
+    def test_bazi_research_runs_force_rls_and_owner_role(self):
+        forced = self.conn.execute(
+            "SELECT relforcerowsecurity FROM pg_class WHERE relname='bazi_research_runs'"
+        ).fetchone()
+        self.assertEqual((True,), forced)
+        insert = """INSERT INTO bazi_research_runs(
+          id,owner_id,method_profile_id,method_profile_version,research_status,
+          review_status,input_snapshot_encrypted,engine_result_encrypted,input_hash,
+          output_hash,trace_hash,replay_manifest,replay_manifest_hash,
+          ruleset_bundle_id,ruleset_bundle_hash
+        ) VALUES(%s,%s,'BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1','1.0.0',
+          'research_active','UNCONFIRMED',%s,%s,%s,%s,%s,'{}',%s,
+          'bazi-four-pillars-research-1.0.0',%s)"""
+        digest = "a" * 64
+        with self.runtime(self.member_a) as member:
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                member.execute(
+                    insert,
+                    (uuid4(), self.member_a, b"encrypted", b"encrypted",
+                     f"sha256:{digest}", f"sha256:{digest}", f"sha256:{digest}",
+                     f"sha256:{digest}", f"sha256:{digest}"),
+                )
+        run_id = uuid4()
+        with self.runtime(self.owner, "owner") as owner:
+            owner.execute(
+                insert,
+                (run_id, self.owner, b"encrypted", b"encrypted",
+                 f"sha256:{digest}", f"sha256:{digest}", f"sha256:{digest}",
+                 f"sha256:{digest}", f"sha256:{digest}"),
+            )
+            owner.commit()
+            self.assertEqual(run_id, owner.execute(
+                "SELECT id FROM bazi_research_runs WHERE id=%s", (run_id,)
+            ).fetchone()[0])
+        with self.runtime(self.member_a) as member:
+            self.assertEqual(0, member.execute(
+                "SELECT count(*) FROM bazi_research_runs"
+            ).fetchone()[0])
+
     def test_migration_drift_is_rejected(self):
         version = "0001_sprint0_baseline.sql"
         checksum = self.conn.execute(

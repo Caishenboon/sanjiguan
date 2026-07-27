@@ -1,0 +1,95 @@
+{
+  "schema_version": "bazi-execution-profile-registry/1.0.0",
+  "registry_version": "bazi-execution-profiles/1.0.0",
+  "status": "research_active",
+  "review_status": "UNCONFIRMED",
+  "production_activatable": false,
+  "profiles": [
+    {
+      "profile_id": "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+      "profile_version": "1.0.0",
+      "time_tracks": [
+        {
+          "track_id": "civil",
+          "time_basis": "civil",
+          "pillar_time_basis": {
+            "year": "civil",
+            "month": "civil",
+            "day": "civil",
+            "hour": "civil"
+          },
+          "day_rollover": "midnight",
+          "hour_stem_day_policy": "effective_day"
+        }
+      ],
+      "year_boundary": "lichun_astronomical_instant",
+      "month_boundary": "twelve_jie_astronomical_instants",
+      "boundary_inclusion": "start_inclusive_end_exclusive",
+      "calendar_basis": "proleptic_gregorian_1900_2099",
+      "unknown_time_policy": "enumerate_13_split_intervals_max_26_candidates"
+    },
+    {
+      "profile_id": "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+      "profile_version": "1.0.0",
+      "time_tracks": [
+        {
+          "track_id": "local_apparent_solar",
+          "time_basis": "local_apparent_solar",
+          "pillar_time_basis": {
+            "year": "local_apparent_solar",
+            "month": "local_apparent_solar",
+            "day": "local_apparent_solar",
+            "hour": "local_apparent_solar"
+          },
+          "day_rollover": "zichu_23",
+          "hour_stem_day_policy": "effective_day"
+        }
+      ],
+      "year_boundary": "lichun_astronomical_instant",
+      "month_boundary": "twelve_jie_astronomical_instants",
+      "boundary_inclusion": "start_inclusive_end_exclusive",
+      "calendar_basis": "proleptic_gregorian_1900_2099",
+      "unknown_time_policy": "enumerate_13_split_intervals_max_26_candidates"
+    },
+    {
+      "profile_id": "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1",
+      "profile_version": "1.0.0",
+      "time_tracks": [
+        {
+          "track_id": "civil_midnight",
+          "time_basis": "civil",
+          "pillar_time_basis": {
+            "year": "civil",
+            "month": "civil",
+            "day": "civil",
+            "hour": "civil"
+          },
+          "day_rollover": "midnight",
+          "hour_stem_day_policy": "effective_day"
+        },
+        {
+          "track_id": "apparent_late_early_zi",
+          "time_basis": "local_apparent_solar",
+          "pillar_time_basis": {
+            "year": "local_apparent_solar",
+            "month": "local_apparent_solar",
+            "day": "local_apparent_solar",
+            "hour": "local_apparent_solar"
+          },
+          "day_rollover": "late_early_zi_split",
+          "hour_stem_day_policy": "next_day_for_late_zi"
+        }
+      ],
+      "year_boundary": "lichun_astronomical_instant",
+      "month_boundary": "twelve_jie_astronomical_instants",
+      "boundary_inclusion": "start_inclusive_end_exclusive",
+      "calendar_basis": "proleptic_gregorian_1900_2099",
+      "unknown_time_policy": "enumerate_13_split_intervals_max_26_candidates"
+    }
+  ],
+  "notices": [
+    "Research-executable does not mean traditionally attested or production approved.",
+    "No profile is a default and no candidate is declared the correct chart.",
+    "D-002 and D-003 remain UNCONFIRMED."
+  ]
+}

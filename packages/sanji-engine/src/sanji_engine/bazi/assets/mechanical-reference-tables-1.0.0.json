@@ -1,0 +1,41 @@
+{
+  "schema_version": "bazi-mechanical-reference-tables/1.0.0",
+  "asset_version": "bazi-mechanical-reference-tables/1.0.0",
+  "use": "independent_test_reference_not_production_lookup",
+  "source_ids": [
+    "HKO_HEAVENLY_STEMS_EARTHLY_BRANCHES_TABLES"
+  ],
+  "source_url": "https://www.hko.gov.hk/en/gts/time/stemsandbranches.htm",
+  "sexagenary_cycle": [
+    "甲子", "乙丑", "丙寅", "丁卯", "戊辰", "己巳", "庚午", "辛未", "壬申", "癸酉",
+    "甲戌", "乙亥", "丙子", "丁丑", "戊寅", "己卯", "庚辰", "辛巳", "壬午", "癸未",
+    "甲申", "乙酉", "丙戌", "丁亥", "戊子", "己丑", "庚寅", "辛卯", "壬辰", "癸巳",
+    "甲午", "乙未", "丙申", "丁酉", "戊戌", "己亥", "庚子", "辛丑", "壬寅", "癸卯",
+    "甲辰", "乙巳", "丙午", "丁未", "戊申", "己酉", "庚戌", "辛亥", "壬子", "癸丑",
+    "甲寅", "乙卯", "丙辰", "丁巳", "戊午", "己未", "庚申", "辛酉", "壬戌", "癸亥"
+  ],
+  "yin_month_start_stem_by_year_stem": {
+    "甲": "丙", "乙": "戊", "丙": "庚", "丁": "壬", "戊": "甲",
+    "己": "丙", "庚": "戊", "辛": "庚", "壬": "壬", "癸": "甲"
+  },
+  "zi_hour_start_stem_by_day_stem": {
+    "甲": "甲", "乙": "丙", "丙": "戊", "丁": "庚", "戊": "壬",
+    "己": "甲", "庚": "丙", "辛": "戊", "壬": "庚", "癸": "壬"
+  },
+  "double_hours": [
+    {"branch": "子", "start_inclusive": "23:00", "end_exclusive": "01:00"},
+    {"branch": "丑", "start_inclusive": "01:00", "end_exclusive": "03:00"},
+    {"branch": "寅", "start_inclusive": "03:00", "end_exclusive": "05:00"},
+    {"branch": "卯", "start_inclusive": "05:00", "end_exclusive": "07:00"},
+    {"branch": "辰", "start_inclusive": "07:00", "end_exclusive": "09:00"},
+    {"branch": "巳", "start_inclusive": "09:00", "end_exclusive": "11:00"},
+    {"branch": "午", "start_inclusive": "11:00", "end_exclusive": "13:00"},
+    {"branch": "未", "start_inclusive": "13:00", "end_exclusive": "15:00"},
+    {"branch": "申", "start_inclusive": "15:00", "end_exclusive": "17:00"},
+    {"branch": "酉", "start_inclusive": "17:00", "end_exclusive": "19:00"},
+    {"branch": "戌", "start_inclusive": "19:00", "end_exclusive": "21:00"},
+    {"branch": "亥", "start_inclusive": "21:00", "end_exclusive": "23:00"}
+  ],
+  "review_status": "ENGINEERING_REFERENCE_PENDING_QUALIFIED_BAZI_REVIEW",
+  "production_activatable": false
+}
