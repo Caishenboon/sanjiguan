@@ -1,0 +1,192 @@
+{
+  "boundary_inclusion_policy": {
+    "decision_refs": [
+      "C-GAP-004"
+    ],
+    "decision_status": "UNCONFIRMED",
+    "notes": "Exact equality at a boundary is not frozen.",
+    "options": [
+      "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE",
+      "START_EXCLUSIVE_END_INCLUSIVE_CANDIDATE",
+      "EXACT_INSTANT_DUAL_SENSITIVITY"
+    ],
+    "policy_id": "BAZI.BOUNDARY_INCLUSION",
+    "selected_option": "START_INCLUSIVE_END_EXCLUSIVE_CANDIDATE"
+  },
+  "calendar_basis": {
+    "decision_refs": [
+      "C-ENG-005",
+      "C-GAP-003"
+    ],
+    "decision_status": "CANDIDATE",
+    "notes": "Current code accepts Gregorian input; pre-reform civil-calendar semantics remain unresolved.",
+    "options": [
+      "PROLEPTIC_GREGORIAN_RESEARCH_WINDOW",
+      "HISTORICAL_CIVIL_CALENDAR"
+    ],
+    "policy_id": "BAZI.CALENDAR_BASIS",
+    "selected_option": "PROLEPTIC_GREGORIAN_RESEARCH_WINDOW"
+  },
+  "content_hash": "sha256:0247f39e9f0eba2c5e7b4523a20ea7f20351d06fc2c31df90cbf519c66cbfa8f",
+  "day_rollover_policy": {
+    "decision_refs": [
+      "C-GAP-001"
+    ],
+    "decision_status": "UNCONFIRMED",
+    "notes": "D-002 remains unconfirmed; the selection is a comparison dimension only.",
+    "options": [
+      "DAY_BOUNDARY_00_CIVIL",
+      "DAY_BOUNDARY_23_ZICHU",
+      "LATE_EARLY_ZI_SPLIT"
+    ],
+    "policy_id": "BAZI.DAY_ROLLOVER",
+    "selected_option": "LATE_EARLY_ZI_SPLIT"
+  },
+  "historical_calendar_policy": {
+    "decision_refs": [
+      "C-ENG-001",
+      "C-ENG-005",
+      "C-GAP-003"
+    ],
+    "decision_status": "UNCONFIRMED",
+    "notes": "The narrow window prevents tzdb and calendar uncertainty being hidden.",
+    "options": [
+      "RESEARCH_WINDOW_1900_2099",
+      "PROLEPTIC_GREGORIAN_ALL_SUPPORTED_DATES",
+      "HISTORICAL_REFORM_BY_LOCATION"
+    ],
+    "policy_id": "BAZI.HISTORICAL_CALENDAR",
+    "selected_option": "RESEARCH_WINDOW_1900_2099"
+  },
+  "hour_boundary_policy": {
+    "decision_refs": [
+      "C-OWNER-001",
+      "C-GAP-001"
+    ],
+    "decision_status": "UNCONFIRMED",
+    "notes": "No policy determines an hour pillar; this only states which time candidate would be tested.",
+    "options": [
+      "CIVIL_TIME_12_DOUBLE_HOURS",
+      "APPARENT_SOLAR_12_DOUBLE_HOURS",
+      "DUAL_TIME_CANDIDATE_HOURS"
+    ],
+    "policy_id": "BAZI.HOUR_BOUNDARY",
+    "selected_option": "DUAL_TIME_CANDIDATE_HOURS"
+  },
+  "known_disputes": [
+    "D-002 day rollover and early/late Zi handling",
+    "D-003 later strength, luck-start and direction rules are outside this profile",
+    "year and month boundary use of astronomical instants is not owner-frozen",
+    "pre-Gregorian-reform and weak historical-zone evidence"
+  ],
+  "legal_time_policy": {
+    "decision_refs": [
+      "C-OWNER-001",
+      "C-ENG-001"
+    ],
+    "decision_status": "FROZEN",
+    "notes": "Preserve entered civil time and resolve the named zone without silently rewriting it.",
+    "options": [
+      "IANA_HISTORICAL_LOCAL_TIME_PRESERVE_RAW"
+    ],
+    "policy_id": "BAZI.LEGAL_TIME",
+    "selected_option": "IANA_HISTORICAL_LOCAL_TIME_PRESERVE_RAW"
+  },
+  "location_precision_policy": {
+    "decision_refs": [
+      "C-OWNER-001",
+      "C-ENG-002"
+    ],
+    "decision_status": "CANDIDATE",
+    "notes": "Solar correction requires longitude and must preserve its precision provenance.",
+    "options": [
+      "EXPLICIT_COORDINATES_AND_PRECISION",
+      "CITY_CENTROID_WITH_WARNING"
+    ],
+    "policy_id": "BAZI.LOCATION_PRECISION",
+    "selected_option": "EXPLICIT_COORDINATES_AND_PRECISION"
+  },
+  "month_boundary_policy": {
+    "decision_refs": [
+      "C-ENG-003",
+      "C-GAP-004"
+    ],
+    "decision_status": "UNCONFIRMED",
+    "notes": "Jie versus zhongqi and exact-boundary inclusion require qualified review.",
+    "options": [
+      "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE",
+      "TWENTY_FOUR_TERMS_CANDIDATE",
+      "CIVIL_DAY_CONTAINING_JIE_CANDIDATE"
+    ],
+    "policy_id": "BAZI.MONTH_BOUNDARY",
+    "selected_option": "TWELVE_JIE_ASTRONOMICAL_INSTANT_CANDIDATE"
+  },
+  "production_activatable": false,
+  "profile_class": "profile_discriminating_candidate",
+  "profile_id": "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1",
+  "profile_version": "0.1.0",
+  "review_status": "UNCONFIRMED",
+  "reviewer_requirements": [
+    "product_owner",
+    "qualified_bazi_method_reviewer",
+    "calendar_engineering_reviewer"
+  ],
+  "schema_version": "bazi-method-profile/1.0.0",
+  "selection_authority": "CANDIDATE_ONLY_NOT_OWNER_DECISION",
+  "solar_time_mode": {
+    "decision_refs": [
+      "C-OWNER-001",
+      "C-ENG-002",
+      "C-ENG-004"
+    ],
+    "decision_status": "FROZEN",
+    "notes": "Only the dual policy is owner-frozen; other selections exist solely as discriminating controls.",
+    "options": [
+      "CIVIL_TIME_ONLY",
+      "LOCAL_MEAN_SOLAR_TIME",
+      "LOCAL_APPARENT_SOLAR_TIME",
+      "DUAL_CIVIL_APPARENT_SENSITIVITY"
+    ],
+    "policy_id": "BAZI.SOLAR_TIME",
+    "selected_option": "DUAL_CIVIL_APPARENT_SENSITIVITY"
+  },
+  "source_claim_ids": [
+    "C-OWNER-001",
+    "C-ENG-001",
+    "C-ENG-002",
+    "C-ENG-003",
+    "C-ENG-004",
+    "C-ENG-005",
+    "C-GAP-001",
+    "C-GAP-003",
+    "C-GAP-004"
+  ],
+  "status": "review_candidate",
+  "unknown_time_policy": {
+    "decision_refs": [
+      "C-OWNER-001",
+      "C-ENG-004"
+    ],
+    "decision_status": "FROZEN",
+    "notes": "Unknown time remains a candidate interval and never becomes a guessed hour.",
+    "options": [
+      "ENUMERATE_CANDIDATE_INTERVALS_NO_GUESSED_HOUR"
+    ],
+    "policy_id": "BAZI.UNKNOWN_TIME",
+    "selected_option": "ENUMERATE_CANDIDATE_INTERVALS_NO_GUESSED_HOUR"
+  },
+  "year_boundary_policy": {
+    "decision_refs": [
+      "C-ENG-003",
+      "C-GAP-004"
+    ],
+    "decision_status": "UNCONFIRMED",
+    "notes": "Astronomical instant is mechanically available but its BaZi use is not owner-frozen.",
+    "options": [
+      "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE",
+      "CIVIL_LUNAR_YEAR_CANDIDATE"
+    ],
+    "policy_id": "BAZI.YEAR_BOUNDARY",
+    "selected_option": "LICHUN_ASTRONOMICAL_INSTANT_CANDIDATE"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "bazi-conformance-fixture/1.0.0",
+  "classification": "profile_discriminating",
+  "authority": "research_only_not_a_bazi_golden_chart",
+  "profile_ids": [
+    "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+    "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+    "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+  ],
+  "expected_content_hash": "sha256:6eb4eba309e9054e9fc1b698a90bf7e55522c7e663f1e497f09fe2ea1964dc02",
+  "boundary_asset_hash": "sha256:d7d521b8205a27d659957bafd4b993e4fe8fb29909e1b9f145a792de8e3a6db1",
+  "pillar_results": null,
+  "calculation_performed": false
+}
