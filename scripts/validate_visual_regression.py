@@ -14,7 +14,7 @@ required_workflow = (
     "runs-on: ubuntu-24.04",
     "id: visual_regression",
     "continue-on-error: true",
-    "actions/upload-artifact@v4",
+    "actions/upload-artifact@v6",
     "visual-regression-${{ runner.os }}-${{ github.run_id }}",
     "steps.visual_regression.outcome == 'failure'",
     "Enforce visual regression result",

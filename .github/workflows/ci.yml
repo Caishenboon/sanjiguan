@@ -148,7 +148,7 @@ jobs:
           fi
       - name: Upload visual regression evidence
         if: steps.visual_regression.outcome == 'failure'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: visual-regression-${{ runner.os }}-${{ github.run_id }}
           path: |
