@@ -1,0 +1,14 @@
+{
+  "schema_version": "research-baseline-determinism/1.0.0",
+  "case_id": "S2-CLEAR-01",
+  "classification": "synthetic_research_baseline",
+  "production_activatable": false,
+  "expected": {
+    "output_hash": "sha256:bc29ea8adb58b8f2f0664651c18d7e9aeb11e56ad25754706f1c778cf65a2bab",
+    "trace_hash": "sha256:5c4c59725eb5a70fc88313860eb03cb7caa335aaf1f86924a5d4af7a1d87e704",
+    "research_domain_hash": "sha256:949c736fb3d98596ebddeaff7d89942c257e2177bf19c46d02b6001b136cfec8",
+    "legacy_locked_hash": "0721c5c2b52c7c40be8605cae8802b50fa5d7c2d50c95ba4ce9b1e87d45d6204",
+    "verdict": "decisive"
+  },
+  "disclaimer": "Cross-platform migration fixture only; not an authoritative golden case."
+}

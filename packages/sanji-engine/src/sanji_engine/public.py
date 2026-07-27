@@ -21,6 +21,7 @@ from .errors import (
     REPLAY_METHOD_VERSION_MISMATCH,
     REPLAY_RESULT_MISMATCH,
     RULESET_HASH_MISMATCH,
+    RULESET_REVOKED,
     SCHEMA_UNSUPPORTED,
 )
 from .rulesets import load_bundle
@@ -65,7 +66,7 @@ def validate_request(request: dict) -> dict:
     allowed = {
         "schema_version", "engine_api_version", "run_id", "run_mode",
         "requested_modules", "input_snapshot", "ruleset_bundle_id",
-        "data_versions", "deterministic_context",
+        "data_versions", "deterministic_context", "requested_trace_level",
     }
     unexpected = sorted(value.keys() - allowed)
     if unexpected:
@@ -85,6 +86,8 @@ def validate_request(request: dict) -> dict:
         raise EngineError(INPUT_INVALID, "required request fields are missing", {"fields": missing})
     if value["run_mode"] not in {"research_preview", "replay"}:
         raise EngineError(INPUT_INVALID, "run_mode is not allowed")
+    if value.get("requested_trace_level", "full") != "full":
+        raise EngineError(INPUT_INVALID, "only full machine-readable trace is supported")
     modules = value["requested_modules"]
     if not isinstance(modules, list) or not modules or len(modules) != len(set(modules)):
         raise EngineError(INPUT_INVALID, "requested_modules must be a non-empty unique list")
@@ -117,7 +120,12 @@ def validate_request(request: dict) -> dict:
         )
     _require_mapping(value["input_snapshot"], "input_snapshot")
     _validate_hash_safe(value)
-    inspect_ruleset(value["ruleset_bundle_id"])
+    bundle = inspect_ruleset(value["ruleset_bundle_id"])
+    if bundle.get("status") == "revoked_for_future_runs" and value["run_mode"] != "replay":
+        raise EngineError(
+            RULESET_REVOKED,
+            "revoked ruleset is available only for historical replay",
+        )
     return value
 
 
