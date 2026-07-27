@@ -1741,6 +1741,16 @@
             "const": "YIJING.THREE_COIN.PHYSICAL.V1",
             "title": "Method Id"
           },
+          "coin_face_mapping_id": {
+            "type": "string",
+            "const": "COIN_FACES.HEADS_3_TAILS_2.V1",
+            "title": "Coin Face Mapping Id"
+          },
+          "coin_face_mapping_version": {
+            "type": "string",
+            "const": "1.0.0",
+            "title": "Coin Face Mapping Version"
+          },
           "tosses": {
             "items": {
               "$ref": "#/components/schemas/CoinTossInput"
@@ -1775,6 +1785,8 @@
           "timezone",
           "location_precision",
           "method_id",
+          "coin_face_mapping_id",
+          "coin_face_mapping_version",
           "tosses",
           "method_version"
         ],

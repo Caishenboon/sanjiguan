@@ -121,11 +121,18 @@ class PostgreSQLHttpE2E(unittest.TestCase):
             "question": "test question", "purpose": "test purpose",
             "divination_at": datetime.now(timezone.utc).isoformat(), "timezone": "Asia/Shanghai",
             "location_precision": "none", "method_id": "YIJING.THREE_COIN.PHYSICAL.V1",
-            "method_version": "1.0.0", "tosses": tosses,
+            "method_version": "1.0.0",
+            "coin_face_mapping_id": "COIN_FACES.HEADS_3_TAILS_2.V1",
+            "coin_face_mapping_version": "1.0.0", "tosses": tosses,
         }, headers={"Idempotency-Key": "e2e-three-coin-0001"})
         self.assertEqual(201, divination.status_code, divination.text)
         self.assertIsNone(divination.json()["interpretation"])
         self.assertIsNone(divination.json()["scoring"])
+        self.assertEqual("research_active", divination.json()["research_status"])
+        self.assertEqual(
+            "bottom_to_top",
+            divination.json()["engine_result"]["input_order"],
+        )
 
     def test_knowledge_admin_is_owner_only_and_sealed_is_metadata_only(self):
         self.login()
