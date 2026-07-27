@@ -9,11 +9,17 @@ from . import __version__
 from .calendar import normalize_birth_time, solar_term_instant
 from .canonical import CANONICALIZATION_VERSION, content_hash
 from .disabled import disabled_result
+from .inference.assets import load_research_assets
+from .inference import run_research_baseline
 from .errors import (
     EngineError,
     INPUT_INVALID,
     NONDETERMINISTIC_CONTEXT,
     REPLAY_ASSET_MISSING,
+    REPLAY_DATA_VERSION_MISMATCH,
+    REPLAY_INPUT_MISMATCH,
+    REPLAY_METHOD_VERSION_MISMATCH,
+    REPLAY_RESULT_MISMATCH,
     RULESET_HASH_MISMATCH,
     SCHEMA_UNSUPPORTED,
 )
@@ -85,6 +91,12 @@ def validate_request(request: dict) -> dict:
     unknown = sorted(set(modules) - MODULES)
     if unknown:
         raise EngineError(INPUT_INVALID, "unknown requested module", {"modules": unknown})
+    research_modules = set(modules) & {"signals", "inference"}
+    if research_modules and research_modules != {"signals", "inference"}:
+        raise EngineError(
+            INPUT_INVALID,
+            "signals and inference must be requested together for this research baseline",
+        )
     context = _require_mapping(value["deterministic_context"], "deterministic_context")
     if context.get("random_method") != "none" or context.get("random_seed") is not None:
         raise EngineError(
@@ -136,6 +148,17 @@ def _calendar_hash_safe(result: dict) -> dict:
     place["latitude"] = str(place["latitude"])
     place["longitude"] = str(place["longitude"])
     return safe
+
+
+def _research_hash_safe(value):
+    """Encode legacy float values as exact decimal strings at the JCS boundary."""
+    if isinstance(value, float):
+        return str(value)
+    if isinstance(value, dict):
+        return {key: _research_hash_safe(child) for key, child in value.items()}
+    if isinstance(value, list):
+        return [_research_hash_safe(child) for child in value]
+    return value
 
 
 def _trace_step(sequence: int, operation: str, input_ref: str, output_ref: str) -> dict:
@@ -211,6 +234,153 @@ def _execute_calendar(snapshot: dict) -> tuple[dict, list[dict]]:
     return {**module, "content_hash": content_hash(module)}, trace
 
 
+def _research_trace_step(
+    sequence: int,
+    module_id: str,
+    operation: str,
+    parameters: dict,
+    input_refs: list[str],
+    output_refs: list[str],
+) -> dict:
+    step = {
+        "step_id": f"{module_id}:{sequence:03d}:{operation}",
+        "sequence": sequence,
+        "module_id": module_id,
+        "operation": operation,
+        "input_refs": input_refs,
+        "rule_refs": [
+            "SIGNALS.RESEARCH_BASELINE.0.1.0",
+            "INFERENCE.RESEARCH_BASELINE.0.1.0",
+        ],
+        "source_refs": ["SANJI_RESEARCH_BASELINE_SYNTHETIC"],
+        "parameters": _research_hash_safe(parameters),
+        "output_refs": output_refs,
+    }
+    return {**step, "calculation_hash": content_hash(step)}
+
+
+def _restore_research_case(snapshot: dict) -> dict:
+    if snapshot.get("operation") != "run_research_inference":
+        raise EngineError(INPUT_INVALID, "research inference operation is not supported")
+    case = deepcopy(_require_mapping(snapshot.get("case"), "case"))
+    for field in ("completeness",):
+        if field in case:
+            case[field] = float(case[field])
+    for signal in case.get("signals", []):
+        for field in ("strength", "source_reliability", "relevance"):
+            if field in signal:
+                signal[field] = float(signal[field])
+    return case
+
+
+def _execute_research(snapshot: dict) -> tuple[dict[str, dict], list[dict], dict]:
+    case = _restore_research_case(snapshot)
+    archetypes, config, asset_hashes = load_research_assets()
+    actual = run_research_baseline(case, archetypes, config)
+    safe_signals = _research_hash_safe(actual["signals"])
+    safe_weights = _research_hash_safe(actual["weights"])
+    safe_locked = _research_hash_safe(actual["locked_verdict"])
+    safe_research_trace = _research_hash_safe(actual["research_trace"])
+    signals_result = {
+        "signals": safe_signals,
+        "weights": safe_weights,
+        "legacy_input_hash": actual["input_hash"],
+        "deduplication": safe_research_trace["deduplication"],
+        "asset_hashes": asset_hashes,
+    }
+    inference_result = {
+        "locked_verdict": safe_locked,
+        "legacy_locked_hash": actual["locked_hash"],
+        "legacy_stages": actual["stages"],
+        "candidate_generation": safe_research_trace["candidate_generation"],
+        "research_trace": safe_research_trace,
+        "asset_hashes": asset_hashes,
+    }
+    trace = [
+        _research_trace_step(
+            100,
+            "signals",
+            "validate_and_deduplicate_signals",
+            {
+                "signals": safe_signals,
+                "deduplication": safe_research_trace["deduplication"],
+            },
+            ["input:case.signals"],
+            ["signals:normalized"],
+        ),
+        _research_trace_step(
+            200,
+            "inference",
+            "generate_and_score_candidates",
+            {
+                "candidate_generation": safe_research_trace["candidate_generation"],
+                "candidate_contributions": safe_research_trace[
+                    "candidate_contributions"
+                ],
+            },
+            ["signals:normalized", "ruleset:research-baseline-0.2.0"],
+            ["inference:scored_candidates"],
+        ),
+        _research_trace_step(
+            300,
+            "inference",
+            "rank_and_decide_status",
+            {
+                "status_decision": safe_research_trace["status_decision"],
+                "ranked_ids": [
+                    item["id"] for item in safe_locked["ranked_hypotheses"]
+                ],
+            },
+            ["inference:scored_candidates"],
+            ["inference:locked_verdict"],
+        ),
+    ]
+    definitions = {
+        "signals": {
+            "method_id": "SIGNALS.RESEARCH_BASELINE.0.1.0",
+            "result": signals_result,
+        },
+        "inference": {
+            "method_id": "INFERENCE.RESEARCH_BASELINE.0.1.0",
+            "result": inference_result,
+        },
+    }
+    module_results = {}
+    for module_id, definition in definitions.items():
+        module = {
+            "module_id": module_id,
+            "module_version": "0.2.0",
+            "method_id": definition["method_id"],
+            "method_status": "research_baseline",
+            "production_activatable": False,
+            "result": definition["result"],
+            "trace_step_ids": [
+                step["step_id"] for step in trace if step["module_id"] == module_id
+            ],
+            "rule_refs": [definition["method_id"]],
+            "source_refs": ["SANJI_RESEARCH_BASELINE_SYNTHETIC"],
+            "uncertainties": [
+                "THEORY_UNVALIDATED",
+                "LEGACY_BINARY_FLOAT_COMPATIBILITY",
+            ],
+            "sensitivity_flags": [],
+        }
+        module_results[module_id] = {
+            **module,
+            "content_hash": content_hash(module),
+        }
+    domain_projection = {
+        "signals": safe_signals,
+        "weights": safe_weights,
+        "locked_verdict": safe_locked,
+        "legacy_locked_hash": actual["locked_hash"],
+    }
+    return module_results, trace, {
+        "research_domain_hash": content_hash(domain_projection),
+        "legacy_locked_hash": actual["locked_hash"],
+    }
+
+
 def execute(request: dict) -> dict:
     validated = validate_request(request)
     bundle = inspect_ruleset(validated["ruleset_bundle_id"])
@@ -223,6 +393,16 @@ def execute(request: dict) -> dict:
     module_results: dict[str, dict] = {}
     trace: list[dict] = []
     disabled_modules: list[str] = []
+    research_metadata: dict = {}
+    research_requested = {"signals", "inference"} <= set(
+        validated["requested_modules"]
+    )
+    research_results: dict[str, dict] = {}
+    if research_requested:
+        research_results, research_trace, research_metadata = _execute_research(
+            validated["input_snapshot"]
+        )
+        trace.extend(research_trace)
     for module_id in validated["requested_modules"]:
         definition = bundle["modules"][module_id]
         if module_id == "calendar" and definition["enabled"]:
@@ -230,6 +410,8 @@ def execute(request: dict) -> dict:
                 validated["input_snapshot"]
             )
             trace.extend(module_trace)
+        elif module_id in research_results and definition["enabled"]:
+            module_results[module_id] = research_results[module_id]
         else:
             module_results[module_id] = disabled_result(module_id, definition)
             disabled_modules.append(module_id)
@@ -246,6 +428,12 @@ def execute(request: dict) -> dict:
         "trace_hash": trace_hash,
         "random_context": validated["deterministic_context"],
     }
+    if research_requested:
+        manifest_base["method_versions"] = {
+            "signals": bundle["modules"]["signals"]["method_id"],
+            "inference": bundle["modules"]["inference"]["method_id"],
+        }
+        manifest_base["domain_result_hashes"] = research_metadata
     replay_manifest = {
         **manifest_base,
         "content_hash": content_hash(manifest_base),
@@ -288,11 +476,31 @@ def replay(manifest: dict, request: dict) -> dict:
     bundle = inspect_ruleset(manifest["ruleset_bundle_id"])
     if bundle["bundle_hash"] != manifest["ruleset_bundle_hash"]:
         raise EngineError(RULESET_HASH_MISMATCH, "ruleset bundle hash mismatch")
+    if request.get("data_versions") != manifest["data_versions"]:
+        raise EngineError(
+            REPLAY_DATA_VERSION_MISMATCH, "replay data versions do not match"
+        )
+    if "method_versions" in manifest:
+        current_methods = {
+            module_id: bundle["modules"][module_id]["method_id"]
+            for module_id in manifest["method_versions"]
+        }
+        if current_methods != manifest["method_versions"]:
+            raise EngineError(
+                REPLAY_METHOD_VERSION_MISMATCH,
+                "replay method versions do not match",
+            )
     replay_request = deepcopy(request)
     replay_request["run_mode"] = "replay"
     result = execute(replay_request)
     if result["input_hash"] != manifest["input_hash"]:
-        raise EngineError(RULESET_HASH_MISMATCH, "replay input hash mismatch")
+        raise EngineError(REPLAY_INPUT_MISMATCH, "replay input hash mismatch")
     if result["trace_hash"] != manifest["trace_hash"]:
-        raise EngineError(RULESET_HASH_MISMATCH, "replay trace hash mismatch")
+        raise EngineError(REPLAY_RESULT_MISMATCH, "replay trace hash mismatch")
+    if (
+        "domain_result_hashes" in manifest
+        and result["replay_manifest"].get("domain_result_hashes")
+        != manifest["domain_result_hashes"]
+    ):
+        raise EngineError(REPLAY_RESULT_MISMATCH, "replay domain result mismatch")
     return result
