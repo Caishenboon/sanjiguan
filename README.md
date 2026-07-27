@@ -1,8 +1,10 @@
 # 三际观——宿世因缘与命势推演系统
 
 内部工程名继续使用 `samsara-engine`。确定性核心位于 `packages/sanji-engine`；
-八字、紫微、解释性易经、密宗、中阴、宿世身份、因缘评分和命势 K 线生产规则均未激活。
-八字方法档案与边界案例只用于 Owner 审校，不生成四柱。
+八字、紫微与实物三钱已有 Owner-only、可回放的确定性机械研究引擎；
+其生产规则仍未激活。解释性易经、密宗、中阴、宿世身份、因缘评分和
+命势 K 线继续禁用。八字与紫微必须显式选择研究 Profile，不存在默认
+方法；所有解释层均为空。
 
 ## API
 
@@ -48,6 +50,17 @@ pnpm build
 pnpm dev
 ```
 
+共享设计系统与组件故事：
+
+```bash
+cd packages/sanji-ui
+pnpm install --frozen-lockfile
+pnpm build-storybook
+```
+
+External Oracle 仅用于合成/批准数据的差分研究，不进入 Engine Hash，
+也不允许生产调用。固定版本与许可证见 `third-party-lock.json`。
+
 ## 验收
 
 ```bash
@@ -57,6 +70,7 @@ work/.venv/Scripts/python scripts/validate_sprint1a5.py
 work/.venv/Scripts/python scripts/validate_sprint1a6.py
 work/.venv/Scripts/python scripts/validate_sanji_engine.py
 work/.venv/Scripts/python scripts/validate_bazi_method_foundation.py
+work/.venv/Scripts/python scripts/validate_ziwei_oracle_ui.py
 work/.venv/Scripts/python scripts/check_doc_links.py
 ```
 
