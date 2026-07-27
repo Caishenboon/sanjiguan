@@ -19,6 +19,10 @@ node_modules/
 dist/
 build/
 coverage/
+storybook-static/
+playwright-report/
+test-results/
+.lighthouseci/
 .coverage
 htmlcov/
 .venv/
@@ -42,6 +46,7 @@ outputs/*
 !outputs/sprint3-tablet-768.png
 !outputs/sprint3-wide-1920.png
 !outputs/sprint3-report-1440.png
+!outputs/ziwei-oracle-ui-*.png
 *.log
 !outputs/postgres16-evidence.redacted.log
 *.sqlite

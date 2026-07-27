@@ -27,4 +27,5 @@ sanji_engine = [
   "research_baselines/*.json",
   "yijing/assets/*.json",
   "bazi/assets/*.json",
+  "ziwei/assets/*.json",
 ]

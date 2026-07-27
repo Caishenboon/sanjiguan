@@ -171,6 +171,41 @@ class PostgreSQLIntegrationTests(unittest.TestCase):
                 "SELECT count(*) FROM bazi_research_runs"
             ).fetchone()[0])
 
+    def test_ziwei_and_oracle_research_tables_force_owner_only_rls(self):
+        rows = self.conn.execute(
+            """SELECT relname,relforcerowsecurity FROM pg_class
+               WHERE relname=ANY(%s) ORDER BY relname""",
+            (["ziwei_research_runs", "oracle_diff_summaries"],),
+        ).fetchall()
+        self.assertEqual(
+            {"ziwei_research_runs", "oracle_diff_summaries"},
+            {row[0] for row in rows},
+        )
+        self.assertTrue(all(row[1] for row in rows))
+        digest = "b" * 64
+        insert = """INSERT INTO ziwei_research_runs(
+          id,owner_id,method_profile_id,method_profile_version,research_status,
+          review_status,input_snapshot_encrypted,engine_result_encrypted,input_hash,
+          output_hash,trace_hash,domain_hash,replay_manifest,replay_manifest_hash,
+          ruleset_bundle_id,ruleset_bundle_hash
+        ) VALUES(%s,%s,'ZIWEI.SANHE.MANUAL_LUNAR.LEAP_SAME_MONTH.V1','1.0.0',
+          'research_active','UNCONFIRMED',%s,%s,%s,%s,%s,%s,'{}',%s,
+          'ziwei-sanhe-research-1.0.0',%s)"""
+        args = (
+            uuid4(), self.owner, b"encrypted", b"encrypted",
+            f"sha256:{digest}", f"sha256:{digest}", f"sha256:{digest}",
+            f"sha256:{digest}", f"sha256:{digest}", f"sha256:{digest}",
+        )
+        with self.runtime(self.member_a) as member:
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                member.execute(insert, args)
+        with self.runtime(self.owner, "owner") as owner:
+            owner.execute(insert, args)
+            owner.commit()
+            self.assertEqual(1, owner.execute(
+                "SELECT count(*) FROM ziwei_research_runs"
+            ).fetchone()[0])
+
     def test_migration_drift_is_rejected(self):
         version = "0001_sprint0_baseline.sql"
         checksum = self.conn.execute(

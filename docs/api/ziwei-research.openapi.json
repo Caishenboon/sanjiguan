@@ -1,0 +1,305 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Sanji Owner Ziwei Mechanical Research API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/admin/research/ziwei/execute": {
+      "post": {
+        "summary": "Execute Ziwei Research",
+        "operationId": "execute_ziwei_research_api_v1_admin_research_ziwei_execute_post",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "name": "__Host-session",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "  Host-Session"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZiweiPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/research/ziwei/oracle-diff": {
+      "post": {
+        "summary": "Ziwei Oracle Diff",
+        "operationId": "ziwei_oracle_diff_api_v1_admin_research_ziwei_oracle_diff_post",
+        "parameters": [
+          {
+            "name": "__Host-session",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "  Host-Session"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZiweiPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CalendarProvenance": {
+        "properties": {
+          "conversion_method": {
+            "type": "string",
+            "pattern": "^manual_verified_lunar_input$",
+            "title": "Conversion Method"
+          },
+          "timezone_id": {
+            "type": "string",
+            "title": "Timezone Id"
+          },
+          "historical_legal_time": {
+            "type": "string",
+            "title": "Historical Legal Time"
+          },
+          "user_confirmed": {
+            "type": "boolean",
+            "title": "User Confirmed"
+          },
+          "synthetic": {
+            "type": "boolean",
+            "title": "Synthetic",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "conversion_method",
+          "timezone_id",
+          "historical_legal_time",
+          "user_confirmed"
+        ],
+        "title": "CalendarProvenance"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LunarBirth": {
+        "properties": {
+          "year": {
+            "type": "integer",
+            "maximum": 2600.0,
+            "minimum": 1600.0,
+            "title": "Year"
+          },
+          "month": {
+            "type": "integer",
+            "maximum": 12.0,
+            "minimum": 1.0,
+            "title": "Month"
+          },
+          "day": {
+            "type": "integer",
+            "maximum": 30.0,
+            "minimum": 1.0,
+            "title": "Day"
+          },
+          "is_leap_month": {
+            "type": "boolean",
+            "title": "Is Leap Month"
+          },
+          "hour_branch_index": {
+            "type": "integer",
+            "maximum": 11.0,
+            "minimum": 0.0,
+            "title": "Hour Branch Index"
+          },
+          "traditional_sex": {
+            "type": "string",
+            "pattern": "^(male|female)$",
+            "title": "Traditional Sex"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "year",
+          "month",
+          "day",
+          "is_leap_month",
+          "hour_branch_index",
+          "traditional_sex"
+        ],
+        "title": "LunarBirth"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "ZiweiPayload": {
+        "properties": {
+          "profile_record_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Record Id"
+          },
+          "profile_id": {
+            "type": "string",
+            "title": "Profile Id"
+          },
+          "profile_version": {
+            "type": "string",
+            "title": "Profile Version"
+          },
+          "lunar_birth": {
+            "$ref": "#/components/schemas/LunarBirth"
+          },
+          "calendar_provenance": {
+            "$ref": "#/components/schemas/CalendarProvenance"
+          },
+          "target_year": {
+            "type": "integer",
+            "maximum": 3000.0,
+            "minimum": 1600.0,
+            "title": "Target Year"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "profile_id",
+          "profile_version",
+          "lunar_birth",
+          "calendar_provenance",
+          "target_year"
+        ],
+        "title": "ZiweiPayload"
+      }
+    }
+  }
+}

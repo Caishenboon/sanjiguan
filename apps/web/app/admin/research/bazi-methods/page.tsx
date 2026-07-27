@@ -1,5 +1,4 @@
-import Link from "next/link";
-import BaziResearchPreview from "../../../../components/BaziResearchPreview";
+import { BaziFourPillars, ProfileBadge, ResearchWarning, SanjiHeader, SanjiShell, TraceStep } from "@sanji/ui";
 
 const profiles=[
  ["BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1","法定时间／民用午夜候选"],
@@ -11,32 +10,13 @@ const categories=[
 ];
 
 export default function Page(){
- return <main className="shell">
-  <p className="badge">Owner only · 机械排盘研究 · UNCONFIRMED</p>
-  <h1>八字多 Profile 四柱研究台</h1>
-  <p className="boundary">可显式选择研究 Profile 生成基础四柱、边界候选与 Replay。结果不是生产命盘，不含十神、旺衰、吉凶或任何解释。</p>
-  <section className="panel">
-   <h2>候选 Method Profile</h2>
-   <ul>{profiles.map(([id,label])=><li key={id}><strong>{label}</strong><br/><code>{id}</code></li>)}</ul>
-   <p>每次执行必须同时提交 Profile ID 与版本；未选择时拒绝执行，不存在隐藏默认方法。</p>
+ return <SanjiShell><SanjiHeader/><main className="sanji-main">
+  <section className="sanji-hero"><div><p className="sanji-kicker">Owner research · BaZi</p><h1 className="sanji-title">四柱边界台</h1><p className="sanji-lede">显式选择 Profile，观察时间校正与边界候选。不含十神、旺衰、格局、吉凶或解释。</p></div><BaziFourPillars/></section>
+  <ResearchWarning>D-002、D-003 未冻结；候选机械结果不指定唯一正确主盘。</ResearchWarning>
+  <section className="sanji-grid" style={{marginTop:"1rem"}}>
+   <article className="sanji-card sanji-card--wide"><h2>Method Profiles</h2>{profiles.map(([id,label])=><p key={id}><ProfileBadge>{id}</ProfileBadge> {label}</p>)}</article>
+   <article className="sanji-card"><h2>74 个合成边界例</h2>{categories.map(([name,count])=><p key={name}>{name} · {count}</p>)}</article>
+   <article className="sanji-card sanji-card--full"><TraceStep index={1} title="原始法定时间">保留用户输入</TraceStep><TraceStep index={2} title="时间候选">民用、平太阳、视太阳并列</TraceStep><TraceStep index={3} title="四柱候选">Profile 决定边界方法</TraceStep></article>
   </section>
-  <section className="panel">
-   <h2>边界案例资产</h2>
-   <ul>{categories.map(([name,count])=><li key={name}>{name}：{count} 例</li>)}</ul>
-   <p>共 74 个完全合成边界案例已接入真实引擎验证；待人工审校案例不冒充权威金样例。</p>
-  </section>
-  <section className="panel">
-   <h2>证据与审校</h2>
-   <p>当前登记 12 项 Claim、10 个 Locator。传统文本、工程事实、Owner 决定和证据缺口分别标注。</p>
-   <p>D-002、D-003 仍未冻结；当前仅为可回放的机械研究实现，需要合格八字方法审校人和逐例签字金样例。</p>
-   <p><Link href="/admin/knowledge/claims">前往 Claim 工坊记录审校意见</Link> ·
-    <Link href="/admin/knowledge/reviews"> 查看审查流程</Link></p>
-  </section>
-  <section className="panel">
-   <h2>研究执行入口</h2>
-   <p>API：<code>POST /api/v1/admin/research/bazi-four-pillars/execute</code>；比较：<code>/compare</code>。可查看时间修正链、候选四柱、Trace 摘要、版本及哈希，并保存 Replay Manifest。</p>
-   <p>正式启用前仍须另行冻结方法、提升版本、补审校责任人并重新运行全部门禁。</p>
-  </section>
-  <BaziResearchPreview/>
- </main>
+ </main></SanjiShell>
 }

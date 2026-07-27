@@ -33,6 +33,7 @@ from .errors import (
 from .rulesets import load_bundle
 from .yijing import cast_physical_three_coin
 from .yijing.assets import ASSET_VERSION as YIJING_ASSET_VERSION
+from .ziwei import calculate_chart as calculate_ziwei_chart, load_profile as load_ziwei_profile
 
 __all__ = ["validate_request", "execute", "replay", "inspect_ruleset"]
 
@@ -137,6 +138,29 @@ def validate_request(request: dict) -> dict:
             "yijing hexagram mapping data version is unavailable",
         )
     snapshot = _require_mapping(value["input_snapshot"], "input_snapshot")
+    if "ziwei" in modules:
+        if modules != ["ziwei"] or value["ruleset_bundle_id"] not in {
+            "ziwei-sanhe-research-1.0.0",
+            "ziwei-sanhe-research-1.0.0-revoked-fixture",
+        }:
+            raise EngineError(
+                INPUT_INVALID,
+                "Ziwei research execution must be an isolated module request with its research ruleset",
+            )
+        profile_id = snapshot.get("profile_id")
+        profile_version = snapshot.get("profile_version")
+        if not isinstance(profile_id, str) or not isinstance(profile_version, str):
+            raise EngineError(
+                INPUT_INVALID,
+                "Ziwei execution requires explicit profile_id and profile_version; no default is permitted",
+            )
+        if data_versions.get("ziwei_profiles") != "ziwei-profile-registry/1.0.0":
+            raise EngineError(REPLAY_DATA_VERSION_MISMATCH, "Ziwei profile registry version is unavailable")
+        if data_versions.get("ziwei_transformations") != "birth-year-transformations-candidate/1.0.0":
+            raise EngineError(REPLAY_DATA_VERSION_MISMATCH, "Ziwei transformation asset version is unavailable")
+        if data_versions.get("ziwei_source_claims") != "ziwei-source-claim-registry/1.0.0":
+            raise EngineError(REPLAY_DATA_VERSION_MISMATCH, "Ziwei source-claim asset version is unavailable")
+        load_ziwei_profile(profile_id, profile_version)
     if "bazi" in modules:
         executable = value["ruleset_bundle_id"] == "bazi-four-pillars-research-1.0.0"
         if executable and modules != ["bazi"]:
@@ -474,6 +498,7 @@ def execute(request: dict) -> dict:
     research_metadata: dict = {}
     yijing_metadata: dict = {}
     bazi_metadata: dict = {}
+    ziwei_metadata: dict = {}
     research_requested = {"signals", "inference"} <= set(
         validated["requested_modules"]
     )
@@ -539,6 +564,34 @@ def execute(request: dict) -> dict:
             }
             bazi_result = {**module, "content_hash": content_hash(module)}
             trace.extend(bazi_trace)
+    ziwei_result = None
+    if "ziwei" in validated["requested_modules"]:
+        definition = bundle["modules"]["ziwei"]
+        if definition["enabled"]:
+            result, ziwei_trace, ziwei_metadata = calculate_ziwei_chart(
+                validated["input_snapshot"]
+            )
+            module = {
+                "module_id": "ziwei",
+                "module_version": "1.0.0",
+                "method_id": definition["method_id"],
+                "method_status": "traditional_mechanical",
+                "production_activatable": False,
+                "result": result,
+                "trace_step_ids": [step["step_id"] for step in ziwei_trace],
+                "rule_refs": [definition["method_id"]],
+                "source_refs": definition["source_ids"],
+                "uncertainties": [
+                    "D005_UNCONFIRMED",
+                    "FOUR_TRANSFORMATIONS_SOURCE_REVIEW_PENDING",
+                ],
+                "sensitivity_flags": [
+                    result["leap_month_decision"]
+                    if result["lunar_birth"]["is_leap_month"] else "none"
+                ],
+            }
+            ziwei_result = {**module, "content_hash": content_hash(module)}
+            trace.extend(ziwei_trace)
     for module_id in validated["requested_modules"]:
         definition = bundle["modules"][module_id]
         if module_id == "calendar" and definition["enabled"]:
@@ -552,6 +605,8 @@ def execute(request: dict) -> dict:
             module_results[module_id] = yijing_result
         elif module_id == "bazi" and bazi_result is not None:
             module_results[module_id] = bazi_result
+        elif module_id == "ziwei" and ziwei_result is not None:
+            module_results[module_id] = ziwei_result
         else:
             module_results[module_id] = disabled_result(module_id, definition)
             disabled_modules.append(module_id)
@@ -584,6 +639,11 @@ def execute(request: dict) -> dict:
             "bazi": bundle["modules"]["bazi"]["method_id"],
         }
         manifest_base["domain_result_hashes"] = bazi_metadata
+    if ziwei_result is not None:
+        manifest_base["method_versions"] = {
+            "ziwei": bundle["modules"]["ziwei"]["method_id"],
+        }
+        manifest_base["domain_result_hashes"] = ziwei_metadata
     replay_manifest = {
         **manifest_base,
         "content_hash": content_hash(manifest_base),

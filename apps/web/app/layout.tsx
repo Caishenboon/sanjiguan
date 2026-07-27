@@ -1,4 +1,5 @@
 import "./styles.css";
+import "@sanji/ui/styles.css";
 import ServiceWorkerRegistration from "../components/ServiceWorkerRegistration";
 
 export const metadata = {

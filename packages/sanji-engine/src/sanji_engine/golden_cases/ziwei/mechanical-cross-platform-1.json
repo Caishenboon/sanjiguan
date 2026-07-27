@@ -1,0 +1,26 @@
+{
+  "schema_version": "ziwei-cross-platform-fixture/1.0.0",
+  "classification": "synthetic_research_baseline_not_authoritative_golden_case",
+  "case_id": "ZIWEI-SYNTHETIC-2000-01-01-ZI",
+  "profile_id": "ZIWEI.SANHE.MANUAL_LUNAR.LEAP_SAME_MONTH.V1",
+  "profile_version": "1.0.0",
+  "input": {
+    "lunar_year": 2000,
+    "lunar_month": 1,
+    "lunar_day": 1,
+    "is_leap_month": false,
+    "hour_branch_index": 0,
+    "traditional_sex": "male",
+    "target_year": 2026
+  },
+  "expected": {
+    "life_palace": {"branch": "寅", "index": 2},
+    "body_palace": {"branch": "寅", "index": 2},
+    "five_element_bureau": "土五局",
+    "major_star_count": 14,
+    "output_hash": "sha256:225d8d9b12662339af41882ade7ec73532190c50edadc66aec392e08a3abff27",
+    "trace_hash": "sha256:81462bbe1a63f045c1176a115dd285889bc7b61a5c2b00c622fbd236de1c2cb7",
+    "domain_hash": "sha256:ea42ff4f7f4455f66f60183b70aa6bfc8919243a295b1495b1707746352e430e",
+    "module_hash": "sha256:4f2090f256b308081933a8cfbce7b5acce37d7b250752f191e52b1667e6e6fa2"
+  }
+}

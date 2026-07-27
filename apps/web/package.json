@@ -6,16 +6,21 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "storybook:build": "pnpm --dir ../../packages/sanji-ui build-storybook",
+    "test:visual": "playwright test"
   },
   "dependencies": {
     "next": "16.2.11",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "@sanji/ui": "file:../../packages/sanji-ui"
   },
   "devDependencies": {
     "@types/node": "22.15.3",
     "@types/react": "19.1.10",
-    "typescript": "5.8.3"
+    "typescript": "5.8.3",
+    "@playwright/test": "1.62.0",
+    "@lhci/cli": "0.15.1"
   }
 }

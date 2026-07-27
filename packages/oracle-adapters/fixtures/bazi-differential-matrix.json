@@ -1,0 +1,22 @@
+{
+  "schema_version": "oracle-bazi-matrix/1.0.0",
+  "classification": "synthetic_only",
+  "cases": [
+    {"case_id":"ordinary-modern","local_date":"2024-07-01","local_time":"12:00:00","timezone_id":"Asia/Shanghai","expected_focus":"ordinary_exact_or_normalized"},
+    {"case_id":"before-lichun","local_date":"2024-02-04","local_time":"16:20:00","timezone_id":"Asia/Shanghai","expected_focus":"year_boundary"},
+    {"case_id":"after-lichun","local_date":"2024-02-04","local_time":"16:40:00","timezone_id":"Asia/Shanghai","expected_focus":"year_boundary"},
+    {"case_id":"jie-month-boundary","local_date":"2024-03-05","local_time":"10:15:00","timezone_id":"Asia/Shanghai","expected_focus":"solar_term_dataset_difference"},
+    {"case_id":"civil-midnight","local_date":"2024-07-01","local_time":"00:00:00","timezone_id":"Asia/Shanghai","expected_focus":"day_boundary"},
+    {"case_id":"late-zi","local_date":"2024-07-01","local_time":"23:30:00","timezone_id":"Asia/Shanghai","expected_focus":"zi_hour_profile_difference"},
+    {"case_id":"apparent-cross-day","local_date":"1990-02-11","local_time":"23:30:00","timezone_id":"Asia/Shanghai","expected_focus":"solar_correction_engine_owned"},
+    {"case_id":"dst-fold","local_date":"2021-11-07","local_time":"01:30:00","timezone_id":"America/New_York","time_resolution_status":"ambiguous","expected_focus":"input_conversion_ambiguity"},
+    {"case_id":"dst-gap","local_date":"2021-03-14","local_time":"02:30:00","timezone_id":"America/New_York","time_resolution_status":"nonexistent","expected_focus":"input_conversion_nonexistent"},
+    {"case_id":"unknown-time","local_date":"2024-07-01","local_time":null,"timezone_id":"Asia/Shanghai","expected_focus":"unsupported_unknown_birth_time"}
+  ],
+  "profiles": [
+    "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+    "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+    "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+  ],
+  "oracles": ["bazi.lunar_python","bazi.tyme4py","bazi.sxtwl"]
+}
