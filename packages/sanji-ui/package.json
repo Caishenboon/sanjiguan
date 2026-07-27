@@ -1,0 +1,31 @@
+{
+  "name": "@sanji/ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.tsx",
+    "./styles.css": "./src/tokens.css"
+  },
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "peerDependencies": {
+    "react": ">=19",
+    "react-dom": ">=19"
+  },
+  "dependencies": {
+    "@radix-ui/react-tabs": "1.1.21",
+    "lucide-react": "1.27.0",
+    "motion": "12.42.2"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "10.5.5",
+    "@storybook/react-vite": "10.5.5",
+    "@types/react": "19.1.10",
+    "@types/react-dom": "19.1.7",
+    "storybook": "10.5.5",
+    "vite": "7.1.12"
+  }
+}

@@ -1,0 +1,20 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import * as UI from "./index";
+
+const meta = { title: "三际观/研究组件", component: UI.ResearchWarning } satisfies Meta<typeof UI.ResearchWarning>;
+export default meta;
+type Story = StoryObj<typeof meta>;
+export const Default: Story = { args: { children: "研究预览 · 未经传统审校 · 不用于生产结论" } };
+export const LongText: Story = { args: { children: "此处展示经过版本锁定的机械结果、来源 Claim、逆证与完整哈希。超长文本必须保持可读，并且不能挤压关键状态标签。" } };
+export const DarkDesktop: Story = { render:()=> <UI.SanjiShell><UI.SanjiHeader/><main className="sanji-main"><UI.ResearchWarning>深色桌面研究态</UI.ResearchWarning></main></UI.SanjiShell> };
+export const Mobile: Story = { parameters:{viewport:{defaultViewport:"mobile1"}}, render:()=> <UI.BaziFourPillars/> };
+export const Decisive: Story = { render:()=> <UI.VerdictStatusBadge status="decisive"/> };
+export const Contested: Story = { render:()=> <UI.VerdictStatusBadge status="contested"/> };
+export const Insufficient: Story = { render:()=> <UI.VerdictStatusBadge status="insufficient"/> };
+export const Empty: Story = { render:()=> <UI.EmptyState><p>等待第一条虚构研究记录。</p></UI.EmptyState> };
+export const Error: Story = { render:()=> <UI.ErrorState><p>未读取或重试任何密钥。</p></UI.ErrorState> };
+export const DisabledRule: Story = { render:()=> <UI.ResearchWarning>MODULE_DISABLED · D-005 尚未冻结</UI.ResearchWarning> };
+export const Hexagram: Story = { render:()=> <UI.YijingHexagram/> };
+export const Pillars: Story = { render:()=> <UI.BaziFourPillars/> };
+export const OracleDiff: Story = { render:()=> <UI.OracleDiffPanel status="normalized_match" engine={<p>三际枢机械结果</p>} oracle={<p>iztro 2.5.8 外部差分</p>}/> };
+export const ReducedMotion: Story = { parameters:{reducedMotion:"reduce"}, render:()=> <UI.TraceStep index={1} title="输入固定">无动画仍完整可用</UI.TraceStep> };
