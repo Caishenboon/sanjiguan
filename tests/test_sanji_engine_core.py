@@ -20,6 +20,7 @@ def deterministic_request():
         "requested_modules": ["calendar", "bazi"],
         "input_snapshot": {
             "operation": "normalize_birth_time",
+            "bazi_method_profile_id": "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1",
             "birth_record": {
                 "calendar_type": "gregorian",
                 "local_date": "1990-01-15",
@@ -41,6 +42,7 @@ def deterministic_request():
             "tzdb": "2025b",
             "ephemeris": "astronomy-engine-2.1.19",
             "calendar_dataset": "calendar-migration-baseline-1.0.0",
+            "bazi_method_profiles": "bazi-method-profile-registry/1.0.0",
         },
         "deterministic_context": {
             "as_of": "2026-07-23T00:00:00Z",

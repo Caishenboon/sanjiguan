@@ -101,6 +101,19 @@ def main() -> None:
         if yijing["modules"][module]["enabled"]:
             fail(f"{module} was activated by the three-coin ruleset")
 
+    bazi_foundation = sanji_engine.inspect_ruleset("bazi-method-foundation-0.1.0")
+    bazi = bazi_foundation["modules"]["bazi"]
+    if (
+        bazi_foundation["production_activatable"]
+        or bazi["enabled"]
+        or bazi["production_activatable"]
+        or bazi["execution_result"] != "MODULE_DISABLED"
+        or bazi["review_status"] != "UNCONFIRMED"
+    ):
+        fail("BaZi method foundation exceeds conformance-only scope")
+    if len(bazi["profile_ids"]) < 2:
+        fail("BaZi method foundation lacks discriminating profiles")
+
     application_sources = [
         ROOT / "apps/api/app/evidence_routes.py",
         ROOT / "packages/evidence/three_coin.py",
@@ -125,6 +138,27 @@ def main() -> None:
         leaked = sorted((names | assigned) & forbidden_algorithm_symbols)
         if leaked:
             fail(f"application contains duplicate yijing mechanics: {path}: {leaked}")
+
+    forbidden_bazi_symbols = {
+        "calculate_year_pillar", "calculate_month_pillar",
+        "calculate_day_pillar", "calculate_hour_pillar",
+        "calculate_ten_gods", "calculate_strength", "calculate_luck_cycles",
+    }
+    for root in (ROOT / "apps", ROOT / "packages"):
+        for path in root.rglob("*.py"):
+            if CORE in path.parents:
+                continue
+            tree = ast.parse(path.read_text("utf-8"))
+            defined = {
+                node.name
+                for node in ast.walk(tree)
+                if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            }
+            leaked = sorted(defined & forbidden_bazi_symbols)
+            if leaked:
+                fail(
+                    f"application contains duplicate BaZi algorithm symbols: {path}: {leaked}"
+                )
 
     baseline = json.loads(
         (CORE / "research_baselines/signals-inference-sprint2.json").read_text("utf-8")

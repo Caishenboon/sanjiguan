@@ -1,0 +1,63 @@
+{
+  "schema_version": "ruleset-bundle/1.0.0",
+  "bundle_id": "bazi-method-foundation-0.1.0",
+  "bundle_version": "0.1.0",
+  "status": "research_active",
+  "system_class": "method_conformance_only",
+  "license_status": "UNDECIDED",
+  "production_activatable": false,
+  "modules": {
+    "calendar": {
+      "method_id": "CALENDAR.MIGRATION.BASELINE.V1",
+      "status": "research_active",
+      "enabled": true,
+      "source_ids": [
+        "IANA_TZDB",
+        "NOAA_GENERAL_SOLAR_POSITION_CALCULATIONS",
+        "ASTRONOMY_ENGINE_PINNED"
+      ]
+    },
+    "bazi": {
+      "method_id": "BAZI.METHOD_PROFILE.CONFORMANCE.V1",
+      "status": "review_candidate",
+      "enabled": false,
+      "review_status": "UNCONFIRMED",
+      "production_activatable": false,
+      "execution_result": "MODULE_DISABLED",
+      "profile_registry_version": "bazi-method-profile-registry/1.0.0",
+      "profile_ids": [
+        "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+        "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+        "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1"
+      ],
+      "prohibited_outputs": [
+        "year_pillar",
+        "month_pillar",
+        "day_pillar",
+        "hour_pillar",
+        "ten_gods",
+        "strength",
+        "luck_cycles",
+        "auspiciousness"
+      ]
+    },
+    "signals": {
+      "method_id": "SIGNALS.RESEARCH_BASELINE.V1",
+      "status": "review_candidate",
+      "enabled": false,
+      "baseline_class": "research_baseline"
+    },
+    "inference": {
+      "method_id": "INFERENCE.RESEARCH_BASELINE.V1",
+      "status": "review_candidate",
+      "enabled": false,
+      "baseline_class": "research_baseline"
+    },
+    "ziwei": {"method_id": "ZIWEI.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "yijing": {"method_id": "YIJING.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "past-life": {"method_id": "PAST_LIFE.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "bardo": {"method_id": "BARDO.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "relationship": {"method_id": "RELATIONSHIP.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "life-chart": {"method_id": "LIFE_CHART.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"}
+  }
+}

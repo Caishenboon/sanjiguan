@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from decimal import Decimal, ROUND_HALF_EVEN
 
 from . import __version__
+from .bazi import ConformanceError, load_profile
 from .calendar import normalize_birth_time, solar_term_instant
 from .canonical import CANONICALIZATION_VERSION, content_hash
 from .disabled import disabled_result
@@ -130,7 +131,27 @@ def validate_request(request: dict) -> dict:
             REPLAY_DATA_VERSION_MISMATCH,
             "yijing hexagram mapping data version is unavailable",
         )
-    _require_mapping(value["input_snapshot"], "input_snapshot")
+    snapshot = _require_mapping(value["input_snapshot"], "input_snapshot")
+    if "bazi" in modules:
+        profile_id = snapshot.get("bazi_method_profile_id")
+        if not isinstance(profile_id, str) or not profile_id:
+            raise EngineError(
+                INPUT_INVALID,
+                "bazi execution requires an explicit method profile; no default is permitted",
+            )
+        if data_versions.get("bazi_method_profiles") != "bazi-method-profile-registry/1.0.0":
+            raise EngineError(
+                REPLAY_DATA_VERSION_MISMATCH,
+                "bazi method-profile registry version is unavailable",
+            )
+        try:
+            load_profile(profile_id)
+        except ConformanceError as exc:
+            raise EngineError(
+                INPUT_INVALID,
+                "bazi method profile failed conformance",
+                exc.as_dict(),
+            ) from exc
     _validate_hash_safe(value)
     bundle = inspect_ruleset(value["ruleset_bundle_id"])
     if bundle.get("status") == "revoked_for_future_runs" and value["run_mode"] != "replay":

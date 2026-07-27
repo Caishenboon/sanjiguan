@@ -3,7 +3,7 @@
   "case_id": "calendar-cross-platform-1",
   "classification": "synthetic_engine_migration_golden",
   "expected": {
-    "output_hash": "sha256:140541fc477d3ba5a56f6e6ac1c5d2ab927433abfdf823aea3b8f4871e346e07"
+    "output_hash": "sha256:1a0cd3e7289b2072c065181003b8afada61277ddb506831363d5143da4b78150"
   },
   "provenance": {
     "legacy_fixture": "tests/golden/sprint1a-time-fixtures.json",
