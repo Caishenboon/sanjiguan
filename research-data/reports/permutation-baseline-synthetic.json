@@ -1,0 +1,21 @@
+{
+  "schema_version": "research-evaluation/1.0.0",
+  "asset_class": "synthetic_conformance",
+  "description": "完全虚构的协议验证样例；不构成现实验证或预测能力证据。",
+  "seed": 20260728,
+  "permutation_count": 100,
+  "sample_count": 100,
+  "declared_rule_accuracy_bp": 6700,
+  "base_rate_accuracy_bp": 5100,
+  "permutation_median_accuracy_bp": 4900,
+  "permutation_interval_bp": {
+    "lower": 3900,
+    "upper": 5700
+  },
+  "effect_direction": "above_permutation_median",
+  "claims": {
+    "predictive_power_established": false,
+    "causality_established": false,
+    "ruleset_auto_promotion_allowed": false
+  }
+}

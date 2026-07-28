@@ -22,7 +22,9 @@ where = ["src"]
 [tool.setuptools.package-data]
 sanji_engine = [
   "schemas/v1/*.json",
+  "schemas/v2/*.json",
   "rulesets/*.json",
+  "rulesets/assets/*.json",
   "golden_cases/**/*.json",
   "research_baselines/*.json",
   "yijing/assets/*.json",

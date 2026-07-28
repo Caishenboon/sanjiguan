@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.invalid/schemas/prospective-blind-protocol/1.0.0",
+  "title": "Prospective Blind Research Protocol (Disabled Entry)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_id", "protocol_version", "preregistered_at", "frozen_ruleset_id",
+    "frozen_ruleset_hash", "outcome_schema_version", "blinding_policy",
+    "holdout_policy", "activation"
+  ],
+  "properties": {
+    "protocol_id": {"type": "string", "minLength": 1},
+    "protocol_version": {"type": "string", "minLength": 1},
+    "preregistered_at": {"type": "string", "format": "date-time"},
+    "frozen_ruleset_id": {"type": "string"},
+    "frozen_ruleset_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "outcome_schema_version": {"type": "string"},
+    "blinding_policy": {"type": "object"},
+    "holdout_policy": {"type": "object"},
+    "activation": {"const": "disabled"}
+  },
+  "x-notice": "No prospective records exist in this Sprint. Activation requires separate written approval."
+}

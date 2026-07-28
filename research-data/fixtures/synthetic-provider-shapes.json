@@ -1,0 +1,21 @@
+{
+  "schema_version": "synthetic-provider-shapes/1.0.0",
+  "synthetic": true,
+  "contains_real_people": false,
+  "birth_rows": [
+    {
+      "RowKey": "SyntheticCraftsperson1988",
+      "BirthTime": "{\"StdTime\":\"08:15 14/03/1988 +08:00\",\"Location\":{\"Name\":\"Fictional Harbor\",\"Longitude\":120.0,\"Latitude\":30.0}}",
+      "Gender": "Unspecified",
+      "Name": "虚构工匠甲",
+      "Notes": "{'rodden': 'SYNTHETIC'}"
+    }
+  ],
+  "marriage_rows": [
+    {
+      "PartitionKey": "SyntheticCraftsperson1988",
+      "RowKey": "",
+      "Info": "{\"marriages\":[{\"type\":\"Synthetic\",\"spouse\":\"虚构人物乙\",\"marriageDate\":\"2016\",\"divorceDate\":\"\",\"outcome\":\"Unknown\",\"dataCredibility\":\"synthetic\",\"PersonId\":\"\"}]}"
+    }
+  ]
+}

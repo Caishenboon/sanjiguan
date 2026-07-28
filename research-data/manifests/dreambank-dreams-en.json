@@ -1,0 +1,39 @@
+{
+  "schema_version": "research-dataset-manifest/1.0.0",
+  "dataset_id": "DReAMy-lib/DreamBank-dreams-en",
+  "official_provider": "DReAMy-lib repackaging of DreamBank material",
+  "platform": "Hugging Face Datasets",
+  "repository_url": "https://huggingface.co/datasets/DReAMy-lib/DreamBank-dreams-en",
+  "pinned_revision": "d400ee8cd114eaa09b1dbf3e44c2f248b2b1b5ec",
+  "downloaded_at": null,
+  "cache_key": "dreambank-dreams-en",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://huggingface.co/datasets/DReAMy-lib/DreamBank-dreams-en/resolve/d400ee8cd114eaa09b1dbf3e44c2f248b2b1b5ec/README.md",
+      "sha256": "d5fbbc2c0531e2086861b3b4ec91ec28cb1397a31b6e0b9f0598502c8dc3bc3f",
+      "bytes": 2448
+    }
+  ],
+  "blocked_files": ["data/train-00000-of-00001.parquet"],
+  "declared_license": "Apache-2.0 in repackaged dataset metadata",
+  "license_file_location": null,
+  "license_review_status": "license_review_required",
+  "license_review_note": "The repackaged repository has no standalone license file proving that the original DreamBank dream texts may be redistributed under Apache-2.0. The original-source authorization chain is unresolved.",
+  "record_count": 22415,
+  "fields": ["series", "description", "dreams", "gender", "year"],
+  "allowed_uses": ["bibliographic_manifest_only"],
+  "raw_data_committable": false,
+  "fixture_committable": false,
+  "public_redistribution_allowed": false,
+  "sensitivity": "dream_narrative_sensitive",
+  "provider_credibility": "repackager_claim_only",
+  "sanji_independent_verification": "not_verified",
+  "shared_source_group": "dreambank_repackaged",
+  "known_limitations": [
+    "Original DreamBank authorization and downstream redistribution terms are not established.",
+    "Dream narratives may contain sensitive personal material.",
+    "Dream text must not be sent to an external LLM without a separate approval and privacy policy."
+  ],
+  "connector_enabled": false
+}

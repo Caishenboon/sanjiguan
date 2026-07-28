@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.invalid/schemas/research-dream-record/1.0.0",
+  "type": "object",
+  "required": [
+    "record_id", "series", "description", "dream_text", "gender_raw",
+    "year_window", "source", "license", "provenance", "privacy_classification"
+  ],
+  "x-activation": "disabled_pending_license_review"
+}

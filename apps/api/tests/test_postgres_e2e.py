@@ -360,3 +360,67 @@ class PostgreSQLHttpE2E(unittest.TestCase):
         self.assertGreater(row[1], 0)
         self.assertGreater(row[2], 0)
         self.assertTrue(row[3].startswith("sha256:"))
+
+    def test_owner_liuxiang_research_is_deterministic_replayable_and_encrypted(self):
+        from scripts.generate_liuxiang_conformance import build_case
+
+        self.login()
+        owner_id, session_id = uuid4(), uuid4()
+        token = "liuxiang-owner-" + uuid4().hex
+        self.admin.execute(
+            "INSERT INTO users(id,email_ciphertext,role) VALUES(%s,%s,'owner')",
+            (owner_id, b"owner"),
+        )
+        self.admin.execute(
+            "INSERT INTO sessions(id,user_id,token_hash,expires_at) VALUES(%s,%s,%s,%s)",
+            (session_id, owner_id, token_hash(token),
+             datetime.now(timezone.utc) + timedelta(hours=1)),
+        )
+        client = TestClient(self.app_module.app, base_url="https://testserver")
+        client.cookies.set("__Host-session", token)
+        case = build_case(0)
+        payload = {
+            "asset_class": "synthetic_conformance",
+            "subject_id": case["snapshot"]["subject_id"],
+            "signals": case["snapshot"]["signals"],
+            "completeness_bp_by_dimension": case["snapshot"]["completeness_bp_by_dimension"],
+        }
+        self.assertEqual(403, self.client.get(
+            "/api/v1/admin/research/liuxiang/sources"
+        ).status_code)
+        sources = client.get("/api/v1/admin/research/liuxiang/sources")
+        self.assertEqual(200, sources.status_code, sources.text)
+        self.assertEqual(3, len(sources.json()["items"]))
+        headers = {"Idempotency-Key": "liuxiang-research-e2e-0001"}
+        created = client.post(
+            "/api/v1/admin/research/liuxiang/executions",
+            json=payload, headers=headers,
+        )
+        self.assertEqual(201, created.status_code, created.text)
+        body = created.json()
+        self.assertEqual("decisive", body["status"])
+        replayed_create = client.post(
+            "/api/v1/admin/research/liuxiang/executions",
+            json=payload, headers=headers,
+        )
+        self.assertEqual(body["id"], replayed_create.json()["id"])
+        replayed = client.post(
+            f"/api/v1/admin/research/liuxiang/executions/{body['id']}/replay"
+        )
+        self.assertEqual(200, replayed.status_code, replayed.text)
+        self.assertTrue(replayed.json()["matches_original"])
+        trace = client.get(
+            f"/api/v1/admin/research/liuxiang/executions/{body['id']}/trace"
+        )
+        self.assertEqual(200, trace.status_code, trace.text)
+        self.assertTrue(trace.json()["trace_hash"].startswith("sha256:"))
+        row = self.admin.execute(
+            """SELECT count(*),min(octet_length(input_snapshot_encrypted)),
+              min(octet_length(engine_result_encrypted)),bool_and(NOT production_activatable)
+              FROM liuxiang_research_executions WHERE owner_id=%s""",
+            (owner_id,),
+        ).fetchone()
+        self.assertEqual(1, row[0])
+        self.assertGreater(row[1], 0)
+        self.assertGreater(row[2], 0)
+        self.assertTrue(row[3])

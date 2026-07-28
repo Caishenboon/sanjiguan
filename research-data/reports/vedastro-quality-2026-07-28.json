@@ -1,0 +1,58 @@
+{
+  "schema_version": "research-data-quality/1.0.0",
+  "generated_at": "2026-07-28T13:30:06.443671+00:00",
+  "asset_class": "external_research_unverified",
+  "source_revisions": {
+    "birth": "c8645485d498011d77c6c762127852ccbad4a7d0",
+    "marriage": "2c297bc38ce348cc7c87d1283bce30a3aaa7583b"
+  },
+  "birth": {
+    "raw_rows": 15807,
+    "normalized_rows": 15807,
+    "invalid_rows": 0,
+    "duplicate_source_ids": 0,
+    "duplicate_normalized_names": 228,
+    "birth_time_precision": {"exact_time": 15807},
+    "provider_rating": {"AA": 15790, "FF": 17},
+    "missing_place": 0,
+    "missing_iana_timezone": 15807,
+    "complete_four_pillars_eligible_by_time_precision": 15807,
+    "ziwei_time_eligible_by_time_precision": 15807,
+    "eligibility_warning": "Eligibility is precision-only; all 15,807 rows still lack IANA timezone and explicit DST provenance."
+  },
+  "marriage": {
+    "raw_rows": 15807,
+    "normalized_person_rows": 15807,
+    "normalized_event_rows": 18148,
+    "invalid_rows": 0,
+    "duplicate_source_ids": 0,
+    "marriage_date_precision": {
+      "exact_date": 11080,
+      "month_only": 52,
+      "unknown": 1352,
+      "year_only": 5664
+    },
+    "divorce_date_precision": {
+      "exact_date": 1956,
+      "month_only": 76,
+      "unknown": 13088,
+      "year_only": 3028
+    }
+  },
+  "matching": {
+    "exact_match_events": 18148,
+    "exact_match_people": 15807,
+    "unmatched_events": 0,
+    "conflicts": 0,
+    "fuzzy_candidates": 0,
+    "rejected_false_matches": 0,
+    "match_rate_bp": 10000,
+    "independence_warning": "Both datasets share provider group vedastro_org and do not constitute independent validation."
+  },
+  "claims": {
+    "reality_validation": false,
+    "predictive_power_established": false,
+    "ruleset_mutation_allowed": false,
+    "provider_aa_is_independent_verification": false
+  }
+}

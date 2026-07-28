@@ -206,6 +206,41 @@ class PostgreSQLIntegrationTests(unittest.TestCase):
                 "SELECT count(*) FROM ziwei_research_runs"
             ).fetchone()[0])
 
+    def test_liuxiang_research_tables_force_rls_and_keep_public_assets_separate(self):
+        tables = (
+            "research_dataset_manifests", "research_import_runs",
+            "research_quality_reports", "normalized_research_people",
+            "research_life_events", "research_person_matches",
+            "liuxiang_research_executions", "liuxiang_research_signals",
+            "liuxiang_research_candidates",
+        )
+        rows = self.conn.execute(
+            """SELECT relname,relforcerowsecurity FROM pg_class
+               WHERE relname=ANY(%s) ORDER BY relname""",
+            (list(tables),),
+        ).fetchall()
+        self.assertEqual(set(tables), {row[0] for row in rows})
+        self.assertTrue(all(row[1] for row in rows))
+        manifest_id = uuid4()
+        self.conn.execute(
+            """INSERT INTO research_dataset_manifests(
+              id,dataset_id,pinned_revision,manifest_hash,license_review_status,
+              shared_source_group,manifest
+            ) VALUES(%s,'synthetic/provider',%s,%s,'approved','synthetic_provider','{}')""",
+            (manifest_id, "0" * 40, f"sha256:{'c' * 64}"),
+        )
+        with self.runtime(self.member_a) as member:
+            self.assertEqual(0, member.execute(
+                "SELECT count(*) FROM research_dataset_manifests"
+            ).fetchone()[0])
+            self.assertEqual(0, member.execute(
+                "SELECT count(*) FROM liuxiang_research_executions"
+            ).fetchone()[0])
+        with self.runtime(self.owner, "owner") as owner:
+            self.assertEqual(1, owner.execute(
+                "SELECT count(*) FROM research_dataset_manifests"
+            ).fetchone()[0])
+
     def test_migration_drift_is_rejected(self):
         version = "0001_sprint0_baseline.sql"
         checksum = self.conn.execute(
