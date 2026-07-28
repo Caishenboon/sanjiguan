@@ -6,7 +6,7 @@
 ## 视觉测试
 
 - 视觉变更必须运行 Web production build 和 Playwright visual regression。
-- GitHub Actions 的固定 Linux 环境是权威基线；Windows 图片只用于本地反馈。
+- GitHub Actions 的 Linux/Windows 固定矩阵是唯一权威环境；本地结果只用于预检。
 - Linux 与 Windows 快照必须保存在各自平台目录，不得交叉覆盖。
 - 基线更新必须独立提交，并附人工审查说明。
 - 普通 CI 禁止使用 `--update-snapshots` 自动接受变化。

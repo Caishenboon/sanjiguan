@@ -30,6 +30,71 @@ jobs:
           python scripts/validate_bazi_method_foundation.py
           python scripts/validate_bazi_four_pillars.py
           python scripts/validate_ziwei_oracle_ui.py
+  web-visual-determinism:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            snapshot_platform: linux
+          - os: windows-2025
+            snapshot_platform: win32
+    runs-on: ${{ matrix.os }}
+    env:
+      CI: "true"
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+      - uses: pnpm/action-setup@v4.4.0
+        with:
+          version: "11.9.0"
+      - name: Install and build Web
+        working-directory: apps/web
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+      - name: Install Playwright Chromium on Linux
+        if: runner.os == 'Linux'
+        working-directory: apps/web
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Install Playwright Chromium on Windows
+        if: runner.os == 'Windows'
+        working-directory: apps/web
+        run: pnpm exec playwright install chromium
+      - name: Playwright Chromium visual regression
+        id: visual_regression
+        continue-on-error: true
+        working-directory: apps/web
+        run: pnpm test:visual
+      - name: Collect visual regression evidence
+        if: steps.visual_regression.outcome == 'failure'
+        run: >-
+          python scripts/collect_visual_regression_evidence.py
+          --platform ${{ matrix.snapshot_platform }}
+      - name: Upload visual regression evidence
+        if: steps.visual_regression.outcome == 'failure'
+        uses: actions/upload-artifact@v6
+        with:
+          name: visual-regression-${{ matrix.snapshot_platform }}-${{ github.run_id }}
+          path: |
+            apps/web/test-results/
+            apps/web/playwright-report/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Enforce visual regression result
+        if: always()
+        shell: bash
+        run: |
+          if [ "${{ steps.visual_regression.outcome }}" != "success" ]; then
+            echo "Visual regression failed; inspect the uploaded evidence artifact."
+            exit 1
+          fi
   baseline:
     runs-on: ubuntu-24.04
     services:
@@ -131,31 +196,6 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm build-storybook
-      - name: Playwright Chromium visual regression
-        id: visual_regression
-        continue-on-error: true
-        working-directory: apps/web
-        run: |
-          pnpm exec playwright install --with-deps chromium
-          pnpm test:visual
-      - name: Collect visual regression evidence
-        if: steps.visual_regression.outcome == 'failure'
-        run: |
-          mkdir -p apps/web/test-results/visual-evidence/expected
-          if [ -d apps/web/tests/visual/__screenshots__/linux ]; then
-            cp -R apps/web/tests/visual/__screenshots__/linux/. \
-              apps/web/test-results/visual-evidence/expected/
-          fi
-      - name: Upload visual regression evidence
-        if: steps.visual_regression.outcome == 'failure'
-        uses: actions/upload-artifact@v6
-        with:
-          name: visual-regression-${{ runner.os }}-${{ github.run_id }}
-          path: |
-            apps/web/test-results/
-            apps/web/playwright-report/
-          if-no-files-found: error
-          retention-days: 14
       - name: Lighthouse quality budgets
         working-directory: apps/web
         run: pnpm exec lhci autorun --config=lighthouserc.json
@@ -164,10 +204,3 @@ jobs:
           docker run --rm -v "$PWD:/repo"
           zricethezav/gitleaks:v8.24.3
           detect --source=/repo --no-banner --redact
-      - name: Enforce visual regression result
-        if: always()
-        run: |
-          if [ "${{ steps.visual_regression.outcome }}" != "success" ]; then
-            echo "Visual regression failed; inspect the uploaded evidence artifact."
-            exit 1
-          fi

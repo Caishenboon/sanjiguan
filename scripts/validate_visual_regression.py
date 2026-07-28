@@ -11,11 +11,15 @@ spec = (ROOT / "apps/web/tests/visual/flagship.spec.ts").read_text(encoding="utf
 contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
 
 required_workflow = (
+    "web-visual-determinism:",
     "runs-on: ubuntu-24.04",
+    "os: windows-2025",
+    "snapshot_platform: linux",
+    "snapshot_platform: win32",
     "id: visual_regression",
     "continue-on-error: true",
     "actions/upload-artifact@v6",
-    "visual-regression-${{ runner.os }}-${{ github.run_id }}",
+    "visual-regression-${{ matrix.snapshot_platform }}-${{ github.run_id }}",
     "steps.visual_regression.outcome == 'failure'",
     "Enforce visual regression result",
 )
@@ -42,6 +46,17 @@ for package_name in font_packages:
         errors.append(f"pinned local font is not installed and imported: {package_name}")
 if "document.fonts.check" not in spec or "document.fonts.ready" not in spec:
     errors.append("visual tests do not fail closed when deterministic fonts are unavailable")
+if "innerHTML" in spec:
+    errors.append("visual tests must exercise rendered application states, not injected HTML")
+for platform in ("linux", "win32"):
+    snapshots = tuple(
+        (ROOT / "apps/web/tests/visual/__screenshots__" / platform).rglob("*.png")
+    )
+    if len(snapshots) != 21:
+        errors.append(
+            f"{platform} must contain exactly 21 reviewed visual baselines; "
+            f"found {len(snapshots)}"
+        )
 if "不得通过提高像素差异阈值" not in contributing:
     errors.append("contribution policy does not forbid threshold inflation")
 

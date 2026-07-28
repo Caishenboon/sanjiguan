@@ -2,14 +2,24 @@
 
 ## 权威环境
 
-GitHub Actions `baseline` job 是唯一权威视觉回归环境。它固定使用
-`ubuntu-24.04`、仓库锁定的 Playwright/Chromium、`C.UTF-8`、UTC 和
-仓库依赖提供的字体。操作系统、浏览器或字体版本变化都必须作为显式
-基线变更审查，不得静默接受。
+GitHub Actions 的 `web-visual-determinism` 矩阵是唯一权威视觉回归环境：
 
-`apps/web/tests/visual/__screenshots__/linux/` 保存权威 Linux 基线。
-`win32/` 只用于 Windows 本地反馈；两类图片不得互相覆盖，也不得用
-Windows 结果更新 Linux 权威基线。
+- `ubuntu-24.04` 对应 `linux/` Snapshot；
+- `windows-2025` 对应 `win32/` Snapshot。
+
+两端均使用仓库锁定的 Node、pnpm、Playwright/Chromium、UTC 和字体依赖。
+本地运行只用于预检，不能替代远程矩阵结果。操作系统、浏览器、字体或 Runner
+版本发生变化时，必须显式生成候选、检查 Diff 并单独提交，不能静默接受。
+
+Snapshot 目录为：
+
+```text
+apps/web/tests/visual/__screenshots__/linux/
+apps/web/tests/visual/__screenshots__/win32/
+```
+
+两个平台不得交叉覆盖。Linux 结果只能更新 `linux/`，Windows 结果只能更新
+`win32/`。
 
 ## 字体
 
@@ -19,11 +29,10 @@ Windows 结果更新 Linux 权威基线。
 - Noto Serif SC；
 - Noto Sans Mono。
 
-三个字体包均声明 `OFL-1.1`，版本和用途登记在
-`third-party-lock.json` 与 `THIRD_PARTY_NOTICES.md`。字体由包管理器
-在构建时取得，字体二进制不直接提交到仓库。视觉测试在截图前等待
-`document.fonts.ready`，并检查三个字体均可用；缺失时直接失败，禁止
-落入不确定的系统字体。
+三项均采用 `OFL-1.1`，版本和用途登记在 `third-party-lock.json` 与
+`THIRD_PARTY_NOTICES.md`。字体二进制由包管理器在构建时取得，不直接提交进
+仓库。视觉测试在截图前等待 `document.fonts.ready`，并验证三种字体可用；
+缺失时直接失败，禁止落入不确定的系统字体 fallback。
 
 ## 本地验证
 
@@ -36,36 +45,39 @@ pnpm build
 pnpm test:visual
 ```
 
-Playwright 通过 `{platform}` 自动选择本机目录。Windows 开发者只验证
-`win32` 基线。Linux 开发者的结果只有在与 CI 的 Ubuntu、Chromium、
-字体和 locale 完全一致时，才可作为 Linux 候选。
+Playwright 通过 `{platform}` 选择当前系统目录。本地通过只说明当前工作站与
+已审核基线一致；合并资格仍以 GitHub Actions 的 Linux 和 Windows 矩阵均通过
+为准。
 
-`pnpm test:visual:update` 只生成当前平台候选。更新后必须逐张检查，不得
-在普通 CI 中使用 `--update-snapshots`。
+`pnpm test:visual:update` 只生成当前平台的候选。普通 CI 不得执行
+`--update-snapshots`。
 
-## 权威基线更新
+## Snapshot 更新
 
-1. 在固定 CI 环境中生成候选图片。
-2. 下载 CI 的 visual-regression Artifact。
-3. 人工检查 expected、actual 和 diff。
-4. 确认变化来自批准的 UI 修改，而不是字体、浏览器、viewport 或环境漂移。
-5. 将审核后的 Linux 图片作为独立提交写入 `linux/`。
-6. 重新运行完整 CI。
+1. 在固定 CI 环境生成候选；
+2. 下载失败运行的 visual-regression Artifact；
+3. 人工检查 actual、expected、diff 和 error context；
+4. 排除字体、浏览器、viewport、动态时间、API 或后端错误导致的漂移；
+5. 只更新受影响平台和页面；
+6. 在独立提交中记录原因和审核依据；
+7. 重新运行完整 CI。
 
-任何浏览器、Playwright、字体、runner 或截图策略升级，都必须在 PR 中
-说明版本变化和视觉影响。
+任何 Playwright、Chromium、字体、Runner 或截图策略升级，都必须在 PR 中说明
+版本变化和视觉影响。
 
-## 失败证据
+## 失败证据与硬失败
 
-视觉步骤失败时，CI 保留 14 天 Artifact，其中包含：
+视觉步骤使用 `continue-on-error` 只为继续收集证据。每个平台随后都有
+`Enforce visual regression result` 硬门禁，因此失败不能形成绿色 Job。
+
+失败 Artifact 保留 14 天并包含：
 
 - actual screenshot；
 - expected screenshot；
 - diff screenshot；
-- Playwright error context。
+- Playwright error context；
+- 对应平台的 21 张已审核基线副本。
 
-视觉步骤采用 `continue-on-error` 仅为收集证据并继续执行 Lighthouse 和
-Gitleaks；job 末尾仍会强制失败，不能形成假绿。
-
-禁止直接提高 `maxDiffPixelRatio`、扩大像素阈值或自动接受快照来绕过
-差异。阈值变更必须单独论证，并证明不会掩盖真实布局或可读性回归。
+禁止通过提高 `maxDiffPixelRatio`、扩大像素阈值、删除页面或设备、缩小旗舰页
+截图范围或自动接受 Snapshot 来绕过差异。阈值变更必须单独论证，并证明不会
+掩盖真实布局或可读性回归。
