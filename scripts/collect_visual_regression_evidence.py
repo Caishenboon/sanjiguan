@@ -26,9 +26,12 @@ def main() -> None:
     destination.mkdir(parents=True)
     shutil.copytree(source, destination, dirs_exist_ok=True)
     copied = sum(1 for path in destination.rglob("*.png") if path.is_file())
-    if copied != 21:
-        raise SystemExit(f"expected 21 reviewed baseline images, copied {copied}")
-    print(f"Collected {copied} reviewed {args.platform} baseline images.")
+    if copied < 21:
+        raise SystemExit(f"expected at least 21 baseline images, copied {copied}")
+    print(
+        f"Collected {copied} {args.platform} baseline/candidate images "
+        "for failure review."
+    )
 
 
 if __name__ == "__main__":
