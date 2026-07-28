@@ -20,7 +20,7 @@ export default function LiuxiangResearchPage() {
       <EvidenceCard title="信息完整度"><p>演示资料 86.00% · 独立来源 3</p>
         <p>Profile 分歧与边界敏感度分别计入 Confidence，不混入 Strength。</p>
       </EvidenceCard>
-      <EvidenceCard title="确定性证据"><HashPanel label="合成案例聚合 Hash" value="sha256:1620423af9d7411b6329e971e5196c599cdd8914f9a3c6e8277ac4b1015f0944"/></EvidenceCard>
+      <EvidenceCard title="确定性证据"><HashPanel label="合成案例聚合 Hash" value="sha256:81a43d8a57f12d9b1a5481b6cc34727bd555bceb08291f3c3ec01420d627fabd"/></EvidenceCard>
     </section>
     <section className="sanji-grid" style={{marginTop:"1rem"}}>
       {liuxiangDimensions.map(item=><EvidenceCard title={`${item.name} · ${item.id}`} key={item.id}>

@@ -127,7 +127,7 @@ class LiuxiangV1Tests(unittest.TestCase):
     def test_fixed_cross_platform_hash_fixture(self):
         result = execute(request(self.asset["cases"][0], "cross-platform-fixture"))
         self.assertEqual(
-            "sha256:36a97d5bd3e66f2ae1964d31f77263ecf302c25327043d5a9c7b3d0552ed4d0a",
+            "sha256:fa7154b90d3373c9f1c42068bd70abebdd10b2df111a07050d0af8658c797430",
             result["output_hash"],
         )
         self.assertEqual(

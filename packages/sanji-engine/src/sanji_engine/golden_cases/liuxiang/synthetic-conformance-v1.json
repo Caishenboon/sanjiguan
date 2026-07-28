@@ -3,7 +3,7 @@
   "asset_class": "synthetic_conformance",
   "reality_validation": false,
   "case_count": 100,
-  "aggregate_hash": "sha256:1620423af9d7411b6329e971e5196c599cdd8914f9a3c6e8277ac4b1015f0944",
+  "aggregate_hash": "sha256:81a43d8a57f12d9b1a5481b6cc34727bd555bceb08291f3c3ec01420d627fabd",
   "cases": [
     {
       "case_id": "LX-001",

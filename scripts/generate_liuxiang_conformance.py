@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 DIMENSIONS = ["lx_ming", "lx_ye", "lx_yuan", "lx_meng", "lx_yuan_relation", "lx_shi"]
-AGGREGATE_HASH = "sha256:1620423af9d7411b6329e971e5196c599cdd8914f9a3c6e8277ac4b1015f0944"
+AGGREGATE_HASH = "sha256:81a43d8a57f12d9b1a5481b6cc34727bd555bceb08291f3c3ec01420d627fabd"
 
 
 def signal(
