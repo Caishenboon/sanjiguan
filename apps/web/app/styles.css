@@ -14,7 +14,7 @@
 body {
   margin: 0; color: var(--lotus); background:
   radial-gradient(circle at 70% 10%, #182340 0, transparent 36%), var(--ink);
-  font-family: "Noto Serif SC", "Songti SC", Georgia, serif;
+  font-family: "Noto Serif SC", serif;
 }
 a { color: inherit; }
 a:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }

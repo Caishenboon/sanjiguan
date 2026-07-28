@@ -15,12 +15,13 @@
   --sanji-radius-lg: 28px;
   --sanji-shadow: 0 24px 80px rgba(0, 0, 0, .3);
   --sanji-grid: minmax(0, 1180px);
-  --sanji-serif: "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
-  --sanji-sans: "Source Han Sans SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
-  --sanji-mono: "Cascadia Mono", "Noto Sans Mono", monospace;
+  --sanji-serif: "Noto Serif SC", serif;
+  --sanji-sans: "Noto Sans SC", sans-serif;
+  --sanji-mono: "Noto Sans Mono", monospace;
 }
 
 * { box-sizing: border-box; }
+html { font-synthesis: none; }
 body {
   margin: 0;
   color: var(--sanji-moon-100);

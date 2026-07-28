@@ -16,6 +16,9 @@ human-readable summary and is not a repository license.
 | Storybook | 10.5.5 | MIT | Component catalog and accessibility configuration |
 | Playwright | 1.62.0 | Apache-2.0 | Synthetic Chromium visual regression |
 | Lighthouse CI | 0.15.1 | Apache-2.0 | Web quality budgets |
+| Noto Sans SC via Fontsource | 5.3.0 | OFL-1.1 | Deterministic interface typography |
+| Noto Serif SC via Fontsource | 5.3.0 | OFL-1.1 | Deterministic title typography |
+| Noto Sans Mono via Fontsource | 5.3.0 | OFL-1.1 | Deterministic hash and trace typography |
 
 Oracle projects are never authority for Sanji Engine output. Their modern
 interpretation prose, visual designs, AI prompts, and unlicensed assets are not
