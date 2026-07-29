@@ -2,20 +2,22 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ProductShell, { PageState, TechnicalDetails } from "./ProductShell";
-import { ChronicleSummary, readProductSession } from "../lib/product-session";
+import { apiRequest } from "../lib/product-session";
+type Entry={id:string;profile_id:string;execution_id:string|null;entry_type:string;title:string;note:string;status:string;candidate_summary:Array<{dimension_id:string;strength_bp:number;confidence_bp:number;status:string}>;engine_version:string|null;ruleset_version:string|null;evidence_policy_version:string|null;output_hash:string|null;trace_hash:string|null;replay_available:boolean;research_notice:string|null;created_at:string};
+const differenceNames:Record<string,string>={input_records_added:"新增输入记录",input_records_removed_or_withdrawn:"撤回或移除记录",evidence_policy_changed:"证据政策变化",ruleset_changed:"规则版本变化",engine_changed:"引擎版本变化",profile_changed:"规则方案变化",execution_context_changed:"执行时间上下文变化",data_precision_changed:"资料精度变化",output_changed:"输出变化"};
+const dimensionNames:Record<string,string>={lx_ming:"命象",lx_ye:"业象",lx_yuan:"愿象",lx_meng:"梦象",lx_yuan_relation:"缘象",lx_shi:"世象"};
+const statusNames:Record<string,string>={decisive:"象意较明",provisional:"初见其象",contested:"诸象相争",insufficient:"资料不足，暂不成断",recorded:"已记录"};
 export default function ChronicleDetail({recordId}:{recordId:string}){
- const [item,setItem]=useState<ChronicleSummary>();const [ready,setReady]=useState(false);
- useEffect(()=>{setItem(readProductSession().chronicles.find(v=>v.id===recordId));setReady(true)},[recordId]);
- if(!ready)return <ProductShell title="读取三际录" eyebrow="三际录"><PageState kind="loading" title="正在读取记录"><p>正在核对当前会话引用。</p></PageState></ProductShell>
- if(!item)return <ProductShell title="记录不可用" eyebrow="三际录"><PageState kind="withdrawn" title="记录已撤销或当前无权查看"><p>这里不会显示原始异常或已撤销正文。</p><Link className="product-button" href="/chronicle">返回列表</Link></PageState></ProductShell>
- return <ProductShell title={item.title} eyebrow="三际录 · 记录详情">
-  <article className="chronicle-detail"><header><time>{item.date}</time><span>{item.status}</span><h2>{item.subject} · {item.type}</h2></header>
-   <section><span>01</span><div><h2>当时记录了什么</h2><p>为保护敏感资料，当前会话摘要不复制保存正文；登录后从加密服务端读取原始内容。</p></div></section>
-   <section><span>02</span><div><h2>当时执行了什么</h2><p>{item.type==="易经"?"按实物三钱方法形成机械结构。":"保存了一条原始记录，没有自动执行术数分析。"}</p></div></section>
-   <section><span>03</span><div><h2>当时得到什么结果</h2><p>{item.status}。没有生成最终吉凶、应期或宿世身份。</p>{item.type==="易经"&&<Link href={`/results/${item.id}`}>阅读机械结果</Link>}</div></section>
-   <section><span>04</span><div><h2>使用了哪些资料</h2><p>记录来源：{item.source}。主体：{item.subject}。</p></div></section>
-   <section><span>05</span><div><h2>哪些资料当时缺失</h2><p>服务端记录会保留日期精度、未知项和边界状态；摘要不会把未知补齐。</p></div></section>
-  </article>
-  <TechnicalDetails><dl className="technical-grid"><div><dt>Record ID</dt><dd><code>{item.id}</code></dd></div><div><dt>原版本回放</dt><dd>{item.replayable?"可按原版本重放":"此类原始记录无需重放"}</dd></div><div><dt>重新分析</dt><dd>用当前版本重新分析尚未开放；不会显示虚假按钮。</dd></div></dl></TechnicalDetails>
- </ProductShell>
+ const [item,setItem]=useState<Entry>();const [error,setError]=useState("");const [replayStatus,setReplayStatus]=useState("");const [comparison,setComparison]=useState<Record<string,unknown>>();
+ useEffect(()=>{apiRequest<Entry>(`/api/v1/chronicle/${recordId}`).then(setItem).catch(e=>setError(e instanceof Error?e.message:"记录不可用"))},[recordId]);
+ async function replay(){if(!item?.execution_id)return;try{const v=await apiRequest<{matched:boolean}>(`/api/v1/liuxiang/executions/${item.execution_id}/replay`,{method:"POST"});setReplayStatus(v.matched?"原版本重放一致":"重放哈希不一致，已阻断")}catch(e){setReplayStatus(e instanceof Error?e.message:"重放失败")}}
+ async function reanalyze(){if(!item?.execution_id)return;setReplayStatus("正在用当前版本建立新记录…");try{const next=await apiRequest<{id:string;archive_id:string}>(`/api/v1/liuxiang/executions/${item.execution_id}/reanalyze`,{method:"POST",body:JSON.stringify({title:`${item.title} · 重新分析`})});const diff=await apiRequest<{differences:Record<string,unknown>}>("/api/v1/liuxiang/executions/compare",{method:"POST",body:JSON.stringify({left_execution_id:item.execution_id,right_execution_id:next.id})});setComparison(diff.differences);setReplayStatus(`已生成新三际录 ${next.archive_id}，原记录未覆盖。`)}catch(e){setReplayStatus(e instanceof Error?e.message:"重新分析失败")}}
+ if(error)return <ProductShell title="记录不可用" eyebrow="三际录"><PageState kind="withdrawn" title="记录已撤销或当前无权查看"><p>{error}</p><Link className="product-button" href="/chronicle">返回列表</Link></PageState></ProductShell>;
+ if(!item)return <ProductShell title="读取三际录" eyebrow="三际录"><PageState kind="loading" title="正在从数据库读取记录"><p>浏览器缓存不是权威数据源。</p></PageState></ProductShell>;
+ return <ProductShell title={item.title} eyebrow="三际录 · 记录详情"><article className="chronicle-detail"><header><time>{item.created_at.slice(0,10)}</time><span>{statusNames[item.status]||item.status}</span><h2>{item.entry_type==="liuxiang_research"?"六象研究":"原始记录"}</h2></header>
+  <section><span>01</span><div><h2>当时记录了什么</h2><p>原始内容保存在加密服务端；本页只展示授权摘要和稳定引用。</p></div></section>
+  <section><span>02</span><div><h2>当时执行了什么</h2><p>{item.execution_id?"按当时的 Engine、Ruleset、Evidence Policy 和有效证据执行确定性研究。":"保存原始记录，没有自动执行术数分析。"}</p></div></section>
+  <section><span>03</span><div><h2>当时得到什么结果</h2>{item.candidate_summary.length?item.candidate_summary.map(v=><p key={v.dimension_id}>{dimensionNames[v.dimension_id]||v.dimension_id}：象势强度 {v.strength_bp} bp，证据可信度 {v.confidence_bp} bp，{statusNames[v.status]||v.status}</p>):<p>这是一条原始记录。</p>}</div></section>
+  <section><span>04</span><div><h2>版本与后续</h2><p>{item.research_notice||"没有自动生成最终吉凶、应期或身份结论。"}</p>{item.replay_available&&<div className="form-actions"><button className="secondary-button" onClick={replay}>按原版本重放</button><button className="product-button" onClick={reanalyze}>用当前版本重新分析</button></div>}<p aria-live="polite">{replayStatus}</p>{comparison&&<div><h3>差异来源</h3><ul>{Object.entries(comparison).filter(([,value])=>value===true||(Array.isArray(value)&&value.length>0)).map(([key,value])=><li key={key}>{differenceNames[key]||key}：{Array.isArray(value)?value.length:"是"}</li>)}</ul></div>}</div></section>
+ </article><TechnicalDetails><dl className="technical-grid"><div><dt>Engine</dt><dd>{item.engine_version||"不适用"}</dd></div><div><dt>Ruleset</dt><dd>{item.ruleset_version||"不适用"}</dd></div><div><dt>Evidence Policy</dt><dd>{item.evidence_policy_version||"不适用"}</dd></div><div><dt>Output Hash</dt><dd><code>{item.output_hash||"不适用"}</code></dd></div><div><dt>Trace Hash</dt><dd><code>{item.trace_hash||"不适用"}</code></dd></div></dl></TechnicalDetails></ProductShell>
 }

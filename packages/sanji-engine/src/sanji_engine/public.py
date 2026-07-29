@@ -24,6 +24,12 @@ from .inference.liuxiang_v1 import (
     run_liuxiang_research_v1,
 )
 from .signals.v2 import validate_signals_v2
+from .signals.evidence_v1 import (
+    METHOD_ID as LIUXIANG_EVIDENCE_INFERENCE_METHOD_ID,
+    OPERATION as LIUXIANG_EVIDENCE_OPERATION,
+    SIGNAL_METHOD_ID as LIUXIANG_EVIDENCE_SIGNAL_METHOD_ID,
+    run_liuxiang_evidence_v1,
+)
 from .errors import (
     EngineError,
     INPUT_INVALID,
@@ -224,8 +230,16 @@ def validate_request(request: dict) -> dict:
     bundle = inspect_ruleset(value["ruleset_bundle_id"])
     if research_modules:
         operation = snapshot.get("operation")
-        is_liuxiang_bundle = bundle["bundle_id"] == "liuxiang-research-v1.0.0"
-        if is_liuxiang_bundle != (operation == "run_liuxiang_research_v1"):
+        expected_operations = {
+            "liuxiang-research-v1.0.0": "run_liuxiang_research_v1",
+            "liuxiang-evidence-research-v1.0.0": LIUXIANG_EVIDENCE_OPERATION,
+        }
+        expected_operation = expected_operations.get(bundle["bundle_id"])
+        liuxiang_operations = set(expected_operations.values())
+        if (
+            (expected_operation is not None and operation != expected_operation)
+            or (operation in liuxiang_operations and expected_operation != operation)
+        ):
             raise EngineError(
                 INPUT_INVALID,
                 "research operation and ruleset bundle do not match",
@@ -391,8 +405,13 @@ def _restore_research_case(snapshot: dict) -> dict:
 
 
 def _execute_research(snapshot: dict) -> tuple[dict[str, dict], list[dict], dict]:
-    if snapshot.get("operation") == "run_liuxiang_research_v1":
-        result, trace = run_liuxiang_research_v1(snapshot)
+    operation = snapshot.get("operation")
+    if operation in {"run_liuxiang_research_v1", LIUXIANG_EVIDENCE_OPERATION}:
+        is_user_evidence = operation == LIUXIANG_EVIDENCE_OPERATION
+        result, trace = (
+            run_liuxiang_evidence_v1(snapshot)
+            if is_user_evidence else run_liuxiang_research_v1(snapshot)
+        )
         signals_projection = {
             "schema_version": "signal-v2/1.0.0",
             "signals": result["signals"],
@@ -412,8 +431,16 @@ def _execute_research(snapshot: dict) -> tuple[dict[str, dict], list[dict], dict
             )
         }
         definitions = {
-            "signals": (LIUXIANG_SIGNAL_METHOD_ID, signals_projection),
-            "inference": (LIUXIANG_INFERENCE_METHOD_ID, inference_projection),
+            "signals": (
+                LIUXIANG_EVIDENCE_SIGNAL_METHOD_ID
+                if is_user_evidence else LIUXIANG_SIGNAL_METHOD_ID,
+                signals_projection,
+            ),
+            "inference": (
+                LIUXIANG_EVIDENCE_INFERENCE_METHOD_ID
+                if is_user_evidence else LIUXIANG_INFERENCE_METHOD_ID,
+                inference_projection,
+            ),
         }
         module_results = {}
         for module_id, (method_id, projection) in definitions.items():
@@ -429,17 +456,32 @@ def _execute_research(snapshot: dict) -> tuple[dict[str, dict], list[dict], dict
                 "trace_step_ids": [
                     step["step_id"] for step in trace if step["module_id"] == module_id
                 ],
-                "rule_refs": ["liuxiang-inference/1.0.0"],
+                "rule_refs": [result["ruleset_version"]],
                 "source_refs": ["SANJI_ORIGINAL_RESEARCH"],
                 "uncertainties": ["LIUXIANG_MAPPING_UNCONFIRMED"],
                 "sensitivity_flags": [],
             }
             module_results[module_id] = {**module, "content_hash": content_hash(module)}
-        return module_results, trace, {
+        metadata = {
             "liuxiang_result_hash": result["result_hash"],
             "signals_v2_hash": content_hash(signals_projection),
             "inference_v1_hash": content_hash(inference_projection),
         }
+        if is_user_evidence:
+            signals_projection["evidence_selection"] = deepcopy(
+                result["evidence_selection"]
+            )
+            signals_projection["coverage_bp_by_dimension"] = deepcopy(
+                result["coverage_bp_by_dimension"]
+            )
+            inference_projection.update({
+                "evidence_policy_id": result["evidence_policy_id"],
+                "evidence_policy_version": result["evidence_policy_version"],
+                "evidence_policy_hash": result["evidence_policy_hash"],
+            })
+        if is_user_evidence:
+            metadata["evidence_policy_hash"] = result["evidence_policy_hash"]
+        return module_results, trace, metadata
     case = _restore_research_case(snapshot)
     archetypes, config, asset_hashes = load_research_assets()
     actual = run_research_baseline(case, archetypes, config)
@@ -559,6 +601,23 @@ def execute(request: dict) -> dict:
             validated["input_snapshot"].get("signals", []),
             {value["dimension_id"] for value in dimensions["dimensions"]},
         )
+    elif bundle["bundle_id"] == "liuxiang-evidence-research-v1.0.0":
+        # User evidence is also an unordered set. Sorting before input hashing
+        # makes cross-platform replay insensitive to transport order.
+        snapshot = validated["input_snapshot"]
+        facts = snapshot.get("facts", [])
+        if isinstance(facts, list):
+            snapshot["facts"] = sorted(
+                facts,
+                key=lambda item: (
+                    str(item.get("dimension_id", "")) if isinstance(item, dict) else "",
+                    str(item.get("record_id", "")) if isinstance(item, dict) else "",
+                    content_hash(item),
+                ),
+            )
+        excluded = snapshot.get("excluded_record_ids", [])
+        if isinstance(excluded, list):
+            snapshot["excluded_record_ids"] = sorted(set(excluded))
     input_projection = deepcopy(validated)
     input_projection.pop("run_id", None)
     # Execution and replay are transport intents, not calculation inputs. Excluding

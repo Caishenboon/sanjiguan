@@ -159,6 +159,85 @@ class PostgreSQLHttpE2E(unittest.TestCase):
         self.assertEqual(201,created.status_code,created.text)
         self.assertFalse(created.json()["production_use"])
 
+    def test_private_liuxiang_execution_archive_replay_reanalysis_and_compare(self):
+        self.login()
+        created = self.client.post(
+            "/api/v1/profiles", json=self.payload("Synthetic Liuxiang"),
+            headers={"Idempotency-Key": "liuxiang-profile-e2e-0001"},
+        )
+        self.assertEqual(201, created.status_code, created.text)
+        profile_id = created.json()["id"]
+        for index, entry_date in enumerate(("2026-01-01", "2026-01-10", "2026-01-20"), 1):
+            record = self.client.post(
+                f"/api/v1/profiles/{profile_id}/journal",
+                json={
+                    "entry_date": entry_date,
+                    "entry_type": "vow_action",
+                    "fields": {
+                        "title": f"synthetic vow {index}",
+                        "date_precision": "exact_date",
+                        "state": "sustained",
+                        "direction": "positive",
+                    },
+                    "free_text": "fully synthetic private fixture",
+                    "tags": [],
+                    "evidence_ids": [],
+                    "candidate_evidence": True,
+                },
+                headers={"Idempotency-Key": f"liuxiang-journal-e2e-{index:04d}"},
+            )
+            self.assertEqual(201, record.status_code, record.text)
+            self.assertIn("archive_id", record.json())
+        selectable = self.client.get(f"/api/v1/profiles/{profile_id}/liuxiang/evidence")
+        self.assertEqual(200, selectable.status_code, selectable.text)
+        self.assertFalse(selectable.json()["private_text_included"])
+        self.assertGreaterEqual(len(selectable.json()["items"]), 4)
+        run = self.client.post(
+            f"/api/v1/profiles/{profile_id}/liuxiang/executions",
+            json={"as_of": "2026-07-29T00:00:00Z", "excluded_record_ids": []},
+            headers={"Idempotency-Key": "liuxiang-execution-e2e-0001"},
+        )
+        self.assertEqual(201, run.status_code, run.text)
+        execution_id = run.json()["id"]
+        self.assertIn(run.json()["status"], {"decisive", "provisional", "contested", "insufficient"})
+        self.assertEqual(6, len(run.json()["candidates"]))
+        replayed = self.client.post(
+            f"/api/v1/liuxiang/executions/{execution_id}/replay",
+            headers={"Idempotency-Key": "liuxiang-replay-e2e-0001"},
+        )
+        self.assertEqual(200, replayed.status_code, replayed.text)
+        self.assertTrue(replayed.json()["matched"])
+        reanalyzed = self.client.post(
+            f"/api/v1/liuxiang/executions/{execution_id}/reanalyze",
+            json={"as_of": "2026-07-30T00:00:00Z"},
+            headers={"Idempotency-Key": "liuxiang-reanalysis-e2e-0001"},
+        )
+        self.assertEqual(201, reanalyzed.status_code, reanalyzed.text)
+        self.assertTrue(reanalyzed.json()["creates_new_record"])
+        second_id = reanalyzed.json()["id"]
+        compared = self.client.post(
+            "/api/v1/liuxiang/executions/compare",
+            json={"left_execution_id": execution_id, "right_execution_id": second_id},
+            headers={"Idempotency-Key": "liuxiang-compare-e2e-0001"},
+        )
+        self.assertEqual(200, compared.status_code, compared.text)
+        self.assertIn("engine_changed", compared.json()["differences"])
+        archive = self.client.get(f"/api/v1/chronicle?profile_id={profile_id}")
+        self.assertEqual(200, archive.status_code, archive.text)
+        self.assertGreaterEqual(len(archive.json()["items"]), 5)
+        purged = self.client.delete(
+            f"/api/v1/liuxiang/executions/{execution_id}/input-snapshot",
+            headers={"Idempotency-Key": "e2e-purge-01"},
+        )
+        self.assertEqual(202, purged.status_code, purged.text)
+        self.assertEqual("replay_unavailable", purged.json()["replay_status"])
+        unavailable = self.client.post(
+            f"/api/v1/liuxiang/executions/{execution_id}/replay",
+            headers={"Idempotency-Key": "e2e-replay-purged-01"},
+        )
+        self.assertEqual(409, unavailable.status_code, unavailable.text)
+        self.assertEqual("replay_unavailable", unavailable.json()["detail"]["code"])
+
     def test_owner_only_research_preview_pipeline_is_replayable(self):
         self.login()
         self.assertEqual(403,self.client.get("/api/v1/admin/research/analyses").status_code)

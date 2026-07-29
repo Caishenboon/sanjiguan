@@ -36,8 +36,14 @@ test("journey A: first use creates a subject without inventing an unknown birth 
 test("journey B: save a record and find it in 三际录", async ({ page }) => {
   await seedSubject(page);
   await page.route(`**/api/v1/profiles/${profileId}/journal`, async (route) => {
-    await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ id: "record-journey-b" }) });
+    await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ id: "record-journey-b", archive_id: "archive-journey-b" }) });
   });
+  await page.route("**/api/v1/chronicle?*", async (route) => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({items:[{
+    id:"archive-journey-b",profile_id:profileId,execution_id:null,entry_type:"record",title:"虚构的学习里程碑",status:"recorded",replay_available:false,created_at:"2026-07-29T00:00:00Z",withdrawn:false,
+  }]})}));
+  await page.route("**/api/v1/chronicle/archive-journey-b", async (route) => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({
+    id:"archive-journey-b",profile_id:profileId,execution_id:null,entry_type:"record",title:"虚构的学习里程碑",note:"",status:"recorded",candidate_summary:[],engine_version:null,ruleset_version:null,evidence_policy_version:null,output_hash:null,trace_hash:null,replay_available:false,research_notice:null,created_at:"2026-07-29T00:00:00Z",
+  })}));
   await page.goto("/records");
   await page.getByRole("article").filter({ hasText: "人生事件" }).getByRole("link", { name: "开始记录" }).click();
   await page.getByLabel("简短标题").fill("虚构的学习里程碑");
@@ -51,8 +57,7 @@ test("journey B: save a record and find it in 三际录", async ({ page }) => {
 
 test("journey C: execute physical three-coin and read progressive result details", async ({ page }) => {
   await seedSubject(page);
-  await page.route(`**/api/v1/profiles/${profileId}/divinations/three-coin`, async (route) => {
-    await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({
+  const divinationPayload = {
       id: divinationId,
       research_status: "research_active",
       notice: "仅记录实物三钱结果；未生成卦义、评分或命理结论。",
@@ -72,7 +77,12 @@ test("journey C: execute physical three-coin and read progressive result details
         method_version: "1.0.0",
         mapping_asset: { asset_version: "1.0.0" },
       },
-    }) });
+    };
+  await page.route(`**/api/v1/profiles/${profileId}/divinations/three-coin`, async (route) => {
+    await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify(divinationPayload) });
+  });
+  await page.route(`**/api/v1/divinations/${divinationId}`, async (route) => {
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(divinationPayload) });
   });
   await page.goto("/consult");
   await page.getByRole("article").filter({ hasText: "易经三钱" }).getByRole("link", { name: "开始" }).click();
@@ -86,11 +96,18 @@ test("journey C: execute physical three-coin and read progressive result details
   await expect(page.getByText("sha256:fixture-only-product-journey")).toBeVisible();
 });
 
-test("journey D: liuxiang explains why it cannot conclude without exposing synthetic candidates", async ({ page }) => {
+test("journey D: liuxiang uses authorized records and can honestly return insufficient", async ({ page }) => {
   await seedSubject(page);
+  await page.route(`**/api/v1/profiles/${profileId}/liuxiang/evidence`, async (route) => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({items:[]})}));
+  await page.route(`**/api/v1/profiles/${profileId}/liuxiang/executions`, async (route) => route.fulfill({status:201,contentType:"application/json",body:JSON.stringify({
+    id:"run-d",archive_id:"archive-d",status:"insufficient",strength_bp:0,confidence_bp:0,output_hash:"sha256:fixture-output",trace_hash:"sha256:fixture-trace",research_notice:"研究态",candidates:[
+      "lx_ming","lx_ye","lx_yuan","lx_meng","lx_yuan_relation","lx_shi"
+    ].map((dimension_id,index)=>({dimension_id,rank:index+1,strength_bp:0,confidence_bp:0,status:"insufficient",support_count:0,counterevidence_count:0,missing_facts:["minimum_independent_records"]}))
+  })}));
   await page.goto("/consult/liuxiang");
-  await expect(page.getByRole("heading", { name: "资料不足，暂不成断" })).toBeVisible();
-  await expect(page.getByText("真实映射规则尚未通过审校")).toBeVisible();
+  await expect(page.getByText("未经审校的干支、星曜、卦象解释继续禁用")).toBeVisible();
+  await page.getByRole("button",{name:"执行六象研究"}).click();
+  await expect(page.getByText("资料不足，暂不成断").first()).toBeVisible();
   await expect(page.getByText("synthetic_conformance")).toHaveCount(0);
   await expect(page.getByText(/聚合哈希|a08cb815|81a43d8/)).toHaveCount(0);
 });
@@ -107,8 +124,11 @@ test("network failure is explained and can be retried", async ({ page }) => {
   await page.route(`**/api/v1/profiles/${profileId}/journal`, async (route) => {
     attempts += 1;
     if (attempts === 1) await route.abort("failed");
-    else await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ id: "retry-record" }) });
+    else await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ id: "retry-record", archive_id: "retry-archive" }) });
   });
+  await page.route("**/api/v1/chronicle?*", async (route) => route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({items:[{
+    id:"retry-archive",profile_id:profileId,execution_id:null,entry_type:"record",title:"虚构重试记录",status:"recorded",replay_available:false,created_at:"2026-07-29T00:00:00Z",withdrawn:false,
+  }]})}));
   await page.goto("/records/new?type=reflection");
   await page.getByLabel("简短标题").fill("虚构重试记录");
   await page.getByLabel("当时发生了什么").fill("第一次网络失败，第二次保存成功。");

@@ -241,6 +241,48 @@ class PostgreSQLIntegrationTests(unittest.TestCase):
                 "SELECT count(*) FROM research_dataset_manifests"
             ).fetchone()[0])
 
+    def test_private_liuxiang_archive_force_rls_and_strictly_isolates_members(self):
+        tables = (
+            "evidence_policy_versions", "liuxiang_user_executions",
+            "liuxiang_execution_evidence_refs", "sanji_archive_entries",
+            "liuxiang_replay_records", "liuxiang_execution_comparisons",
+        )
+        rows = self.conn.execute(
+            """SELECT relname,relforcerowsecurity FROM pg_class
+               WHERE relname=ANY(%s) ORDER BY relname""", (list(tables),)
+        ).fetchall()
+        self.assertEqual(set(tables), {row[0] for row in rows})
+        self.assertTrue(all(row[1] for row in rows))
+        digest = f"sha256:{'d' * 64}"
+        run_id = uuid4()
+        insert = """INSERT INTO liuxiang_user_executions(
+          id,owner_id,profile_id,execution_kind,input_snapshot_encrypted,result_encrypted,
+          candidate_summary,engine_version,ruleset_bundle_id,ruleset_bundle_hash,
+          evidence_policy_id,evidence_policy_version,evidence_policy_hash,profile_version,
+          input_hash,output_hash,trace_hash,replay_manifest,status,research_notice
+        ) VALUES(%s,%s,%s,'initial',%s,%s,'[]','0.1.0',
+          'liuxiang-evidence-research-v1.0.0',%s,'liuxiang-user-evidence-policy',
+          '1.0.0',%s,'profile/current',%s,%s,%s,'{}','insufficient','research only')"""
+        with self.runtime(self.member_a) as member:
+            member.execute(
+                insert,
+                (run_id, self.member_a, self.profile_a, b"encrypted", b"encrypted",
+                 digest, digest, digest, digest, digest),
+            )
+            member.commit()
+            self.assertEqual(run_id, member.execute(
+                "SELECT id FROM liuxiang_user_executions WHERE id=%s", (run_id,)
+            ).fetchone()[0])
+        with self.runtime(self.member_b) as other:
+            self.assertIsNone(other.execute(
+                "SELECT id FROM liuxiang_user_executions WHERE id=%s", (run_id,)
+            ).fetchone())
+        # The role named owner is not a resource-global reader for private archives.
+        with self.runtime(self.owner, "owner") as owner:
+            self.assertIsNone(owner.execute(
+                "SELECT id FROM liuxiang_user_executions WHERE id=%s", (run_id,)
+            ).fetchone())
+
     def test_migration_drift_is_rejected(self):
         version = "0001_sprint0_baseline.sql"
         checksum = self.conn.execute(

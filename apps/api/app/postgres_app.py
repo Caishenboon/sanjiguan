@@ -227,3 +227,5 @@ from apps.api.app.ziwei_research_routes import router as ziwei_research_router
 app.include_router(ziwei_research_router)
 from apps.api.app.liuxiang_research_routes import router as liuxiang_research_router
 app.include_router(liuxiang_research_router)
+from apps.api.app.liuxiang_archive_routes import router as liuxiang_archive_router
+app.include_router(liuxiang_archive_router)
