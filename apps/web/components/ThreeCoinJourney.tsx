@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProductShell, { PageState } from "./ProductShell";
-import { apiRequest, readProductSession, updateProductSession } from "../lib/product-session";
+import { apiRequest, readProductSession } from "../lib/product-session";
 
 type Face="heads"|"tails";
 type EngineResult={
@@ -22,14 +22,13 @@ const lineNames=["初爻","二爻","三爻","四爻","五爻","上爻"];
 export default function ThreeCoinJourney(){
   const router=useRouter();
   const [profileId,setProfileId]=useState("");
-  const [subjectName,setSubjectName]=useState("");
   const [question,setQuestion]=useState("");
   const [purpose,setPurpose]=useState("记录一次正式占问");
   const [tosses,setTosses]=useState<Face[][]>(Array.from({length:6},()=>["heads","tails","heads"]));
   const [confirmed,setConfirmed]=useState(false);
   const [status,setStatus]=useState<"idle"|"saving"|"error">("idle");
   const [error,setError]=useState("");
-  useEffect(()=>{const subject=readProductSession().subject;setProfileId(subject?.id||"");setSubjectName(subject?.name||"");},[]);
+  useEffect(()=>{const subject=readProductSession().subject;setProfileId(subject?.id||"");},[]);
   function setFace(line:number,coin:number,value:Face){setTosses(current=>current.map((row,i)=>i===line?row.map((v,j)=>j===coin?value:v):row))}
   async function submit(event:FormEvent){
     event.preventDefault();setError("");
@@ -43,9 +42,6 @@ export default function ThreeCoinJourney(){
         tosses:tosses.map((coin_faces,index)=>({line_no:index+1,coin_faces,was_retossed:false})),
         interrupted_retoss:false,repeated_due_to_dissatisfaction:false,method_version:"1.0.0",
       })});
-      const completedAt=new Date().toISOString().slice(0,10);
-      updateProductSession((session)=>({...session,recentRun:{id:response.id,tool:"yijing",title:`易经三钱 · ${question.trim()}`,completedAt,result:response as unknown as Record<string,unknown>},
-        chronicles:[{id:response.id,profileId,date:completedAt,subject:subjectName,type:"易经",title:question.trim(),status:"机械结构已完成",source:"实物三钱",replayable:true},...session.chronicles]}));
       router.push(`/results/${response.id}`);
     }catch(cause){setStatus("error");setError(cause instanceof Error?`执行未完成：${cause.message}。`:"执行未完成，请检查网络后重试。")}
   }

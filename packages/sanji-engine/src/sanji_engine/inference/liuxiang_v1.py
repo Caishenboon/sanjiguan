@@ -191,9 +191,23 @@ def _candidate(
     return {**base, "result_hash": content_hash(base)}
 
 
-def run_liuxiang_research_v1(snapshot: dict) -> tuple[dict, list[dict]]:
-    dimensions_asset, mappings_asset, policy = load_liuxiang_assets()
-    if snapshot.get("operation") != "run_liuxiang_research_v1":
+def run_liuxiang_from_signals(
+    snapshot: dict,
+    *,
+    dimensions_asset: dict,
+    mappings_asset: dict,
+    policy: dict,
+    expected_operation: str,
+    method_id: str = METHOD_ID,
+    signal_method_id: str = SIGNAL_METHOD_ID,
+    result_metadata: dict | None = None,
+) -> tuple[dict, list[dict]]:
+    """Run the single Liuxiang inference pipeline with versioned assets.
+
+    The frozen synthetic baseline and the user-evidence adapter share this
+    exact scoring, deduplication, ranking and status implementation.
+    """
+    if snapshot.get("operation") != expected_operation:
         raise EngineError(INPUT_INVALID, "Liuxiang research operation is unsupported")
     dimensions = dimensions_asset["dimensions"]
     dimension_ids = {value["dimension_id"] for value in dimensions}
@@ -272,7 +286,7 @@ def run_liuxiang_research_v1(snapshot: dict) -> tuple[dict, list[dict]]:
             "module_id": "signals",
             "operation": "validate_signal_v2",
             "input_refs": ["input:signals"],
-            "rule_refs": [SIGNAL_METHOD_ID],
+            "rule_refs": [signal_method_id],
             "source_refs": ["SANJI_ORIGINAL_RESEARCH"],
             "parameters": {"count": len(raw_signals)},
             "output_refs": ["signals:validated"],
@@ -297,7 +311,7 @@ def run_liuxiang_research_v1(snapshot: dict) -> tuple[dict, list[dict]]:
             "module_id": "inference",
             "operation": "score_strength_confidence",
             "input_refs": ["signals:effective"],
-            "rule_refs": [METHOD_ID, policy["ruleset_version"]],
+            "rule_refs": [method_id, policy["ruleset_version"]],
             "source_refs": ["SANJI_ORIGINAL_RESEARCH"],
             "parameters": {
                 "integer_policy": "basis_points_round_half_even",
@@ -344,4 +358,17 @@ def run_liuxiang_research_v1(snapshot: dict) -> tuple[dict, list[dict]]:
         "confidence_bp": top["confidence_bp"],
         "trace_ref": "trace:liuxiang-v1",
     }
+    if result_metadata:
+        result_base.update(deepcopy(result_metadata))
     return {**result_base, "result_hash": content_hash(result_base)}, trace
+
+
+def run_liuxiang_research_v1(snapshot: dict) -> tuple[dict, list[dict]]:
+    dimensions_asset, mappings_asset, policy = load_liuxiang_assets()
+    return run_liuxiang_from_signals(
+        snapshot,
+        dimensions_asset=dimensions_asset,
+        mappings_asset=mappings_asset,
+        policy=policy,
+        expected_operation="run_liuxiang_research_v1",
+    )

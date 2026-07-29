@@ -1,0 +1,22 @@
+{
+  "schema_version": "ruleset-bundle/1.0.0",
+  "bundle_id": "liuxiang-evidence-research-v1.0.0",
+  "bundle_version": "1.0.0",
+  "status": "research_active",
+  "system_class": "sanji_original_research",
+  "review_status": "UNCONFIRMED",
+  "license_status": "UNDECIDED",
+  "production_activatable": false,
+  "modules": {
+    "calendar": {"method_id": "CALENDAR.MIGRATION.BASELINE.V1", "status": "research_active", "enabled": false},
+    "signals": {"method_id": "SIGNALS.V2.LIUXIANG.USER_EVIDENCE.RESEARCH.V1", "status": "research_active", "enabled": true, "schema_version": "signal-v2/1.0.0", "production_activatable": false},
+    "inference": {"method_id": "INFERENCE.LIUXIANG.USER_EVIDENCE.RESEARCH.V1", "status": "research_active", "enabled": true, "ruleset_version": "liuxiang-evidence-inference/1.0.0", "production_activatable": false},
+    "bazi": {"method_id": "BAZI.INTERPRETIVE.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "ziwei": {"method_id": "ZIWEI.INTERPRETIVE.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "yijing": {"method_id": "YIJING.INTERPRETIVE.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "past-life": {"method_id": "PAST_LIFE.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "bardo": {"method_id": "BARDO.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "relationship": {"method_id": "RELATIONSHIP.FINAL.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "life-chart": {"method_id": "LIFE_CHART.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"}
+  }
+}

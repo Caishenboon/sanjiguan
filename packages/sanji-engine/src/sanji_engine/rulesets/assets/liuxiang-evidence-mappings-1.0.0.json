@@ -1,0 +1,171 @@
+{
+  "schema_version": "liuxiang-mapping-ruleset/1.0.0",
+  "ruleset_version": "liuxiang-evidence-mappings/1.0.0",
+  "tradition_scope": "sanji_original",
+  "review_status": "UNCONFIRMED",
+  "activation": "research_active",
+  "production_activatable": false,
+  "rules": [
+    {
+      "mapping_rule_id": "LX.USER_EVIDENCE.MING.V1",
+      "source_fact_selector": "$.facts[dimension_id=lx_ming]",
+      "target_dimension_id": "lx_ming",
+      "direction": "coverage_and_structure_only",
+      "magnitude_bp": 0,
+      "source_reliability_policy": "normalized_user_record",
+      "mapping_reliability_bp": 0,
+      "independence_group_policy": "source_record",
+      "shared_source_group_policy": "same_birth_record",
+      "reason": "出生覆盖与机械结构只影响完整度和边界说明，不产生解释性强度。",
+      "source_claim_ids": [
+        "SANJI_USER_CONFIRMED_RECORD"
+      ],
+      "counterevidence_conditions": [],
+      "missingness_conditions": [
+        "required_birth_field_missing"
+      ],
+      "profile_scope": "explicit_only",
+      "ruleset_version": "liuxiang-evidence-mappings/1.0.0",
+      "review_status": "UNCONFIRMED",
+      "activation_status": "research_active",
+      "production_activatable": false,
+      "content_hash": "sha256:40a4338ae0cfd394f1c308335642dcd6d06aab0129de7292bc570a5158f58f5f"
+    },
+    {
+      "mapping_rule_id": "LX.USER_EVIDENCE.YE.V1",
+      "source_fact_selector": "$.facts[dimension_id=lx_ye and fact_kind=evidence]",
+      "target_dimension_id": "lx_ye",
+      "direction": "fact_declared",
+      "magnitude_bp": "evidence_policy",
+      "source_reliability_policy": "user_observable_record_capped",
+      "mapping_reliability_bp": 7000,
+      "independence_group_policy": "one_group_per_source_record",
+      "shared_source_group_policy": "private_user_records",
+      "reason": "跨日期的可观察重复行为按证据政策递减贡献；不判断业力。",
+      "source_claim_ids": [
+        "SANJI_USER_CONFIRMED_RECORD"
+      ],
+      "counterevidence_conditions": [
+        "fact_direction_negative"
+      ],
+      "missingness_conditions": [
+        "minimum_count_or_span_missing"
+      ],
+      "profile_scope": "authorized_subject",
+      "ruleset_version": "liuxiang-evidence-mappings/1.0.0",
+      "review_status": "UNCONFIRMED",
+      "activation_status": "research_active",
+      "production_activatable": false,
+      "content_hash": "sha256:acabd05dfe1464b51e18bd426276fba43971a58ba7d635017769fbc1d748071c"
+    },
+    {
+      "mapping_rule_id": "LX.USER_EVIDENCE.YUAN.V1",
+      "source_fact_selector": "$.facts[dimension_id=lx_yuan and fact_kind=evidence]",
+      "target_dimension_id": "lx_yuan",
+      "direction": "fact_declared",
+      "magnitude_bp": "evidence_policy",
+      "source_reliability_policy": "user_commitment_state_capped",
+      "mapping_reliability_bp": 7500,
+      "independence_group_policy": "one_group_per_source_record",
+      "shared_source_group_policy": "private_user_records",
+      "reason": "表达、行动、持续、完成与撤回分层处理；一句愿向只有低贡献。",
+      "source_claim_ids": [
+        "SANJI_USER_CONFIRMED_RECORD"
+      ],
+      "counterevidence_conditions": [
+        "conflicting_or_abandoned_vow"
+      ],
+      "missingness_conditions": [
+        "action_or_duration_missing"
+      ],
+      "profile_scope": "authorized_subject",
+      "ruleset_version": "liuxiang-evidence-mappings/1.0.0",
+      "review_status": "UNCONFIRMED",
+      "activation_status": "research_active",
+      "production_activatable": false,
+      "content_hash": "sha256:91dd0b6ffc0d6edd40ff787f1c6a0c2d45dd5612de4a84a5c29d5e11cc777cc5"
+    },
+    {
+      "mapping_rule_id": "LX.USER_EVIDENCE.MENG.V1",
+      "source_fact_selector": "$.facts[dimension_id=lx_meng and fact_kind=evidence]",
+      "target_dimension_id": "lx_meng",
+      "direction": "fact_declared",
+      "magnitude_bp": "evidence_policy",
+      "source_reliability_policy": "user_confirmed_tags_only",
+      "mapping_reliability_bp": 6000,
+      "independence_group_policy": "one_group_per_dream_record",
+      "shared_source_group_policy": "private_user_records",
+      "reason": "仅使用用户确认的结构标签；不解析正文、不自动判断吉凶或预知。",
+      "source_claim_ids": [
+        "SANJI_USER_CONFIRMED_RECORD"
+      ],
+      "counterevidence_conditions": [
+        "user_confirmed_reality_conflict"
+      ],
+      "missingness_conditions": [
+        "confirmed_tag_missing"
+      ],
+      "profile_scope": "authorized_subject",
+      "ruleset_version": "liuxiang-evidence-mappings/1.0.0",
+      "review_status": "UNCONFIRMED",
+      "activation_status": "research_active",
+      "production_activatable": false,
+      "content_hash": "sha256:018b07ee217b7f2570415c715bc94ba724997c1e65c4fef3982efc52fb00eb7e"
+    },
+    {
+      "mapping_rule_id": "LX.USER_EVIDENCE.RELATION.V1",
+      "source_fact_selector": "$.facts[dimension_id=lx_yuan_relation and fact_kind=evidence]",
+      "target_dimension_id": "lx_yuan_relation",
+      "direction": "fact_declared",
+      "magnitude_bp": "evidence_policy",
+      "source_reliability_policy": "consent_and_party_status_capped",
+      "mapping_reliability_bp": 7000,
+      "independence_group_policy": "one_group_per_relationship_event",
+      "shared_source_group_policy": "private_user_records",
+      "reason": "保留单方与双方确认差异；不生成命定或灵魂伴侣结论。",
+      "source_claim_ids": [
+        "SANJI_USER_CONFIRMED_RECORD"
+      ],
+      "counterevidence_conditions": [
+        "withdrawal_or_conflict"
+      ],
+      "missingness_conditions": [
+        "consent_or_longitudinal_event_missing"
+      ],
+      "profile_scope": "authorized_subject",
+      "ruleset_version": "liuxiang-evidence-mappings/1.0.0",
+      "review_status": "UNCONFIRMED",
+      "activation_status": "research_active",
+      "production_activatable": false,
+      "content_hash": "sha256:2ab67082c800bef7edd66ee8903611da3ffe81a0f1c03e869a5f7ca637958c66"
+    },
+    {
+      "mapping_rule_id": "LX.USER_EVIDENCE.SHI.V1",
+      "source_fact_selector": "$.facts[dimension_id=lx_shi and fact_kind=evidence]",
+      "target_dimension_id": "lx_shi",
+      "direction": "fact_declared",
+      "magnitude_bp": "evidence_policy",
+      "source_reliability_policy": "event_source_and_verification_capped",
+      "mapping_reliability_bp": 7500,
+      "independence_group_policy": "one_group_per_life_event",
+      "shared_source_group_policy": "private_user_records",
+      "reason": "只使用已记录事件及其原始日期精度；不补造具体日期。",
+      "source_claim_ids": [
+        "SANJI_USER_CONFIRMED_RECORD"
+      ],
+      "counterevidence_conditions": [
+        "fact_direction_negative"
+      ],
+      "missingness_conditions": [
+        "date_or_event_precision_missing"
+      ],
+      "profile_scope": "authorized_subject",
+      "ruleset_version": "liuxiang-evidence-mappings/1.0.0",
+      "review_status": "UNCONFIRMED",
+      "activation_status": "research_active",
+      "production_activatable": false,
+      "content_hash": "sha256:89f209930ef272985978e31bdba372ee220de1cc58a21a4c7b19c5610bab41bb"
+    }
+  ],
+  "content_hash": "sha256:3d1e4a634903742f64f1b6f020307e355a1f1b3419edd9c36be06f5acc153acd"
+}

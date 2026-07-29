@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProductShell, { PageState } from "./ProductShell";
-import { apiRequest, newId, readProductSession, updateProductSession } from "../lib/product-session";
+import { apiRequest, readProductSession, updateProductSession } from "../lib/product-session";
 import { RECORD_TYPES } from "./RecordCenter";
 
 const allowed = new Set(["dream","vow_action","life_event","reflection","relationship"]);
@@ -21,12 +21,10 @@ export default function RecordForm({ requestedType }: { requestedType: string })
   const [status,setStatus]=useState<"idle"|"draft"|"saving"|"error">("idle");
   const [error,setError]=useState("");
   const [profileId,setProfileId]=useState("");
-  const [subjectName,setSubjectName]=useState("");
 
   useEffect(()=>{
     const session=readProductSession();
     setProfileId(session.subject?.id||"");
-    setSubjectName(session.subject?.name||"");
   },[]);
 
   function saveDraft(){
@@ -43,20 +41,16 @@ export default function RecordForm({ requestedType }: { requestedType: string })
       const payload={
         entry_date:dateUnknown?new Date().toISOString().slice(0,10):date,
         entry_type:apiTypes[type],
-        fields:{date_precision:dateUnknown?"unknown":"exact_date",record_kind:type},
+        fields:{date_precision:dateUnknown?"unknown":"exact_date",record_kind:type,title:title.trim()},
         free_text:text,
         tags:[],
         evidence_ids:[],
         candidate_evidence:false,
       };
-      const response=await apiRequest<{id:string}>(`/api/v1/profiles/${profileId}/journal`,{method:"POST",body:JSON.stringify(payload)});
-      const summaryId=response.id||newId("record");
-      updateProductSession((session)=>({...session,chronicles:[{
-        id:summaryId,profileId,date:dateUnknown?"日期不确定":date,subject:subjectName,type:"记录",
-        title:title.trim(),status:"已保存",source:info.title,replayable:false,
-      },...session.chronicles],pendingTask:undefined}));
+      const response=await apiRequest<{id:string;archive_id:string}>(`/api/v1/profiles/${profileId}/journal`,{method:"POST",body:JSON.stringify(payload)});
+      updateProductSession((session)=>({...session,pendingTask:undefined}));
       sessionStorage.removeItem(`sanjiguan:draft:${type}`);
-      router.push(`/chronicle?created=${encodeURIComponent(summaryId)}`);
+      router.push(`/chronicle?created=${encodeURIComponent(response.archive_id)}`);
     }catch(cause){
       setStatus("error");
       setError(cause instanceof Error?`保存未完成：${cause.message}。`:"保存未完成，请稍后重试。");

@@ -2,16 +2,16 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ProductShell, { PageState, TechnicalDetails } from "./ProductShell";
-import { ToolRunSummary, readProductSession } from "../lib/product-session";
+import { apiRequest } from "../lib/product-session";
 
 const lineNames:Record<string,string>={old_yin:"老阴",young_yang:"少阳",young_yin:"少阴",old_yang:"老阳"};
 type ResponseShape={id:string;engine_result?:{lines?:{line_position:number;sum:number;line_state:string;moving:boolean}[];moving_lines?:number[];base_hexagram?:{sequence:number;name:string;key:string};transformed_hexagram?:{sequence:number;name:string;key:string};method_version?:string;mapping_asset?:{asset_version:string}};result_hash?:string;research_status?:string;notice?:string};
 export default function ResultReader({runId}:{runId:string}){
- const [run,setRun]=useState<ToolRunSummary>();const [ready,setReady]=useState(false);
- useEffect(()=>{const current=readProductSession().recentRun;if(current?.id===runId)setRun(current);setReady(true)},[runId]);
+ const [payload,setPayload]=useState<ResponseShape>();const [ready,setReady]=useState(false);
+ useEffect(()=>{apiRequest<ResponseShape>(`/api/v1/divinations/${runId}`).then(setPayload).catch(()=>setPayload(undefined)).finally(()=>setReady(true))},[runId]);
  if(!ready)return <ProductShell title="读取结果" eyebrow="合参 · 结果"><PageState kind="loading" title="正在读取已保存结果"><p>正在核对当前会话中的执行引用。</p></PageState></ProductShell>
- if(!run)return <ProductShell title="结果暂不可读" eyebrow="合参 · 结果"><PageState kind="error" title="历史版本无法回放"><p>当前浏览器会话没有这次执行的结果摘要。请从三际录重新打开，或在已登录环境读取服务端记录。</p><Link className="product-button" href="/chronicle">返回三际录</Link></PageState></ProductShell>
- const payload=run.result as ResponseShape;const result=payload.engine_result;
+ if(!payload)return <ProductShell title="结果暂不可读" eyebrow="合参 · 结果"><PageState kind="error" title="历史版本无法回放"><p>服务端没有返回这次执行，或当前账号无权读取。</p><Link className="product-button" href="/chronicle">返回三际录</Link></PageState></ProductShell>
+ const result=payload.engine_result;
  return <ProductShell title="易经三钱机械结果" eyebrow="合参 · 阅读结果" status="机械结构">
   <section className="result-summary"><div><p className="eyebrow">本次完成</p><h2>已按实物三钱记录形成卦象结构</h2><p>这不是吉凶、应期或人生结论。你可以核对六爻、本卦、变卦与动爻，然后在研究详情中查看版本。</p></div><span className="result-kind">机械排盘</span></section>
   <section className="result-primary" aria-labelledby="structure-heading"><div><p className="eyebrow">主要结构</p><h2 id="structure-heading">{result?.base_hexagram?.name||"本卦"} → {result?.transformed_hexagram?.name||"变卦"}</h2><dl><div><dt>本卦</dt><dd>第 {result?.base_hexagram?.sequence||"—"} 卦 · {result?.base_hexagram?.name||"未返回"}</dd></div><div><dt>变卦</dt><dd>第 {result?.transformed_hexagram?.sequence||"—"} 卦 · {result?.transformed_hexagram?.name||"未返回"}</dd></div><div><dt>动爻</dt><dd>{result?.moving_lines?.length?result.moving_lines.join("、"):"无"}</dd></div></dl></div>

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sanjiguan.local/v2/evidence-fact-v1.schema.json",
+  "title": "Liuxiang normalized private evidence fact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["record_id", "dimension_id", "fact_kind"],
+  "properties": {
+    "record_id": {"type": "string", "minLength": 1},
+    "dimension_id": {"enum": ["lx_ming", "lx_ye", "lx_yuan", "lx_meng", "lx_yuan_relation", "lx_shi"]},
+    "fact_kind": {"enum": ["coverage", "structural", "evidence"]},
+    "occurred_on": {"type": ["string", "null"]},
+    "date_precision": {"enum": ["exact_date", "month_only", "year_only", "unknown"]},
+    "state": {"type": "string"},
+    "direction": {"enum": ["positive", "negative", "neutral"]},
+    "source_reliability_bp": {"type": "integer", "minimum": 0, "maximum": 10000},
+    "confirmed_tags": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "coverage_fields": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "shared_source_group": {"type": "string"},
+    "profile_id": {"type": ["string", "null"]},
+    "withdrawn": {"type": "boolean"},
+    "counterevidence": {"type": "array", "items": {"type": "string"}},
+    "conflicts": {"type": "array", "items": {"type": "string"}},
+    "relationship_confirmation": {"type": "string"},
+    "consent_active": {"type": "boolean"},
+    "profile_dispute_bp": {"type": "integer", "minimum": 0, "maximum": 10000},
+    "boundary_sensitivity_bp": {"type": "integer", "minimum": 0, "maximum": 10000},
+    "source_type": {"type": "string"},
+    "verification_status": {"type": "string"}
+  }
+}

@@ -29,6 +29,7 @@ export type ToolRunSummary = {
 
 export type ProductSession = {
   subject?: SubjectSummary;
+  /** Compatibility-only display cache. PostgreSQL `/api/v1/chronicle` is authoritative. */
   chronicles: ChronicleSummary[];
   recentRun?: ToolRunSummary;
   pendingTask?: { label: string; href: string };
@@ -41,14 +42,23 @@ export function readProductSession(): ProductSession {
   if (typeof window === "undefined") return EMPTY;
   try {
     const parsed = JSON.parse(sessionStorage.getItem(KEY) || "{}");
-    return { chronicles: [], ...parsed };
+    // Browser storage is only an interaction cache. Execution results and
+    // archive history are always loaded from their authenticated APIs.
+    return {
+      chronicles: [],
+      subject: parsed.subject,
+      pendingTask: parsed.pendingTask,
+    };
   } catch {
     return EMPTY;
   }
 }
 
 export function writeProductSession(next: ProductSession) {
-  sessionStorage.setItem(KEY, JSON.stringify(next));
+  sessionStorage.setItem(KEY, JSON.stringify({
+    subject: next.subject,
+    pendingTask: next.pendingTask,
+  }));
   window.dispatchEvent(new CustomEvent("sanjiguan:session-change"));
 }
 

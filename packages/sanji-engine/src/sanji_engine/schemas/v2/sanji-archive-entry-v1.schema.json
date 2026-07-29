@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sanjiguan.local/v2/sanji-archive-entry-v1.schema.json",
+  "title": "Sanji archive entry summary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "profile_id", "entry_type", "status", "created_at"],
+  "properties": {
+    "id": {"type": "string", "format": "uuid"},
+    "profile_id": {"type": "string", "format": "uuid"},
+    "execution_id": {"type": ["string", "null"], "format": "uuid"},
+    "entry_type": {"enum": ["record", "mechanical_result", "liuxiang_research"]},
+    "title": {"type": "string"},
+    "status": {"type": "string"},
+    "candidate_summary": {"type": "array", "items": {"type": "object"}},
+    "output_hash": {"type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$"},
+    "trace_hash": {"type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$"},
+    "replay_available": {"type": "boolean"},
+    "created_at": {"type": "string", "format": "date-time"}
+  }
+}

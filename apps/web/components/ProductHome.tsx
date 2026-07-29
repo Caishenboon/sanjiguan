@@ -3,19 +3,29 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ProductShell, { PageState } from "./ProductShell";
-import { ProductSession, readProductSession } from "../lib/product-session";
+import { ProductSession, apiRequest, readProductSession } from "../lib/product-session";
+
+type ArchiveItem={id:string;title:string;entry_type:string;created_at:string};
+type DivinationItem={id:string;divination_at:string};
 
 export default function ProductHome() {
   const [session, setSession] = useState<ProductSession>({ chronicles: [] });
   const [ready, setReady] = useState(false);
+  const [latest, setLatest] = useState<ArchiveItem>();
+  const [latestTool, setLatestTool] = useState<DivinationItem>();
   useEffect(() => {
-    const refresh = () => { setSession(readProductSession()); setReady(true); };
+    const refresh = () => {
+      const current=readProductSession();setSession(current);setReady(true);
+      if(current.subject?.id){
+        apiRequest<{items:ArchiveItem[]}>(`/api/v1/chronicle?profile_id=${current.subject.id}`).then(v=>setLatest(v.items[0])).catch(()=>setLatest(undefined));
+        apiRequest<{items:DivinationItem[]}>(`/api/v1/profiles/${current.subject.id}/divinations`).then(v=>setLatestTool(v.items[0])).catch(()=>setLatestTool(undefined));
+      }
+    };
     refresh();
     window.addEventListener("sanjiguan:session-change", refresh);
     return () => window.removeEventListener("sanjiguan:session-change", refresh);
   }, []);
 
-  const latest = session.chronicles[0];
   return <ProductShell title={session.subject ? `欢迎回来，${session.subject.name}` : "从一份如实记录开始"} eyebrow="首页 · 观三际">
     <section className="product-hero">
       <div><p className="product-kicker">过去 · 当下 · 未来</p><h2>先把事实安放好，再察其间的关系。</h2>
@@ -36,8 +46,8 @@ export default function ProductHome() {
 
     <section className="product-dashboard" aria-labelledby="recent-heading">
       <div className="product-section-head"><div><p className="eyebrow">最近状态</p><h2 id="recent-heading">从上次停下的地方继续</h2></div></div>
-      <article><small>最近记录</small><h3>{latest?.title || "尚无记录"}</h3><p>{latest ? `${latest.date} · ${latest.type}` : "写下梦境、愿向、事件或一段观照。"}</p><Link href="/chronicle">打开三际录</Link></article>
-      <article><small>最近工具</small><h3>{session.recentRun?.title || "尚未执行"}</h3><p>{session.recentRun ? "机械结果已经保存，可继续阅读。" : "易经、八字与紫微会标注机械或研究边界。"}</p><Link href={session.recentRun ? `/results/${session.recentRun.id}` : "/consult"}>{session.recentRun ? "继续阅读" : "查看合参"}</Link></article>
+      <article><small>最近记录</small><h3>{latest?.title || "尚无记录"}</h3><p>{latest ? `${latest.created_at.slice(0,10)} · 数据库三际录` : "写下梦境、愿向、事件或一段观照。"}</p><Link href="/chronicle">打开三际录</Link></article>
+      <article><small>最近工具</small><h3>{latestTool?"易经三钱机械结果":"尚未执行"}</h3><p>{latestTool ? "机械结果已经保存，可继续阅读。" : "易经、八字与紫微会标注机械或研究边界。"}</p><Link href={latestTool ? `/results/${latestTool.id}` : "/consult"}>{latestTool ? "继续阅读" : "查看合参"}</Link></article>
       <article><small>需要补充</small><h3>{session.subject?.timePrecision === "unknown" ? "出生时刻仍未知" : session.subject ? "可继续记录长期事实" : "主体基本资料"}</h3><p>未知值保持未知，不会自动填成中午、午夜或随机时辰。</p><Link href={session.subject ? "/records" : "/onboarding"}>去补充</Link></article>
     </section>
     {session.pendingTask && <section className="continue-task"><div><small>未完成任务</small><h2>{session.pendingTask.label}</h2></div><Link className="product-button" href={session.pendingTask.href}>继续上次任务</Link></section>}

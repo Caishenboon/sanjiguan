@@ -268,9 +268,23 @@ def create_journal(profile_id: UUID, payload: JournalCreate, response: Response,
             (jid, profile_id, data["entry_date"], _enc(data["free_text"]), _enc(data["tags"]),
              data["entry_type"], _enc(data["fields"]), data["candidate_evidence"]),
         )
+        archive_id = uuid7()
+        title = str(data["fields"].get("title") or data["entry_type"])
+        conn.execute(
+            """INSERT INTO sanji_archive_entries(
+              id,owner_id,profile_id,entry_type,title_ciphertext,original_record_refs,
+              status,candidate_summary,replay_available
+            ) VALUES(%s,%s,%s,'record',%s,%s,'recorded','[]'::jsonb,false)""",
+            (
+                archive_id, user["id"], profile_id, _enc(title),
+                json.dumps([{"record_id": str(jid), "record_table": "journal_entries"}]),
+            ),
+        )
         for eid in data["evidence_ids"]:
             conn.execute("INSERT INTO journal_evidence_links VALUES(%s,%s,now())", (jid, eid))
-        return _finish(conn, claim, key, 201, {"id": str(jid), "profile_id": str(profile_id), **data})
+        return _finish(conn, claim, key, 201, {
+            "id": str(jid), "archive_id": str(archive_id), "profile_id": str(profile_id), **data
+        })
 
 
 @router.get("/profiles/{profile_id}/journal")
@@ -477,7 +491,24 @@ def create_three_coin(profile_id: UUID, payload: ThreeCoinDivinationCreate, resp
               created_at,coin_values) VALUES(%s,%s,%s,%s,%s,%s,now(),%s)""",
               (uuid7(), did, toss["line_no"], toss["coin_faces"], line["sum"],
                toss["was_retossed"], toss["coin_values"]))
-        result = {"id": str(did), "profile_id": str(profile_id), "method_id": data["method_id"],
+        archive_id = uuid7()
+        conn.execute(
+            """INSERT INTO sanji_archive_entries(
+              id,owner_id,profile_id,entry_type,title_ciphertext,original_record_refs,
+              status,candidate_summary,engine_version,ruleset_version,output_hash,
+              trace_hash,replay_available,research_notice
+            ) VALUES(%s,%s,%s,'mechanical_result',%s,%s,'recorded','[]'::jsonb,
+              %s,%s,%s,%s,false,%s)""",
+            (
+                archive_id, user["id"], profile_id, _enc(data["question"]),
+                json.dumps([{"record_id": str(did), "record_table": "divination_sessions"}]),
+                engine_envelope["engine_version"], engine_envelope["ruleset_bundle_id"],
+                engine_envelope["output_hash"], engine_envelope["trace_hash"],
+                "机械结构；未生成卦义、评分、吉凶或应期。",
+            ),
+        )
+        result = {"id": str(did), "archive_id": str(archive_id),
+                  "profile_id": str(profile_id), "method_id": data["method_id"],
                   "method_version": data["method_version"], "tosses": tosses,
                   "coin_face_mapping_id": COIN_FACE_MAPPING_ID,
                   "coin_face_mapping_version": COIN_FACE_MAPPING_VERSION,
