@@ -260,7 +260,7 @@ def _collect_facts(conn, profile: dict) -> tuple[list[dict], list[dict]]:
     relations = conn.execute(
         """SELECT r.*,
           EXISTS(SELECT 1 FROM relationship_consents c WHERE c.subject_id=r.id
-            AND c.status='active' AND c.revoked_at IS NULL
+            AND c.consent_status='granted' AND c.withdrawn_at IS NULL
             AND (c.expires_at IS NULL OR c.expires_at>now())) AS consent_active
           FROM relationship_subjects r WHERE r.profile_id=%s ORDER BY r.id""",
         (profile_id,),
