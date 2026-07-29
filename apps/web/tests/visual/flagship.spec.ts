@@ -33,6 +33,9 @@ const pages = [
 
 for (const [name, path] of pages) {
   test(`${name} fixed visual`, async ({ page }) => {
+    if (path.startsWith("/admin/")) {
+      await page.setExtraHTTPHeaders({ "x-sanji-test-role": "research_admin" });
+    }
     await page.goto(path);
     await expect(page.locator("main")).toBeVisible();
     await requireDeterministicFonts(page);
@@ -44,6 +47,7 @@ for (const [name, path] of pages) {
 }
 
 test("research warning state remains readable", async ({ page }) => {
+  await page.setExtraHTTPHeaders({ "x-sanji-test-role": "research_admin" });
   await page.goto("/admin/research");
   await requireDeterministicFonts(page);
   await expect(page.locator("main")).toBeVisible();

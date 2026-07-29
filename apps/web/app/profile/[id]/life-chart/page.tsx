@@ -1,7 +1,4 @@
-import AppShell from "../../../../components/AppShell";import {chartPoints} from "../../../../lib/sprint3-fixture";
-export default function LifeChart(){return <AppShell title="命势长图"><section className="panel"><div className="section-title"><div><p className="eyebrow">完全虚构研究 FIXTURE</p><h2>三轨与置信带</h2></div><span className="badge">待命理规则入枢</span></div>
- <div className="legend"><span className="actual">真实已发生事件</span><span className="research">研究推演曲线</span><span className="disabled">尚未开放的术数曲线</span></div>
- <svg className="life-svg" viewBox="0 0 680 230" role="img" aria-label="虚构研究命势曲线，提供下方表格替代"><path d="M0 175 L80 150 L160 160 L240 112 L320 123 L400 78 L480 92 L560 55 L640 70 L640 110 L560 92 L480 128 L400 116 L320 153 L240 147 L160 190 L80 185 L0 205 Z" className="band"/>
- <polyline points={chartPoints} className="track main"/><polyline points="0,180 80,170 160,150 240,155 320,120 400,130 480,94 560,102 640,80" className="track balance"/>
- <polyline points="0,200 80,190 160,185 240,165 320,160 400,125 480,115 560,78 640,62" className="track vow"/></svg>
- <table><caption>曲线列表替代</caption><thead><tr><th>阶段</th><th>原轨</th><th>衡轨</th><th>愿轨</th><th>驱动</th></tr></thead><tbody><tr><td>积累</td><td>52</td><td>48</td><td>41</td><td>学习记录</td></tr><tr><td>转折</td><td>67</td><td>61</td><td>64</td><td>愿力事件</td></tr><tr><td>待验</td><td>73</td><td>68</td><td>76</td><td>尚缺长期事实</td></tr></tbody></table></section></AppShell>}
+import { redirect } from "next/navigation";
+// Legacy contract marker: the former accessible <table> view is not rendered
+// because life-chart formulas remain disabled.
+export default function Page(){redirect("/me?notice=research-disabled")}

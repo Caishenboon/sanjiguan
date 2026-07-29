@@ -14,3 +14,9 @@
 - 不得通过提高像素差异阈值、删除用例或跳过检查来取得绿色结果。
 
 完整流程见 `docs/testing/visual-regression.md`。
+
+普通用户页面必须遵守五入口产品主干、白话字段词典和渐进披露边界。不得把
+Signal、Mapping、Hash 或合成六象候选放到普通页面首屏，也不得在前端复制
+排盘或评分逻辑。路由与旅程说明见
+`docs/product/product-spine-user-journey-v1.md`；提交前运行
+`python scripts/validate_product_spine_v1.py`。

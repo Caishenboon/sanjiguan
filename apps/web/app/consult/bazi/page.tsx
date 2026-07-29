@@ -1,0 +1,3 @@
+import ProductShell, { PageState, TechnicalDetails } from "../../../components/ProductShell";
+import Link from "next/link";
+export default function Page(){return <ProductShell title="八字机械排盘" eyebrow="合参 · 八字" status="研究可用"><PageState kind="insufficient" title="请先确认出生资料"><p>可在主体资料中保留未知时刻。系统会传播候选区间，不会补造时柱。</p><Link className="product-button" href="/onboarding">检查主体资料</Link></PageState><section className="scope-card"><h2>当前只提供机械结构</h2><ul><li>四柱候选与多 Profile 差异</li><li>历史法定时间、平太阳时与视太阳时校正链</li><li>跨时辰、日界或节气边界提示</li></ul><p>不提供旺衰、喜忌、完整大运解释、最终吉凶或应期。</p></section><TechnicalDetails><p>实际执行后才显示 Engine、Ruleset、Output Hash、Trace Hash 与 Replay 参数。</p></TechnicalDetails></ProductShell>}

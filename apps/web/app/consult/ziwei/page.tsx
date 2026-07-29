@@ -1,0 +1,3 @@
+import ProductShell, { PageState, TechnicalDetails } from "../../../components/ProductShell";
+import Link from "next/link";
+export default function Page(){return <ProductShell title="紫微机械结构" eyebrow="合参 · 紫微" status="研究可用"><PageState kind="insufficient" title="需要经确认的出生资料"><p>当前 MVP 仅支持受限三合基础排盘结构。四化、闰月与子时规则继续受审校门禁约束。</p><Link className="product-button" href="/onboarding">检查主体资料</Link></PageState><section className="scope-card"><h2>当前可阅读范围</h2><ul><li>命宫、身宫与十二宫位</li><li>已支持主星及获批准的辅星</li><li>当前冻结的机械周期结构</li></ul><p>不补充未经审查的星曜解释、宿世映射或最终断语。</p></section><TechnicalDetails><p>实际执行后才显示 Profile、Engine、Ruleset、Hash 与 Trace。</p></TechnicalDetails></ProductShell>}

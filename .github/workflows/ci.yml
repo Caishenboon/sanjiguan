@@ -169,6 +169,7 @@ jobs:
           python scripts/validate_ziwei_oracle_ui.py
           python scripts/validate_visual_regression.py
           python scripts/validate_liuxiang_research_v1.py
+          python scripts/validate_product_spine_v1.py
           python scripts/research_data.py validate
           python scripts/check_product_language.py
           python scripts/check_secrets.py
