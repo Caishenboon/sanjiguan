@@ -48,9 +48,17 @@ CREATE TABLE liuxiang_user_executions (
   output_hash text NOT NULL CHECK (output_hash ~ '^sha256:[a-f0-9]{64}$'),
   trace_hash text NOT NULL CHECK (trace_hash ~ '^sha256:[a-f0-9]{64}$'),
   replay_manifest jsonb NOT NULL,
+  replay_available boolean NOT NULL DEFAULT true,
+  replay_unavailable_reason text,
+  snapshot_purged_at timestamptz,
   status text NOT NULL CHECK (status IN ('decisive','provisional','contested','insufficient')),
   research_notice text NOT NULL,
-  created_at timestamptz NOT NULL DEFAULT now()
+  created_at timestamptz NOT NULL DEFAULT now(),
+  CHECK (
+    (replay_available AND replay_unavailable_reason IS NULL AND snapshot_purged_at IS NULL)
+    OR
+    (NOT replay_available AND replay_unavailable_reason IS NOT NULL AND snapshot_purged_at IS NOT NULL)
+  )
 );
 
 CREATE TABLE liuxiang_execution_evidence_refs (

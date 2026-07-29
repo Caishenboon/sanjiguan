@@ -79,3 +79,18 @@ unconfirmed.
 ```text
 python -m unittest tests.test_sanji_engine_liuxiang_evidence_v1 -v
 ```
+
+## Sensitive snapshot erasure
+
+The immutable execution snapshot contains normalized facts and record
+references, never journal, dream, or relationship narrative. Withdrawal keeps
+the historical encrypted snapshot available for original-version replay while
+excluding that record from every new run.
+
+An owner may separately request irreversible erasure of an execution's
+canonical input snapshot. The API replaces the encrypted snapshot with an empty
+encrypted object, records the purge time and reason, disables replay on both the
+execution and its archive entry, and returns `replay_unavailable` for later
+replay attempts. It never reconstructs erased input from current mutable
+records. Comparisons that require an erased snapshot are also rejected rather
+than fabricated.

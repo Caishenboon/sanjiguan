@@ -575,6 +575,11 @@ def replay_execution(
         if isinstance(claim, dict):
             return claim
         row, request, original = _stored(conn, execution_id)
+        if not row["replay_available"]:
+            raise HTTPException(409, {
+                "code": "replay_unavailable",
+                "reason": row["replay_unavailable_reason"],
+            })
         reproduced = replay(row["replay_manifest"], request)
         matched = (
             reproduced["output_hash"] == original["output_hash"]
@@ -589,6 +594,48 @@ def replay_execution(
         response = {"execution_id": str(execution_id), "matched": matched,
                     "output_hash": reproduced["output_hash"], "trace_hash": reproduced["trace_hash"]}
         pg.complete(conn, claim, key, 200, response)
+        return response
+
+
+@router.delete("/liuxiang/executions/{execution_id}/input-snapshot", status_code=202)
+def purge_execution_input_snapshot(
+    execution_id: UUID,
+    key: str = Header(alias="Idempotency-Key"),
+    token: str | None = Cookie(None, alias="__Host-session"),
+):
+    """Irreversibly remove the canonical private input facts used for replay."""
+    pg, user = _pg(), _user(token)
+    with pg.pool.connection() as conn, conn.transaction():
+        pg.runtime(conn, user)
+        claim = pg.idempotency(
+            conn, user["id"], "DELETE",
+            "/api/v1/liuxiang/executions/{id}/input-snapshot",
+            key, pg.fingerprint({"execution_id": str(execution_id)}),
+        )
+        if isinstance(claim, dict):
+            return claim
+        row, _, _ = _stored(conn, execution_id)
+        if row["replay_available"]:
+            conn.execute(
+                """UPDATE liuxiang_user_executions
+                   SET input_snapshot_encrypted=%s,replay_available=false,
+                       replay_unavailable_reason='input_snapshot_erased_by_user',
+                       snapshot_purged_at=now()
+                   WHERE id=%s""",
+                (_enc({}), execution_id),
+            )
+            conn.execute(
+                """UPDATE sanji_archive_entries
+                   SET replay_available=false WHERE execution_id=%s""",
+                (execution_id,),
+            )
+        response = {
+            "execution_id": str(execution_id),
+            "snapshot_erased": True,
+            "replay_available": False,
+            "replay_status": "replay_unavailable",
+        }
+        pg.complete(conn, claim, key, 202, response)
         return response
 
 
@@ -676,6 +723,11 @@ def compare_executions(
         right, right_request, _ = _stored(conn, right_id)
         if left["profile_id"] != right["profile_id"]:
             raise HTTPException(409, "executions_must_share_profile")
+        if not left["replay_available"] or not right["replay_available"]:
+            raise HTTPException(409, {
+                "code": "replay_unavailable",
+                "reason": "comparison_input_snapshot_unavailable",
+            })
         summary = _comparison(left, right, left_request, right_request)
         comparison_hash = _hash(summary)
         comparison_id = uuid7()

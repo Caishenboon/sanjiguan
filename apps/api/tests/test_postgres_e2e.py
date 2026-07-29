@@ -225,6 +225,18 @@ class PostgreSQLHttpE2E(unittest.TestCase):
         archive = self.client.get(f"/api/v1/chronicle?profile_id={profile_id}")
         self.assertEqual(200, archive.status_code, archive.text)
         self.assertGreaterEqual(len(archive.json()["items"]), 5)
+        purged = self.client.delete(
+            f"/api/v1/liuxiang/executions/{execution_id}/input-snapshot",
+            headers={"Idempotency-Key": "e2e-purge-01"},
+        )
+        self.assertEqual(202, purged.status_code, purged.text)
+        self.assertEqual("replay_unavailable", purged.json()["replay_status"])
+        unavailable = self.client.post(
+            f"/api/v1/liuxiang/executions/{execution_id}/replay",
+            headers={"Idempotency-Key": "e2e-replay-purged-01"},
+        )
+        self.assertEqual(409, unavailable.status_code, unavailable.text)
+        self.assertEqual("replay_unavailable", unavailable.json()["detail"]["code"])
 
     def test_owner_only_research_preview_pipeline_is_replayable(self):
         self.login()

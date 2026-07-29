@@ -360,6 +360,70 @@
         }
       }
     },
+    "/api/v1/liuxiang/executions/{execution_id}/input-snapshot": {
+      "delete": {
+        "summary": "Purge Execution Input Snapshot",
+        "description": "Irreversibly remove the canonical private input facts used for replay.",
+        "operationId": "purge_execution_input_snapshot_api_v1_liuxiang_executions__execution_id__input_snapshot_delete",
+        "parameters": [
+          {
+            "name": "execution_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Execution Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "name": "__Host-session",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "  Host-Session"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/liuxiang/executions/{execution_id}/reanalyze": {
       "post": {
         "summary": "Reanalyze",
