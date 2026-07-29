@@ -1,0 +1,75 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
+
+const NAV = [
+  { label: "首页", subtitle: "观三际", href: "/" },
+  { label: "记录", subtitle: "录一念", href: "/records" },
+  { label: "合参", subtitle: "察诸象", href: "/consult" },
+  { label: "三际录", subtitle: "阅往迹", href: "/chronicle" },
+  { label: "我的", subtitle: "主体与设置", href: "/me" },
+] as const;
+
+export default function ProductShell({
+  title,
+  eyebrow,
+  children,
+  status = "个人空间",
+}: {
+  title: string;
+  eyebrow?: string;
+  children: ReactNode;
+  status?: string;
+}) {
+  const pathname = usePathname();
+  return (
+    <div className="product-shell">
+      <aside className="product-sidebar">
+        <Link href="/" className="product-brand"><strong>三际观</strong><span>大屏观三际，小屏录一念</span></Link>
+        <nav aria-label="普通用户主导航">
+          {NAV.map((item) => {
+            const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+            return <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined}>
+              <b>{item.label}</b><small>{item.subtitle}</small>
+            </Link>;
+          })}
+        </nav>
+        <p className="product-boundary">机械排盘与研究状态会如实标注。未审校规则不会生成术数结论。</p>
+      </aside>
+      <div className="product-main">
+        <header className="product-topbar">
+          <div><p className="eyebrow">{eyebrow || "三际观"}</p><h1>{title}</h1></div>
+          <span className="status-dot">{status}</span>
+        </header>
+        <main id="main-content" className="product-content">{children}</main>
+      </div>
+      <nav className="product-mobile-nav" aria-label="普通用户手机主导航">
+        {NAV.map((item) => <Link key={item.href} href={item.href} aria-current={(item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)) ? "page" : undefined}>{item.label}</Link>)}
+      </nav>
+    </div>
+  );
+}
+
+export function PageState({
+  kind,
+  title,
+  children,
+  action,
+}: {
+  kind: "empty" | "loading" | "success" | "error" | "insufficient" | "forbidden" | "withdrawn" | "disabled";
+  title: string;
+  children: ReactNode;
+  action?: ReactNode;
+}) {
+  const role = kind === "error" ? "alert" : "status";
+  return <section className={`product-state product-state--${kind}`} role={role} aria-live="polite">
+    <span aria-hidden="true">{({empty:"○",loading:"…",success:"✓",error:"!",insufficient:"△",forbidden:"⊘",withdrawn:"—",disabled:"◇"})[kind]}</span>
+    <div><h2>{title}</h2><div>{children}</div>{action && <div className="state-action">{action}</div>}</div>
+  </section>;
+}
+
+export function TechnicalDetails({ children }: { children: ReactNode }) {
+  return <details className="technical-details"><summary>研究详情</summary><p className="boundary">以下内容用于核验与回放，普通阅读无需理解。</p>{children}</details>;
+}

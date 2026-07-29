@@ -5,8 +5,8 @@
       "startServerReadyPattern": "Ready|ready",
       "url": [
         "http://127.0.0.1:3000/",
-        "http://127.0.0.1:3000/admin/research",
-        "http://127.0.0.1:3000/admin/research/ziwei"
+        "http://127.0.0.1:3000/records",
+        "http://127.0.0.1:3000/consult"
       ],
       "numberOfRuns": 3,
       "settings": {
