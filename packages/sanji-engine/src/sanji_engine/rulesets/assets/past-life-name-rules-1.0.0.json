@@ -1,0 +1,68 @@
+{
+  "schema_version": "past-life-name-rules/1.0.0",
+  "naming_ruleset_id": "past-life-name-rules",
+  "version": "1.0.0",
+  "tradition_scope": "sanji_original",
+  "activation": "research_active",
+  "review_status": "UNCONFIRMED",
+  "production_activatable": false,
+  "profiles": {
+    "zh_historical": {
+      "surnames": [
+        "沈",
+        "顾",
+        "谢",
+        "陆",
+        "程",
+        "周",
+        "许",
+        "梁",
+        "杜",
+        "苏",
+        "林",
+        "叶"
+      ],
+      "given_names": [
+        "怀安",
+        "清河",
+        "昭宁",
+        "知远",
+        "守一",
+        "景和",
+        "行简",
+        "若衡",
+        "静川",
+        "明澄",
+        "砚秋",
+        "允成"
+      ]
+    },
+    "generic": {
+      "surnames": [
+        "安",
+        "和",
+        "宁",
+        "清",
+        "明",
+        "远"
+      ],
+      "given_names": [
+        "川",
+        "宁",
+        "原",
+        "禾",
+        "舟",
+        "衡",
+        "澄",
+        "遥"
+      ]
+    }
+  },
+  "disabled_combinations": [
+    "安安",
+    "宁宁",
+    "清清",
+    "明明"
+  ],
+  "content_hash": "sha256:25b3d091562fdf58d88ea3c49237d09d8fbde6d8240d086a9c547d39bb67ef80"
+}

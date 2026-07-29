@@ -1,0 +1,28 @@
+{
+  "schema_version": "ruleset-bundle/1.0.0",
+  "bundle_id": "topic-research-v1.0.0",
+  "bundle_version": "1.0.0",
+  "status": "research_active",
+  "system_class": "sanji_original_research",
+  "review_status": "UNCONFIRMED",
+  "license_status": "UNDECIDED",
+  "production_activatable": false,
+  "topic_capabilities": {
+    "sushe": {"status": "research_active", "review_status": "UNCONFIRMED", "enabled": true, "production_activatable": false},
+    "zhongyin_life": {"status": "research_active", "review_status": "UNCONFIRMED", "enabled": true, "production_activatable": false},
+    "zhongyin_deceased": {"status": "research_active", "review_status": "UNCONFIRMED", "enabled": true, "production_activatable": false},
+    "yuanqi": {"status": "research_active", "review_status": "UNCONFIRMED", "enabled": true, "production_activatable": false}
+  },
+  "modules": {
+    "calendar": {"method_id": "CALENDAR.MIGRATION.BASELINE.V1", "status": "research_active", "enabled": false},
+    "signals": {"method_id": "SIGNALS.TOPIC.EVIDENCE_GRAPH.RESEARCH.V1", "status": "research_active", "enabled": true, "schema_version": "topic-evidence-graph/1.0.0", "production_activatable": false},
+    "inference": {"method_id": "INFERENCE.TOPIC.SANJI_ORIGINAL.RESEARCH.V1", "status": "research_active", "enabled": true, "ruleset_version": "topic-research-rules/1.0.0", "production_activatable": false},
+    "bazi": {"method_id": "BAZI.INTERPRETIVE.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "ziwei": {"method_id": "ZIWEI.INTERPRETIVE.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "yijing": {"method_id": "YIJING.INTERPRETIVE.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "past-life": {"method_id": "PAST_LIFE.TOPIC.RESEARCH.V1", "status": "research_active", "enabled": false, "review_status": "UNCONFIRMED", "production_activatable": false},
+    "bardo": {"method_id": "BARDO.TOPIC.RESEARCH.V1", "status": "research_active", "enabled": false, "review_status": "UNCONFIRMED", "production_activatable": false},
+    "relationship": {"method_id": "RELATIONSHIP.TOPIC.RESEARCH.V1", "status": "research_active", "enabled": false, "review_status": "UNCONFIRMED", "production_activatable": false},
+    "life-chart": {"method_id": "LIFE_CHART.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"}
+  }
+}

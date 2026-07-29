@@ -283,6 +283,49 @@ class PostgreSQLIntegrationTests(unittest.TestCase):
                 "SELECT id FROM liuxiang_user_executions WHERE id=%s", (run_id,)
             ).fetchone())
 
+    def test_topic_execution_tables_force_rls_and_strictly_isolate_members(self):
+        tables = (
+            "topic_ruleset_versions", "topic_executions",
+            "topic_execution_evidence_refs", "topic_replay_records",
+            "topic_execution_comparisons",
+        )
+        rows = self.conn.execute(
+            """SELECT relname,relforcerowsecurity FROM pg_class
+               WHERE relname=ANY(%s) ORDER BY relname""", (list(tables),)
+        ).fetchall()
+        self.assertEqual(set(tables), {row[0] for row in rows})
+        self.assertTrue(all(row[1] for row in rows))
+        digest = f"sha256:{'e' * 64}"
+        run_id = uuid4()
+        insert = """INSERT INTO topic_executions(
+          id,owner_id,profile_id,topic_type,execution_kind,input_snapshot_encrypted,
+          graph_snapshot_encrypted,result_encrypted,candidate_summary,engine_version,
+          ruleset_bundle_id,topic_ruleset_version,topic_ruleset_hash,
+          naming_ruleset_version,naming_ruleset_hash,evidence_policy_version,
+          input_hash,graph_hash,output_hash,trace_hash,replay_manifest,status,research_notice
+        ) VALUES(%s,%s,%s,'sushe','initial',%s,%s,%s,'[]','0.1.0',
+          'topic-research-v1.0.0','topic-research-rules/1.0.0',%s,
+          'past-life-name-rules/1.0.0',%s,'liuxiang-user-evidence-policy/1.0.0',
+          %s,%s,%s,%s,'{}','insufficient','research only')"""
+        with self.runtime(self.member_a) as member:
+            member.execute(
+                insert,
+                (run_id, self.member_a, self.profile_a, b"encrypted", b"encrypted",
+                 b"encrypted", digest, digest, digest, digest, digest, digest),
+            )
+            member.commit()
+            self.assertEqual(run_id, member.execute(
+                "SELECT id FROM topic_executions WHERE id=%s", (run_id,)
+            ).fetchone()[0])
+        with self.runtime(self.member_b) as other:
+            self.assertIsNone(other.execute(
+                "SELECT id FROM topic_executions WHERE id=%s", (run_id,)
+            ).fetchone())
+        with self.runtime(self.owner, "owner") as owner:
+            self.assertIsNone(owner.execute(
+                "SELECT id FROM topic_executions WHERE id=%s", (run_id,)
+            ).fetchone())
+
     def test_migration_drift_is_rejected(self):
         version = "0001_sprint0_baseline.sql"
         checksum = self.conn.execute(

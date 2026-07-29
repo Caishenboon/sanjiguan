@@ -751,7 +751,7 @@ def list_archive(
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
         rows = conn.execute(
-            """SELECT id,profile_id,execution_id,entry_type,status,candidate_summary,
+            """SELECT id,profile_id,execution_id,topic_execution_id,entry_type,status,candidate_summary,
                replay_available,created_at,title_ciphertext,withdrawn_at
                FROM sanji_archive_entries
                WHERE (%s::uuid IS NULL OR profile_id=%s)
@@ -761,6 +761,9 @@ def list_archive(
         return {"items": [{
             "id": str(row["id"]), "profile_id": str(row["profile_id"]),
             "execution_id": str(row["execution_id"]) if row["execution_id"] else None,
+            "topic_execution_id": (
+                str(row["topic_execution_id"]) if row["topic_execution_id"] else None
+            ),
             "entry_type": row["entry_type"], "title": _dec(row["title_ciphertext"], ""),
             "status": row["status"], "candidate_summary": row["candidate_summary"],
             "replay_available": row["replay_available"], "created_at": row["created_at"],
@@ -779,6 +782,9 @@ def get_archive(entry_id: UUID, token: str | None = Cookie(None, alias="__Host-s
         return {
             "id": str(row["id"]), "profile_id": str(row["profile_id"]),
             "execution_id": str(row["execution_id"]) if row["execution_id"] else None,
+            "topic_execution_id": (
+                str(row["topic_execution_id"]) if row["topic_execution_id"] else None
+            ),
             "entry_type": row["entry_type"], "title": _dec(row["title_ciphertext"], ""),
             "note": _dec(row["note_ciphertext"], ""), "status": row["status"],
             "candidate_summary": row["candidate_summary"], "engine_version": row["engine_version"],

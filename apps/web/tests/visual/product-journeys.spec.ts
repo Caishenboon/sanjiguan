@@ -144,3 +144,36 @@ test("legacy profile routes redirect to the product spine", async ({ page }) => 
   await page.goto("/profile/demo/analysis");
   await expect(page).toHaveURL(/\/consult\/liuxiang\?subject=demo$/);
 });
+
+test("topic journey: low-confidence generated identity stays visible and qualified", async ({ page }) => {
+  await seedSubject(page);
+  await page.route(`**/api/v1/profiles/${profileId}/topics/sushe/evidence`, async (route) =>
+    route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({items:[]})})
+  );
+  const ep = (value: unknown, epistemic_status="rule_inferred", confidence_bp=1800) =>
+    ({value,epistemic_status,confidence_bp});
+  await page.route(`**/api/v1/profiles/${profileId}/topics/sushe/executions`, async (route) =>
+    route.fulfill({status:201,contentType:"application/json",body:JSON.stringify({
+      id:"topic-synthetic",archive_id:"topic-archive",topic_type:"sushe",
+      status:"insufficient",strength_bp:0,confidence_bp:1800,
+      graph_hash:"sha256:synthetic-graph",output_hash:"sha256:synthetic-output",
+      trace_hash:"sha256:synthetic-trace",research_notice:"三际观原创研究",
+      candidates:[{
+        candidate_id:"sushe-1",rank:1,status:"insufficient",strength_bp:0,confidence_bp:1800,
+        name:ep("沈怀安","generated_identity"),active_era:ep("明末至清初"),
+        region_candidates:ep(["江南水运区域"]),identity:ep("地方账房"),
+        profession:ep("文书人员"),key_life_events:ep("迁居"),
+        death_candidates:[{rank:1,cause:ep("疾病")}],
+        reincarnation:{main_value:ep(7),range:ep([6,9])},
+        causal_debts:[{debt_id:"d1",type:ep("未竟之诺"),confidence_bp:1200}],
+        supporting_record_ids:[],counterevidence_record_ids:[],conflicts:[],missing_facts:["minimum_independent_records"],
+      }],
+    })})
+  );
+  await page.goto("/consult/sushe");
+  await page.getByRole("button",{name:"开始专题推演"}).click();
+  await expect(page.getByRole("heading",{name:"沈怀安【可能·资料不足】"})).toBeVisible();
+  await expect(page.getByText("历史人物", {exact:false})).toHaveCount(0);
+  await page.getByText("研究详情", {exact:true}).click();
+  await expect(page.getByText("sha256:synthetic-output")).toBeVisible();
+});

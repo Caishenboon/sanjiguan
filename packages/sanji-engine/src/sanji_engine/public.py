@@ -30,6 +30,12 @@ from .signals.evidence_v1 import (
     SIGNAL_METHOD_ID as LIUXIANG_EVIDENCE_SIGNAL_METHOD_ID,
     run_liuxiang_evidence_v1,
 )
+from .topics.v1 import (
+    INFERENCE_METHOD_ID as TOPIC_INFERENCE_METHOD_ID,
+    OPERATION as TOPIC_OPERATION,
+    SIGNAL_METHOD_ID as TOPIC_SIGNAL_METHOD_ID,
+    run_topic_research_v1,
+)
 from .errors import (
     EngineError,
     INPUT_INVALID,
@@ -233,6 +239,7 @@ def validate_request(request: dict) -> dict:
         expected_operations = {
             "liuxiang-research-v1.0.0": "run_liuxiang_research_v1",
             "liuxiang-evidence-research-v1.0.0": LIUXIANG_EVIDENCE_OPERATION,
+            "topic-research-v1.0.0": TOPIC_OPERATION,
         }
         expected_operation = expected_operations.get(bundle["bundle_id"])
         liuxiang_operations = set(expected_operations.values())
@@ -406,6 +413,66 @@ def _restore_research_case(snapshot: dict) -> dict:
 
 def _execute_research(snapshot: dict) -> tuple[dict[str, dict], list[dict], dict]:
     operation = snapshot.get("operation")
+    if operation == TOPIC_OPERATION:
+        result, trace = run_topic_research_v1(snapshot)
+        graph_projection = {
+            "schema_version": result["graph"]["schema_version"],
+            "topic_type": result["topic_type"],
+            "graph": deepcopy(result["graph"]),
+            "deduplication": deepcopy(result["deduplication"]),
+            "topic_ruleset_version": result["topic_ruleset_version"],
+            "topic_ruleset_hash": result["topic_ruleset_hash"],
+        }
+        inference_projection = {
+            key: deepcopy(result[key])
+            for key in (
+                "schema_version", "tradition_scope", "activation", "review_status",
+                "production_activatable", "engine_version", "topic_type",
+                "epistemic_model_version", "topic_ruleset_version",
+                "topic_ruleset_hash", "naming_ruleset_version",
+                "naming_ruleset_hash", "evidence_policy_version",
+                "canonical_input_hash", "candidates", "supporting_record_ids",
+                "counterevidence_record_ids", "conflicts", "missing_facts",
+                "strength_bp", "confidence_bp", "status", "trace_ref",
+                "no_llm_or_oracle_input", "historical_claim", "result_hash",
+            )
+        }
+        definitions = {
+            "signals": (TOPIC_SIGNAL_METHOD_ID, graph_projection),
+            "inference": (TOPIC_INFERENCE_METHOD_ID, inference_projection),
+        }
+        module_results = {}
+        for module_id, (method_id, projection) in definitions.items():
+            module = {
+                "module_id": module_id,
+                "module_version": "1.0.0",
+                "method_id": method_id,
+                "method_status": "research_active",
+                "tradition_scope": "sanji_original",
+                "review_status": "UNCONFIRMED",
+                "production_activatable": False,
+                "result": projection,
+                "trace_step_ids": [
+                    step["step_id"] for step in trace if step["module_id"] == module_id
+                ],
+                "rule_refs": [
+                    result["topic_ruleset_version"],
+                    result["naming_ruleset_version"],
+                ],
+                "source_refs": ["SANJI_ORIGINAL_RESEARCH"],
+                "uncertainties": [
+                    "TOPIC_RULES_UNCONFIRMED",
+                    "NOT_HISTORICAL_OR_METAPHYSICAL_FACT",
+                ],
+                "sensitivity_flags": [],
+            }
+            module_results[module_id] = {**module, "content_hash": content_hash(module)}
+        return module_results, trace, {
+            "topic_result_hash": result["result_hash"],
+            "topic_graph_hash": result["graph"]["graph_hash"],
+            "topic_input_hash": result["canonical_input_hash"],
+            "naming_ruleset_hash": result["naming_ruleset_hash"],
+        }
     if operation in {"run_liuxiang_research_v1", LIUXIANG_EVIDENCE_OPERATION}:
         is_user_evidence = operation == LIUXIANG_EVIDENCE_OPERATION
         result, trace = (
@@ -618,6 +685,17 @@ def execute(request: dict) -> dict:
         excluded = snapshot.get("excluded_record_ids", [])
         if isinstance(excluded, list):
             snapshot["excluded_record_ids"] = sorted(set(excluded))
+    elif bundle["bundle_id"] == "topic-research-v1.0.0":
+        snapshot = validated["input_snapshot"]
+        facts = snapshot.get("facts", [])
+        if isinstance(facts, list):
+            snapshot["facts"] = sorted(
+                facts,
+                key=lambda item: (
+                    str(item.get("record_id", "")) if isinstance(item, dict) else "",
+                    content_hash(item),
+                ),
+            )
     input_projection = deepcopy(validated)
     input_projection.pop("run_id", None)
     # Execution and replay are transport intents, not calculation inputs. Excluding
