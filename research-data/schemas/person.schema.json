@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.invalid/schemas/research-person/1.0.0",
+  "type": "object",
+  "required": [
+    "person_id", "source_person_id", "original_person_identifier",
+    "normalized_name", "aliases", "birth_date", "birth_time", "time_precision",
+    "birth_place_raw", "normalized_place", "latitude", "longitude",
+    "timezone_id", "utc_offset", "dst_status", "provider_rating",
+    "sanji_verification_status", "source_revision", "provenance",
+    "shared_source_group"
+  ]
+}

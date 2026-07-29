@@ -1,0 +1,38 @@
+{
+  "schema_version": "research-dataset-manifest/1.0.0",
+  "dataset_id": "vedastro-org/15000-Famous-People-Birth-Date-Location",
+  "official_provider": "VedAstro",
+  "platform": "Hugging Face Datasets",
+  "repository_url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
+  "pinned_revision": "c8645485d498011d77c6c762127852ccbad4a7d0",
+  "downloaded_at": "2026-07-28T00:00:00Z",
+  "cache_key": "vedastro-famous-births",
+  "files": [
+    {
+      "path": "PersonList-15k.csv",
+      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location/resolve/c8645485d498011d77c6c762127852ccbad4a7d0/PersonList-15k.csv",
+      "sha256": "ca28a3fea1250b2ea01eb06a54b4921ec0bf790fdc14c5c561006f1c592c634b",
+      "bytes": 3617903
+    }
+  ],
+  "declared_license": "MIT (Hugging Face dataset metadata)",
+  "license_file_location": null,
+  "license_review_status": "conditional_download_only",
+  "license_review_note": "Pinned repository exposes an MIT metadata tag but no standalone LICENSE file. Local research processing is allowed conditionally; raw redistribution remains disabled pending legal review.",
+  "record_count": 15807,
+  "fields": ["RowKey", "BirthTime", "Gender", "Name", "Notes"],
+  "allowed_uses": ["local_quality_audit", "retrospective_observational_candidate"],
+  "raw_data_committable": false,
+  "fixture_committable": false,
+  "public_redistribution_allowed": false,
+  "sensitivity": "public_person_research_moderate",
+  "provider_credibility": "provider_claim_only",
+  "sanji_independent_verification": "not_verified",
+  "shared_source_group": "vedastro_org",
+  "known_limitations": [
+    "All rows contain a clock time but no IANA timezone identifier or explicit DST field.",
+    "Rodden ratings are provider-supplied claims and are not independently verified by Sanjiguan.",
+    "Names are not unique and must not be used alone for entity merging."
+  ],
+  "connector_enabled": true
+}

@@ -12,9 +12,9 @@ export function SanjiHeader() {
 export function ResearchNavigation() {
   return <nav className="sanji-nav" aria-label="研究导航"><a href="/admin/research">总览</a><a href="/admin/research/three-coin">三钱</a><a href="/admin/research/bazi-methods">八字</a><a href="/admin/research/ziwei">紫微</a><a href="/admin/research/oracles">Oracle</a></nav>;
 }
-export function VerdictStatusBadge({ status }: { status: "decisive"|"contested"|"insufficient" }) {
-  const text = {decisive:"成断",contested:"两象相争",insufficient:"不成断"}[status];
-  return <span className={`sanji-badge sanji-badge--${status==="decisive"?"gold":status==="contested"?"violet":"risk"}`}>{text}</span>;
+export function VerdictStatusBadge({ status }: { status: "decisive"|"provisional"|"contested"|"insufficient" }) {
+  const text = {decisive:"成断",provisional:"待验",contested:"两象相争",insufficient:"不成断"}[status];
+  return <span className={`sanji-badge sanji-badge--${status==="decisive"?"gold":status==="insufficient"?"risk":"violet"}`}>{text}</span>;
 }
 export function RulesetBadge({ children="research_active" }: PropsWithChildren) { return <span className="sanji-badge sanji-badge--jade"><ShieldCheck size={13}/>{children}</span>; }
 export function ProfileBadge({ children }: PropsWithChildren) { return <span className="sanji-badge sanji-badge--violet">{children}</span>; }

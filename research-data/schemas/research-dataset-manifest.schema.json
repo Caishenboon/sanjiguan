@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.invalid/schemas/research-dataset-manifest/1.0.0",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version", "dataset_id", "official_provider", "platform",
+    "pinned_revision", "files", "declared_license", "license_review_status",
+    "record_count", "fields", "allowed_uses", "raw_data_committable",
+    "fixture_committable", "public_redistribution_allowed", "sensitivity",
+    "provider_credibility", "sanji_independent_verification",
+    "shared_source_group", "known_limitations", "connector_enabled"
+  ],
+  "properties": {
+    "schema_version": {"const": "research-dataset-manifest/1.0.0"},
+    "pinned_revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "license_review_status": {
+      "enum": ["approved", "conditional_download_only", "license_review_required", "rejected"]
+    },
+    "connector_enabled": {"type": "boolean"},
+    "raw_data_committable": {"type": "boolean"},
+    "fixture_committable": {"type": "boolean"},
+    "public_redistribution_allowed": {"type": "boolean"}
+  }
+}

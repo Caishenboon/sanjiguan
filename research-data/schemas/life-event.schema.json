@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.invalid/schemas/research-life-event/1.0.0",
+  "type": "object",
+  "required": [
+    "event_id", "person_id", "event_type", "start_date_raw", "end_date_raw",
+    "start_date", "end_date", "date_precision", "end_date_precision",
+    "related_person_raw", "outcome", "source", "provider_credibility",
+    "sanji_verification_status", "provenance", "shared_source_group"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": "liuxiang-inference-policy/1.0.0",
+  "ruleset_version": "liuxiang-inference/1.0.0",
+  "tradition_scope": "sanji_original",
+  "review_status": "UNCONFIRMED",
+  "activation": "research_active",
+  "production_activatable": false,
+  "numeric_policy": {
+    "unit": "basis_points",
+    "rounding": "round_half_even",
+    "binary_float_forbidden": true
+  },
+  "shared_source_policy": "strongest_per_dimension_direction_shared_source",
+  "independence_step_bp": 2500,
+  "conflict_penalty_multiplier_bp": 5000,
+  "confidence_weights": {
+    "reliability": 25,
+    "independence": 20,
+    "completeness": 25,
+    "profile_consistency": 10,
+    "boundary_stability": 10,
+    "data_quality": 10
+  },
+  "status_thresholds": {
+    "minimum_completeness_bp": 4000,
+    "contested_gap_bp": 800,
+    "contested_second_strength_bp": 2500,
+    "decisive_strength_bp": 6500,
+    "decisive_confidence_bp": 7000,
+    "decisive_independent_count": 2,
+    "decisive_gap_bp": 1200
+  },
+  "stable_sort": [
+    "calibrated_strength_bp desc",
+    "confidence_bp desc",
+    "stable_tie_break_key asc",
+    "candidate_id asc"
+  ],
+  "content_hash": "sha256:07aa26efcec43a74fec4e0818716e4bbb778a157c4ffed624cb1cc8b3337f781"
+}

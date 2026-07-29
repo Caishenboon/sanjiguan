@@ -17,6 +17,13 @@ from .canonical import CANONICALIZATION_VERSION, content_hash
 from .disabled import disabled_result
 from .inference.assets import load_research_assets
 from .inference import run_research_baseline
+from .inference.liuxiang_v1 import (
+    METHOD_ID as LIUXIANG_INFERENCE_METHOD_ID,
+    SIGNAL_METHOD_ID as LIUXIANG_SIGNAL_METHOD_ID,
+    load_liuxiang_assets,
+    run_liuxiang_research_v1,
+)
+from .signals.v2 import validate_signals_v2
 from .errors import (
     EngineError,
     INPUT_INVALID,
@@ -215,6 +222,14 @@ def validate_request(request: dict) -> dict:
             ) from exc
     _validate_hash_safe(value)
     bundle = inspect_ruleset(value["ruleset_bundle_id"])
+    if research_modules:
+        operation = snapshot.get("operation")
+        is_liuxiang_bundle = bundle["bundle_id"] == "liuxiang-research-v1.0.0"
+        if is_liuxiang_bundle != (operation == "run_liuxiang_research_v1"):
+            raise EngineError(
+                INPUT_INVALID,
+                "research operation and ruleset bundle do not match",
+            )
     if bundle.get("status") == "revoked_for_future_runs" and value["run_mode"] != "replay":
         raise EngineError(
             RULESET_REVOKED,
@@ -376,6 +391,55 @@ def _restore_research_case(snapshot: dict) -> dict:
 
 
 def _execute_research(snapshot: dict) -> tuple[dict[str, dict], list[dict], dict]:
+    if snapshot.get("operation") == "run_liuxiang_research_v1":
+        result, trace = run_liuxiang_research_v1(snapshot)
+        signals_projection = {
+            "schema_version": "signal-v2/1.0.0",
+            "signals": result["signals"],
+            "effective_signals": result["effective_signals"],
+            "deduplication": result["deduplication"],
+            "shared_source_discounts": result["shared_source_discounts"],
+            "dimension_contract_hash": result["dimension_contract_hash"],
+            "mapping_asset_hash": result["mapping_asset_hash"],
+        }
+        inference_projection = {
+            key: deepcopy(result[key])
+            for key in (
+                "schema_version", "tradition_scope", "activation", "review_status",
+                "production_activatable", "engine_version", "ruleset_version",
+                "candidates", "status", "leading_candidate_id", "strength_bp",
+                "confidence_bp", "trace_ref", "result_hash",
+            )
+        }
+        definitions = {
+            "signals": (LIUXIANG_SIGNAL_METHOD_ID, signals_projection),
+            "inference": (LIUXIANG_INFERENCE_METHOD_ID, inference_projection),
+        }
+        module_results = {}
+        for module_id, (method_id, projection) in definitions.items():
+            module = {
+                "module_id": module_id,
+                "module_version": "1.0.0",
+                "method_id": method_id,
+                "method_status": "research_active",
+                "tradition_scope": "sanji_original",
+                "review_status": "UNCONFIRMED",
+                "production_activatable": False,
+                "result": projection,
+                "trace_step_ids": [
+                    step["step_id"] for step in trace if step["module_id"] == module_id
+                ],
+                "rule_refs": ["liuxiang-inference/1.0.0"],
+                "source_refs": ["SANJI_ORIGINAL_RESEARCH"],
+                "uncertainties": ["LIUXIANG_MAPPING_UNCONFIRMED"],
+                "sensitivity_flags": [],
+            }
+            module_results[module_id] = {**module, "content_hash": content_hash(module)}
+        return module_results, trace, {
+            "liuxiang_result_hash": result["result_hash"],
+            "signals_v2_hash": content_hash(signals_projection),
+            "inference_v1_hash": content_hash(inference_projection),
+        }
     case = _restore_research_case(snapshot)
     archetypes, config, asset_hashes = load_research_assets()
     actual = run_research_baseline(case, archetypes, config)
@@ -486,6 +550,15 @@ def _execute_research(snapshot: dict) -> tuple[dict[str, dict], list[dict], dict
 def execute(request: dict) -> dict:
     validated = validate_request(request)
     bundle = inspect_ruleset(validated["ruleset_bundle_id"])
+    if bundle["bundle_id"] == "liuxiang-research-v1.0.0":
+        # Signal v2 is an unordered evidence set.  Normalize it before both
+        # input hashing and execution; legacy baselines keep their frozen
+        # order-sensitive compatibility path.
+        dimensions, _, _ = load_liuxiang_assets()
+        validated["input_snapshot"]["signals"] = validate_signals_v2(
+            validated["input_snapshot"].get("signals", []),
+            {value["dimension_id"] for value in dimensions["dimensions"]},
+        )
     input_projection = deepcopy(validated)
     input_projection.pop("run_id", None)
     # Execution and replay are transport intents, not calculation inputs. Excluding

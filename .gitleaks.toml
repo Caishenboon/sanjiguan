@@ -4,7 +4,10 @@ title = "Samsara Engine secret scanning"
 useDefault = true
 
 [allowlist]
-description = "Only explicit empty placeholders are allowed."
+description = "Empty placeholders and one historical deterministic ordering label are allowed."
 paths = [
   '''\.env\.example$'''
+]
+regexes = [
+  '''^05_yuan_relation$'''
 ]

@@ -1,0 +1,38 @@
+{
+  "schema_version": "research-dataset-manifest/1.0.0",
+  "dataset_id": "vedastro-org/15000-Famous-People-Marriage-Divorce-Info",
+  "official_provider": "VedAstro",
+  "platform": "Hugging Face Datasets",
+  "repository_url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Marriage-Divorce-Info",
+  "pinned_revision": "2c297bc38ce348cc7c87d1283bce30a3aaa7583b",
+  "downloaded_at": "2026-07-28T00:00:00Z",
+  "cache_key": "vedastro-marriages",
+  "files": [
+    {
+      "path": "MarriageInfoDataset.csv",
+      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Marriage-Divorce-Info/resolve/2c297bc38ce348cc7c87d1283bce30a3aaa7583b/MarriageInfoDataset.csv",
+      "sha256": "dc704ba2b22a18d8e3b15b961b2f0288d11aaeeef768351d340ed9bd9eae73ab",
+      "bytes": 5458394
+    }
+  ],
+  "declared_license": "MIT (Hugging Face dataset metadata)",
+  "license_file_location": null,
+  "license_review_status": "conditional_download_only",
+  "license_review_note": "Pinned repository exposes an MIT metadata tag but no standalone LICENSE file. Local research processing is allowed conditionally; raw redistribution remains disabled pending legal review.",
+  "record_count": 15807,
+  "fields": ["PartitionKey", "RowKey", "Info.marriages"],
+  "allowed_uses": ["local_quality_audit", "retrospective_observational_candidate"],
+  "raw_data_committable": false,
+  "fixture_committable": false,
+  "public_redistribution_allowed": false,
+  "sensitivity": "public_person_relationship_research_high",
+  "provider_credibility": "provider_claim_only",
+  "sanji_independent_verification": "not_verified",
+  "shared_source_group": "vedastro_org",
+  "known_limitations": [
+    "Birth and relationship datasets share the same provider and are not independent validation sources.",
+    "Year-only events remain year-only and are never expanded to January 1.",
+    "Outcome labels are heterogeneous provider values and must not be treated as objective relationship quality."
+  ],
+  "connector_enabled": true
+}
