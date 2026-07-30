@@ -13,10 +13,6 @@ async function forward(request: NextRequest, context: { params: Promise<{ path: 
     const value = request.headers.get(name);
     if (value) headers.set(name, value);
   }
-  const cookie = headers.get("cookie");
-  if (cookie && cookie.includes("sanji-session=")) {
-    headers.set("cookie", cookie.replace(/(^|;\s*)sanji-session=/, "$1__Host-session="));
-  }
   headers.set("origin", new URL(process.env.PUBLIC_ORIGIN || request.nextUrl.origin).origin);
   const response = await fetch(target, {
     method: request.method,
