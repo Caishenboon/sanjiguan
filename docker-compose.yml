@@ -64,6 +64,7 @@ services:
       dockerfile: apps/web/Dockerfile
     environment:
       SANJI_API_ORIGIN: http://api:8000
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://127.0.0.1:3000}
       NEXT_PUBLIC_SANJI_VERSION: ${SANJI_VERSION:-v1-candidate}
     depends_on:
       api:

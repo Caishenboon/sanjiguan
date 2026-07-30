@@ -60,9 +60,11 @@ if not os.getenv("SANJI_DEMO_SESSION"):
             {"bootstrap_token": bootstrap, "email": "demo-owner@invalid.example"},
         )
     except RuntimeError as exc:
-        raise SystemExit(
-            "An owner already exists. Supply SANJI_DEMO_SESSION from a disposable local session."
-        ) from exc
+        if "(409)" in str(exc):
+            raise SystemExit(
+                "An owner already exists. Supply SANJI_DEMO_SESSION from a disposable local session."
+            ) from exc
+        raise
 
 profile = request(
     "/api/v1/profiles",
