@@ -1,0 +1,235 @@
+{
+  "schema_version": "topic-research-rules/1.0.0",
+  "ruleset_id": "topic-research-rules",
+  "version": "1.0.0",
+  "tradition_scope": "sanji_original",
+  "activation": "research_active",
+  "review_status": "UNCONFIRMED",
+  "production_activatable": false,
+  "rules": {
+    "diminishing_returns_bp": [
+      10000,
+      7000,
+      4500,
+      2500,
+      1200
+    ],
+    "thresholds": {
+      "minimum_groups": 3,
+      "contested_margin_bp": 600,
+      "decisive_strength_bp": 6500,
+      "decisive_confidence_bp": 7000
+    },
+    "debt_types": [
+      "emotional_debt",
+      "gratitude_debt",
+      "responsibility_debt",
+      "vow_debt",
+      "life_debt",
+      "financial_debt",
+      "family_debt",
+      "lineage_debt",
+      "unfinished_promise",
+      "harm_and_repayment"
+    ],
+    "relationship_types": [
+      "mutual_response",
+      "one_way_pull",
+      "commitment_formed",
+      "commitment_unfulfilled",
+      "repeated_conflict",
+      "relationship_maintained",
+      "relationship_dissipating",
+      "relationship_ended",
+      "past_life_continuation_candidate"
+    ],
+    "past_relationship_types": [
+      "family",
+      "companions",
+      "mentor_and_student",
+      "business_partners",
+      "partners",
+      "debtor_and_creditor"
+    ],
+    "past_life": {
+      "eras": [
+        {
+          "id": "era_ancient",
+          "label": "先秦至汉代",
+          "range": [
+            -500,
+            220
+          ],
+          "stage": "古代早期"
+        },
+        {
+          "id": "era_medieval",
+          "label": "隋唐至宋代",
+          "range": [
+            581,
+            1279
+          ],
+          "stage": "中古至宋代"
+        },
+        {
+          "id": "era_late_imperial",
+          "label": "明代至清中期",
+          "range": [
+            1368,
+            1800
+          ],
+          "stage": "帝制晚期"
+        },
+        {
+          "id": "era_modern_transition",
+          "label": "清末至民国",
+          "range": [
+            1840,
+            1949
+          ],
+          "stage": "近代转型"
+        }
+      ],
+      "regions": [
+        {
+          "id": "region_jiangnan",
+          "culture": "中华历史文化区域",
+          "candidates": [
+            "江南水运区域",
+            "苏州府周边"
+          ],
+          "geography": "河网平原",
+          "settlement": "城镇与近郊",
+          "culture_profile": "zh_historical"
+        },
+        {
+          "id": "region_north_plain",
+          "culture": "中华历史文化区域",
+          "candidates": [
+            "华北平原",
+            "府县交通节点"
+          ],
+          "geography": "平原与驿路",
+          "settlement": "县城与乡里",
+          "culture_profile": "zh_historical"
+        },
+        {
+          "id": "region_southwest",
+          "culture": "西南历史文化区域",
+          "candidates": [
+            "西南山地",
+            "山地商道周边"
+          ],
+          "geography": "山地与河谷",
+          "settlement": "集镇与村落",
+          "culture_profile": "zh_historical"
+        },
+        {
+          "id": "region_generic",
+          "culture": "未定文化区域",
+          "candidates": [
+            "内陆交通区域",
+            "区域性聚落"
+          ],
+          "geography": "平原与丘陵交界",
+          "settlement": "城镇或村落",
+          "culture_profile": "generic"
+        }
+      ],
+      "gender_tendencies": [
+        "男性倾向",
+        "女性倾向",
+        "未定倾向"
+      ],
+      "roles": [
+        "农耕",
+        "商贸",
+        "手工业",
+        "文士",
+        "官吏",
+        "医者",
+        "宗教修行",
+        "军旅",
+        "航运",
+        "艺伎或表演",
+        "家族管理",
+        "仆役",
+        "游历者",
+        "其他"
+      ],
+      "professions": [
+        "地方商户家族中的账房与文书",
+        "乡里手工业者",
+        "往来商路的行旅经营者",
+        "地方医者与药材整理者",
+        "家族事务管理者",
+        "水路运输从业者",
+        "私塾教读与文书人员",
+        "以季节劳作为主的农耕者"
+      ],
+      "family_structures": [
+        "多代同居家族",
+        "小型核心家庭",
+        "寄居亲族网络",
+        "以行业伙伴为主的生活结构"
+      ],
+      "relationships": [
+        "家族责任关系",
+        "师友关系",
+        "长期合作关系",
+        "未完成承诺关系"
+      ],
+      "personalities": [
+        "审慎而重承诺",
+        "行动直接但易中断",
+        "重秩序与积累",
+        "敏感且善于观察"
+      ],
+      "vows": [
+        "维持家业与照料亲属",
+        "完成一项长期技艺",
+        "远行求学并传递所学",
+        "偿还尚未完成的承诺"
+      ],
+      "events": [
+        "迁居或远行",
+        "行业转换",
+        "家族责任加重",
+        "重要合作关系形成"
+      ],
+      "turning_points": [
+        "外部环境改变生活路径",
+        "关系承诺改变原有计划",
+        "长期事务因中断而转向",
+        "迁徙带来新的生活结构"
+      ],
+      "death_causes": [
+        "疾病",
+        "年老",
+        "战乱",
+        "意外",
+        "水灾",
+        "火灾",
+        "饥荒",
+        "生产相关",
+        "刑罚",
+        "暴力冲突",
+        "自我终结",
+        "原因不明"
+      ],
+      "unfinished": [
+        "尚未完成的家族责任",
+        "未兑现的关系承诺",
+        "中断的长期技艺",
+        "未能完成的迁徙计划"
+      ],
+      "correspondences": [
+        "持续承担与边界之间的张力",
+        "表达愿向与实际行动的距离",
+        "迁移和守成之间的反复选择",
+        "关系承诺与个人方向的协调"
+      ]
+    }
+  },
+  "content_hash": "sha256:babe7b23065aba4c0ca2ef9f6f0c689846497cd6d836e0fd306ff8c61b63ce55"
+}

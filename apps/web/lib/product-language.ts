@@ -96,3 +96,25 @@ export const PRODUCT_TERMS: Record<string, ProductTerm> = {
 export function productStatus(value: string) {
   return PRODUCT_TERMS[value]?.label ?? value;
 }
+
+export const EPISTEMIC_SUFFIX: Record<string, string> = {
+  observed: "",
+  mechanically_derived: "",
+  rule_inferred: "【可能】",
+  generated_identity: "【可能】",
+  historical_candidate: "【历史人物候选·可能】",
+  contested: "【相争】",
+  insufficient: "【可能·资料不足】",
+};
+
+export function epistemicDisplay(
+  value: string | number,
+  status: string,
+  confidenceBp?: number,
+) {
+  const resolved =
+    typeof confidenceBp === "number" && confidenceBp < 3000
+      ? "insufficient"
+      : status;
+  return `${value}${EPISTEMIC_SUFFIX[resolved] ?? "【可能】"}`;
+}

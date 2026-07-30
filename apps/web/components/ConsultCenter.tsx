@@ -8,6 +8,9 @@ const TOOLS = [
   { id:"bazi", title:"八字", kind:"机械排盘", status:"研究可用", needs:"出生日期、地点、历史时区；时刻可标记未知", description:"展示四柱候选、Profile 与边界敏感，不判断旺衰、喜忌或大运。", href:"/consult/bazi" },
   { id:"ziwei", title:"紫微", kind:"机械结构", status:"研究可用", needs:"经确认的出生资料与已批准方法 Profile", description:"展示命宫、身宫与已实现机械结构，不补充未经审校的星曜断语。", href:"/consult/ziwei" },
   { id:"liuxiang", title:"六象研究", kind:"真实证据研究", status:"研究可用", needs:"多类授权记录；资料不足也可诚实执行", description:"只用版本化证据政策处理明确记录；传统解释性映射仍禁用，也不会展示合成测试候选。", href:"/consult/liuxiang" },
+  { id:"sushe", title:"宿世观", kind:"原创专题研究", status:"研究可用", needs:"已授权的主体记录与结构标签", description:"生成一至三组确定性研究候选；姓名、年代、地点、身份与死因均明确标注为可能，不主张历史事实。", href:"/consult/sushe" },
+  { id:"zhongyin", title:"中阴观", kind:"原创专题研究", status:"研究可用", needs:"人生过渡记录；离世模式另需明确离世事实", description:"观察人生结构过渡；不会预测在世主体的死亡时间、死法或寿命。", href:"/consult/zhongyin" },
+  { id:"yuanqi", title:"缘契观", kind:"原创专题研究", status:"研究可用", needs:"关系事件、承诺与相应同意范围", description:"区分单方观察与双方合参，不输出命定伴侣、必然复合或不可改变的关系结论。", href:"/consult/yuanqi" },
 ] as const;
 
 export default function ConsultCenter(){
