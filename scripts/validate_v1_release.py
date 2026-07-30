@@ -31,6 +31,8 @@ assert "127.0.0.1:3000:3000" in compose
 assert "networks: [private, ingress]" in compose
 assert "ingress:" in compose
 assert "PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://127.0.0.1:3000}" in compose
+demo = (root / "scripts/demo.py").read_text(encoding="utf-8")
+assert 'life_trend["deterministic_report_hash"]' in demo
 assert "5432:5432" not in compose
 assert "service_completed_successfully" in compose
 assert "condition: service_healthy" in compose

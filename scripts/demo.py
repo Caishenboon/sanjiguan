@@ -206,7 +206,7 @@ summary = {
     "life_trend_replay_matched": life_replay["matched"],
     "life_trend_reanalysis_id": life_reanalysis["id"],
     "core_output_hash": life_trend["core_output_hash"],
-    "deterministic_report_hash": report["deterministic_report_hash"],
+    "deterministic_report_hash": life_trend["deterministic_report_hash"],
     "narrative_source": report["source"],
 }
 print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
