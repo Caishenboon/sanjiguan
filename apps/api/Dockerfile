@@ -9,6 +9,8 @@ COPY apps /app/apps
 COPY packages /app/packages
 COPY scripts /app/scripts
 COPY infra /app/infra
+COPY knowledge /app/knowledge
+COPY research-data /app/research-data
 RUN chown -R sanji:sanji /app
 USER sanji
 EXPOSE 8000

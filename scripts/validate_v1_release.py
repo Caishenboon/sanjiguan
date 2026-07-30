@@ -25,11 +25,14 @@ for path in tracked_candidates:
         raise SystemExit(f"absolute local path: {path.relative_to(root)}")
 
 compose = (root / "docker-compose.yml").read_text(encoding="utf-8")
+api_dockerfile = (root / "apps/api/Dockerfile").read_text(encoding="utf-8")
 assert "postgres:16.10-bookworm" in compose
 assert "127.0.0.1:3000:3000" in compose
 assert "5432:5432" not in compose
 assert "service_completed_successfully" in compose
 assert "condition: service_healthy" in compose
+assert "COPY knowledge /app/knowledge" in api_dockerfile
+assert "COPY research-data /app/research-data" in api_dockerfile
 
 env = (root / ".env.example").read_text(encoding="utf-8")
 assert "DEEPSEEK_API_KEY=\n" in env
