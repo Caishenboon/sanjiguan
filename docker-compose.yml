@@ -21,7 +21,7 @@ services:
       dockerfile: apps/api/Dockerfile
     command: ["python", "scripts/bootstrap_db.py"]
     environment:
-      MIGRATION_DATABASE_URL: postgresql://migration_owner:${POSTGRES_MIGRATION_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      MIGRATION_DATABASE_URL: dbname=${POSTGRES_DB} user=migration_owner password=${POSTGRES_MIGRATION_PASSWORD} host=postgres port=5432
       POSTGRES_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:?set via ignored .env}
     depends_on:
       postgres:
@@ -37,7 +37,7 @@ services:
       APP_ENV: ${APP_ENV:-development}
       SANJI_VERSION: ${SANJI_VERSION:-v1-candidate}
       STORAGE_BACKEND: postgres
-      DATABASE_URL: postgresql://app_runtime:${POSTGRES_APP_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      DATABASE_URL: dbname=${POSTGRES_DB} user=app_runtime password=${POSTGRES_APP_PASSWORD} host=postgres port=5432
       PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://127.0.0.1:3000}
       SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
       KEY_PROVIDER: ${KEY_PROVIDER:?set via ignored .env}
