@@ -133,12 +133,13 @@ def _persist(
     for sequence, bucket in enumerate(domain["buckets"]):
         conn.execute(
             """INSERT INTO life_trend_buckets(
-              execution_id,owner_id,bucket_id,sequence_no,starts_on,ends_on,segment,
-              candle,confidence_bp,coverage_bp,trace_ref
-            ) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+              execution_id,owner_id,bucket_id,sequence_no,starts_on,ends_on,
+              time_precision,segment,candle,confidence_bp,coverage_bp,trace_ref
+            ) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
             (
                 execution_id, user["id"], bucket["bucket_id"], sequence,
-                bucket["start"], bucket["end"], bucket["segment"],
+                bucket["start"], bucket["end"], bucket["time_precision"],
+                bucket["segment"],
                 json.dumps(bucket["candle"]) if bucket["candle"] else None,
                 bucket["confidence_bp"], bucket["coverage_bp"], bucket["trace_ref"],
             ),

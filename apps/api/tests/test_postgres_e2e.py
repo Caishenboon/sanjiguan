@@ -278,6 +278,16 @@ class PostgreSQLHttpE2E(unittest.TestCase):
         body, execution_id = created_run.json(), created_run.json()["id"]
         self.assertIn("core_output_hash", body)
         self.assertTrue(any(item["segment"] == "projected_future" for item in body["timeline"]))
+        stored_year = self.admin.execute(
+            """SELECT starts_on,ends_on,time_precision
+               FROM life_trend_buckets
+               WHERE execution_id=%s AND starts_on='2024'""",
+            (execution_id,),
+        ).fetchone()
+        self.assertEqual(
+            {"starts_on": "2024", "ends_on": "2024", "time_precision": "year"},
+            dict(stored_year),
+        )
         replayed = self.client.post(
             f"/api/v1/life-trend-executions/{execution_id}/replay",
             headers={"Idempotency-Key": "life-trend-replay-e2e-0001"},

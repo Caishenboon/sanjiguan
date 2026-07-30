@@ -72,8 +72,13 @@ CREATE TABLE life_trend_buckets (
   owner_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   bucket_id text NOT NULL,
   sequence_no integer NOT NULL CHECK (sequence_no >= 0),
-  starts_on date NOT NULL,
-  ends_on date NOT NULL,
+  -- Precision-preserving canonical labels. A year/quarter/month must never be
+  -- coerced to an invented calendar day merely to satisfy a DATE column.
+  starts_on text NOT NULL,
+  ends_on text NOT NULL,
+  time_precision text NOT NULL CHECK (
+    time_precision IN ('exact_date','month','quarter','year','phase')
+  ),
   segment text NOT NULL CHECK (
     segment IN ('observed_past','current_state','projected_future','insufficient_gap')
   ),
@@ -88,9 +93,11 @@ CREATE TABLE life_trend_timing_windows (
   execution_id uuid NOT NULL REFERENCES life_trend_executions(id) ON DELETE CASCADE,
   owner_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   window_id text NOT NULL,
-  starts_on date NOT NULL,
-  ends_on date NOT NULL,
-  precision text NOT NULL,
+  starts_on text NOT NULL,
+  ends_on text NOT NULL,
+  precision text NOT NULL CHECK (
+    precision IN ('exact_date','month','quarter','year','phase')
+  ),
   window_type text NOT NULL,
   strength_bp integer NOT NULL CHECK (strength_bp BETWEEN 0 AND 10000),
   confidence_bp integer NOT NULL CHECK (confidence_bp BETWEEN 0 AND 10000),
