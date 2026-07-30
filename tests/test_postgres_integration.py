@@ -326,6 +326,50 @@ class PostgreSQLIntegrationTests(unittest.TestCase):
                 "SELECT id FROM topic_executions WHERE id=%s", (run_id,)
             ).fetchone())
 
+    def test_life_trend_tables_force_rls_and_strictly_isolate_members(self):
+        tables = (
+            "life_trend_ruleset_versions", "life_trend_executions",
+            "life_trend_buckets", "life_trend_timing_windows",
+            "life_trend_replay_records", "life_trend_execution_comparisons",
+        )
+        rows = self.conn.execute(
+            """SELECT relname,relforcerowsecurity FROM pg_class
+               WHERE relname=ANY(%s) ORDER BY relname""", (list(tables),)
+        ).fetchall()
+        self.assertEqual(set(tables), {row[0] for row in rows})
+        self.assertTrue(all(row[1] for row in rows))
+        digest = f"sha256:{'f' * 64}"
+        run_id = uuid4()
+        insert = """INSERT INTO life_trend_executions(
+          id,owner_id,profile_id,execution_kind,input_snapshot_encrypted,
+          core_result_encrypted,deterministic_report_encrypted,engine_version,
+          ruleset_bundle_id,life_trend_ruleset_version,evidence_policy_version,
+          report_template_version,input_hash,core_output_hash,
+          deterministic_report_hash,narrative_input_hash,output_hash,trace_hash,
+          replay_manifest,status,research_notice
+        ) VALUES(%s,%s,%s,'initial',%s,%s,%s,'0.1.0',
+          'life-trend-research-v1.0.0','life-trend-rules/1.0.0',
+          'liuxiang-user-evidence-policy/1.0.0','sanji-report-template/1.0.0',
+          %s,%s,%s,%s,%s,%s,'{}','insufficient','research only')"""
+        with self.runtime(self.member_a) as member:
+            member.execute(
+                insert,
+                (run_id, self.member_a, self.profile_a, b"encrypted", b"encrypted",
+                 b"encrypted", digest, digest, digest, digest, digest, digest),
+            )
+            member.commit()
+            self.assertEqual(run_id, member.execute(
+                "SELECT id FROM life_trend_executions WHERE id=%s", (run_id,)
+            ).fetchone()[0])
+        with self.runtime(self.member_b) as other:
+            self.assertIsNone(other.execute(
+                "SELECT id FROM life_trend_executions WHERE id=%s", (run_id,)
+            ).fetchone())
+        with self.runtime(self.owner, "owner") as owner:
+            self.assertIsNone(owner.execute(
+                "SELECT id FROM life_trend_executions WHERE id=%s", (run_id,)
+            ).fetchone())
+
     def test_migration_drift_is_rejected(self):
         version = "0001_sprint0_baseline.sql"
         checksum = self.conn.execute(

@@ -49,6 +49,9 @@ class Sprint3ContractTests(unittest.TestCase):
         base=ROOT/"apps/web/app/profile/[id]"
         self.assertTrue(all((base/name).exists() for name in expected))
         star=(base/"samsara-map/page.tsx").read_text("utf-8")
-        chart=(base/"life-chart/page.tsx").read_text("utf-8")
+        chart_route=(base/"life-chart/page.tsx").read_text("utf-8")
+        chart=(ROOT/"apps/web/components/LifeTrendResearch.tsx").read_text("utf-8")
         self.assertIn("列表替代视图",star)
+        self.assertIn("/consult/life-trend",chart_route)
         self.assertIn("<table>",chart)
+        self.assertIn('aria-label="命势长图移动端文字列表"',chart)

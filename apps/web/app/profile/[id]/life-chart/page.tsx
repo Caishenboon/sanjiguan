@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
-// Legacy contract marker: the former accessible <table> view is not rendered
-// because life-chart formulas remain disabled.
-export default function Page(){redirect("/me?notice=research-disabled")}
+export default async function Page({params}:{params:Promise<{id:string}>}){
+  const {id}=await params;
+  redirect(`/consult/life-trend?subject=${id}`)
+}

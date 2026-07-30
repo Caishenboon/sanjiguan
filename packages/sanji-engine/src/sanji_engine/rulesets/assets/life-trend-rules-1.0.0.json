@@ -1,0 +1,95 @@
+{
+  "schema_version": "life-trend-rules/1.0.0",
+  "ruleset_id": "life-trend-rules",
+  "version": "1.0.0",
+  "tradition_scope": "sanji_original",
+  "activation": "research_active",
+  "review_status": "UNCONFIRMED",
+  "production_activatable": false,
+  "time_bucket_policy": {
+    "supported": [
+      "day",
+      "month",
+      "quarter",
+      "year",
+      "phase"
+    ],
+    "auto_uses_coarsest_input_precision": true,
+    "unknown_time_is_never_imputed": true,
+    "empty_bucket_interpolation": "forbidden"
+  },
+  "factor_types": [
+    "coverage",
+    "structural",
+    "evidence",
+    "event",
+    "projection"
+  ],
+  "direction_types": [
+    "supports",
+    "counters",
+    "neutral"
+  ],
+  "single_factor_cap_bp": 1800,
+  "gap_open_policy": "carry_forward_last_valid_close",
+  "simultaneous_factor_policy": "unordered_directional_extrema",
+  "diminishing_returns_bp": [
+    10000,
+    7600,
+    5800,
+    4300,
+    3200,
+    2400
+  ],
+  "coverage_per_channel_bp": 1450,
+  "boundary_penalty_bp": 700,
+  "conflict_penalty_bp": 850,
+  "future_confidence_decay_bp": [
+    10000,
+    8800,
+    7600,
+    6500,
+    5500,
+    4600
+  ],
+  "projection_base_cap_bp": 1600,
+  "projection_magnitude_decay_bp": [
+    7600,
+    5800,
+    4300,
+    3200,
+    2400
+  ],
+  "maximum_future_bucket_count": 5,
+  "maximum_span_years": 120,
+  "maximum_bucket_count": 520,
+  "status": {
+    "minimum_confidence_bp": 1800,
+    "contested_delta_bp": 500,
+    "decisive_confidence_bp": 7200,
+    "decisive_delta_bp": 1800
+  },
+  "auspice": {
+    "minimum_confidence_bp": 1800,
+    "direction_threshold_bp": 1200
+  },
+  "auspice_labels": {
+    "auspicious": "吉",
+    "neutral": "平",
+    "inauspicious": "凶",
+    "auspicious_with_obstruction": "吉中有阻",
+    "inauspicious_with_relief": "凶中有解",
+    "contested": "吉凶相争",
+    "insufficient": "资料不足，暂不定吉凶"
+  },
+  "symbolic_titles": {
+    "auspicious": "风生水起",
+    "neutral": "持衡观变",
+    "inauspicious": "云重路迟",
+    "auspicious_with_obstruction": "云开有碍",
+    "inauspicious_with_relief": "暗处见隙",
+    "contested": "两势交衡",
+    "insufficient": "卷有留白"
+  },
+  "content_hash": "sha256:e9f2a044f7b9a6495bede7d45d4bbdc6a29a68294ef8b82579679bd771d63121"
+}
