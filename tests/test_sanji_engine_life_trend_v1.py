@@ -160,6 +160,42 @@ class LifeTrendV1Tests(unittest.TestCase):
         self.assertEqual(close(baseline), close(with_coverage))
         self.assertEqual(close(baseline), close(with_duplicate))
 
+    def test_same_interval_does_not_invent_high_low_from_factor_ids(self):
+        stronger = factor(
+            "technical-z", "2025", "supports",
+            precision="year_only", magnitude=2600,
+        )
+        weaker = factor(
+            "technical-a", "2025", "counters",
+            precision="year_only", magnitude=1200,
+        )
+        swapped_stronger = {
+            **stronger,
+            "factor_id": "technical-a",
+            "source_record_id": "technical-a",
+            "independence_group": "technical-a",
+            "shared_source_group": "technical-a",
+        }
+        swapped_weaker = {
+            **weaker,
+            "factor_id": "technical-z",
+            "source_record_id": "technical-z",
+            "independence_group": "technical-z",
+            "shared_source_group": "technical-z",
+        }
+        first = domain(execute(request([stronger, weaker])))
+        second = domain(execute(request([swapped_weaker, swapped_stronger])))
+        first_bucket = next(item for item in first["buckets"] if item["bucket_id"] == "2025")
+        second_bucket = next(item for item in second["buckets"] if item["bucket_id"] == "2025")
+        self.assertEqual(first_bucket["candle"], second_bucket["candle"])
+        self.assertEqual(
+            "unordered_directional_extrema",
+            first_bucket["simultaneous_factor_policy"],
+        )
+        self.assertEqual(
+            "carry_forward_last_valid_close", first_bucket["open_policy"]
+        )
+
     def test_future_confidence_decays_and_year_is_not_imputed_to_day(self):
         values = [factor("a", "2024-01-01"), factor("b", "2025-01-01"), factor("coarse", "2023", precision="year_only")]
         result = domain(execute(request(values)))

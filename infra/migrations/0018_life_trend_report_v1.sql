@@ -21,7 +21,7 @@ INSERT INTO life_trend_ruleset_versions(
 ) VALUES (
   '019fa02b-a48f-7bb0-8a18-000000000018',
   'life-trend-rules','1.0.0',
-  'sha256:b3dbfc721afc398524c52bad2429b6f85a2e9515f8537411b63e37315f433e3a',
+  'sha256:e9f2a044f7b9a6495bede7d45d4bbdc6a29a68294ef8b82579679bd771d63121',
   'sanji_original','research_active','UNCONFIRMED',false
 ) ON CONFLICT(ruleset_id,version) DO NOTHING;
 

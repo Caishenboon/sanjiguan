@@ -681,23 +681,66 @@ def run_life_trend_v1(snapshot: dict) -> tuple[dict, list[dict]]:
         scoring = [item for item in items if item["scoring_allowed"]]
         support = [item for item in scoring if item["direction"] == "supports"]
         counters = [item for item in scoring if item["direction"] == "counters"]
-        ordered = sorted(
-            scoring,
-            key=lambda item: (
-                item["interval_start"] or "",
-                item["factor_id"],
-                item["content_hash"],
-            ),
-        )
-        open_value, high_value, low_value = position, position, position
-        for order, factor in enumerate(ordered):
-            delta = _factor_delta(
-                factor,
-                return_schedule[min(order, len(return_schedule) - 1)],
-                rules["single_factor_cap_bp"],
+        temporal_groups: dict[tuple[str, str, str], list[dict]] = {}
+        for factor in scoring:
+            temporal_groups.setdefault(
+                (
+                    factor["interval_start"] or "",
+                    factor["interval_end"] or "",
+                    factor["date_precision"],
+                ),
+                [],
+            ).append(factor)
+        ordered = [
+            factor
+            for temporal_key in sorted(temporal_groups)
+            for factor in sorted(
+                temporal_groups[temporal_key],
+                key=lambda item: (
+                    -(
+                        item["magnitude_bp"]
+                        * item["source_reliability_bp"]
+                        * item["mapping_reliability_bp"]
+                    ),
+                    item["direction"],
+                    item["content_hash"],
+                ),
             )
-            position = _clamp(position + delta)
-            high_value, low_value = max(high_value, position), min(low_value, position)
+        ]
+        open_value, high_value, low_value = position, position, position
+        return_index = 0
+        for temporal_key in sorted(temporal_groups):
+            group_start = position
+            positive_total = 0
+            negative_total = 0
+            simultaneous = sorted(
+                temporal_groups[temporal_key],
+                key=lambda item: (
+                    -(
+                        item["magnitude_bp"]
+                        * item["source_reliability_bp"]
+                        * item["mapping_reliability_bp"]
+                    ),
+                    item["direction"],
+                    item["content_hash"],
+                ),
+            )
+            for factor in simultaneous:
+                delta = _factor_delta(
+                    factor,
+                    return_schedule[min(return_index, len(return_schedule) - 1)],
+                    rules["single_factor_cap_bp"],
+                )
+                return_index += 1
+                if delta >= 0:
+                    positive_total += delta
+                else:
+                    negative_total += delta
+            # No evidenced sequence exists inside one canonical interval.
+            # Compute directional extrema around the same opening position.
+            high_value = max(high_value, _clamp(group_start + positive_total))
+            low_value = min(low_value, _clamp(group_start + negative_total))
+            position = _clamp(group_start + positive_total + negative_total)
         candle = None
         if scoring:
             candle = {
@@ -730,6 +773,8 @@ def run_life_trend_v1(snapshot: dict) -> tuple[dict, list[dict]]:
                 ["no_scoring_evidence"] if not scoring else []
             ),
             "trace_ref": f"trace:bucket:{key}",
+            "open_policy": rules["gap_open_policy"],
+            "simultaneous_factor_policy": rules["simultaneous_factor_policy"],
         }
         bucket["status"] = _bucket_status(bucket, rules)
         bucket["auspice"] = _auspice(bucket, rules)
@@ -821,6 +866,8 @@ def run_life_trend_v1(snapshot: dict) -> tuple[dict, list[dict]]:
         }),
         _trace_step(300, "calculate_integer_ohlc", {
             "bucket_hashes": [item["content_hash"] for item in buckets],
+            "gap_open_policy": rules["gap_open_policy"],
+            "simultaneous_factor_policy": rules["simultaneous_factor_policy"],
         }),
         _trace_step(400, "derive_auspice_and_timing", {
             "auspice": [item["auspice"] for item in buckets],

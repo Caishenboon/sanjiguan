@@ -19,6 +19,14 @@ require(asset["tradition_scope"] == "sanji_original", "life trend must be Sanji-
 require(asset["activation"] == "research_active", "life trend must stay research_active")
 require(asset["review_status"] == "UNCONFIRMED", "life trend must stay UNCONFIRMED")
 require(asset["production_activatable"] is False, "production activation forbidden")
+require(
+    asset["gap_open_policy"] == "carry_forward_last_valid_close",
+    "gap Open policy must be explicit and versioned",
+)
+require(
+    asset["simultaneous_factor_policy"] == "unordered_directional_extrema",
+    "simultaneous factors must not invent a technical sequence",
+)
 require(bundle["modules"]["life-chart"]["enabled"] is True, "life-chart public execution missing")
 for module in ("bazi", "ziwei", "yijing", "past-life", "bardo", "relationship"):
     require(bundle["modules"][module]["enabled"] is False, f"interpretive module enabled: {module}")
@@ -28,6 +36,11 @@ for table in ("life_trend_executions","life_trend_buckets","life_trend_timing_wi
     require(f"ALTER TABLE {table} FORCE ROW LEVEL SECURITY" in migration, f"FORCE RLS missing: {table}")
 require("float(" not in engine and "Decimal(" not in engine, "binary float/undeclared Decimal forbidden")
 require('"no_interpolation": True' in engine, "gap interpolation gate missing")
+require('"gap_open_policy": rules["gap_open_policy"]' in engine, "gap Open policy missing from Trace")
+require(
+    '"simultaneous_factor_policy": rules["simultaneous_factor_policy"]' in engine,
+    "simultaneous factor policy missing from Trace",
+)
 require("execute(request)" in api and 'replay(row["replay_manifest"]' in api, "thin API public-engine calls missing")
 for forbidden in ("DeepSeekProvider", "urllib.request", "requests.", "httpx.", "oracle_adapter"):
     require(forbidden not in engine, f"provider entered core: {forbidden}")

@@ -31,6 +31,8 @@
     "neutral"
   ],
   "single_factor_cap_bp": 1800,
+  "gap_open_policy": "carry_forward_last_valid_close",
+  "simultaneous_factor_policy": "unordered_directional_extrema",
   "diminishing_returns_bp": [
     10000,
     7600,
@@ -89,5 +91,5 @@
     "contested": "两势交衡",
     "insufficient": "卷有留白"
   },
-  "content_hash": "sha256:b3dbfc721afc398524c52bad2429b6f85a2e9515f8537411b63e37315f433e3a"
+  "content_hash": "sha256:e9f2a044f7b9a6495bede7d45d4bbdc6a29a68294ef8b82579679bd771d63121"
 }
