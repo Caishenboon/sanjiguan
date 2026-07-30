@@ -76,7 +76,7 @@ services:
       timeout: 5s
       retries: 12
     restart: unless-stopped
-    networks: [private]
+    networks: [private, ingress]
 
 volumes:
   postgres-data:
@@ -84,4 +84,5 @@ volumes:
 networks:
   private:
     internal: true
+  ingress:
   egress:
