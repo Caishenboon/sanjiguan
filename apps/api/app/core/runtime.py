@@ -9,6 +9,14 @@ PRODUCTION_ENVS = {"production", "prod"}
 WEAK_VALUES = {"", "change-me", "changeme", "password", "secret", "default"}
 
 
+def session_cookie_name(app_env: str | None = None) -> str:
+    environment = (app_env or os.environ.get("APP_ENV", "")).strip().lower()
+    return "sanji-session" if environment == "development" else "__Host-session"
+
+
+SESSION_COOKIE_NAME = session_cookie_name()
+
+
 @dataclass(frozen=True)
 class RuntimeConfig:
     app_env: str

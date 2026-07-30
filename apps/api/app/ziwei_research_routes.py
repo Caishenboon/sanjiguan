@@ -8,6 +8,8 @@ from fastapi import APIRouter, Body, Cookie, Header, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 from sanji_engine import execute
 
+from apps.api.app.core.runtime import SESSION_COOKIE_NAME
+
 from apps.api.app.core.ids import uuid7
 
 router = APIRouter(prefix="/api/v1/admin/research/ziwei")
@@ -93,7 +95,7 @@ def _request(payload: dict, run_id: str) -> dict:
 def execute_ziwei_research(
     payload_model: ZiweiPayload = Body(...),
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     module, user = _pg(), _owner(token)
     payload = payload_model.model_dump(mode="json")
@@ -149,7 +151,7 @@ def execute_ziwei_research(
 @router.post("/oracle-diff")
 def ziwei_oracle_diff(
     payload_model: ZiweiPayload = Body(...),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     _owner(token)
     payload = payload_model.model_dump(mode="json")

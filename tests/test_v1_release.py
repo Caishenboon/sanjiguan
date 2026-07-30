@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from apps.api.app.core.runtime import load_runtime_config
+from apps.api.app.core.runtime import load_runtime_config, session_cookie_name
 
 
 class RuntimeConfigTests(unittest.TestCase):
@@ -21,6 +21,10 @@ class RuntimeConfigTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertNotIn('cookie.replace(', route)
         self.assertIn('"cookie"', route)
+
+    def test_session_cookie_name_is_shared_by_development_and_production_routes(self):
+        self.assertEqual(session_cookie_name("development"), "sanji-session")
+        self.assertEqual(session_cookie_name("production"), "__Host-session")
 
     def test_production_rejects_http_and_weak_or_missing_secret(self):
         env = {

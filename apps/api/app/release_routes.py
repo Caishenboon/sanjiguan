@@ -17,6 +17,8 @@ from uuid import UUID
 from fastapi import APIRouter, Cookie, Header, HTTPException
 from fastapi.responses import Response
 
+from apps.api.app.core.runtime import SESSION_COOKIE_NAME
+
 from apps.api.app.core.ids import uuid7
 
 router = APIRouter(prefix="/api/v1")
@@ -104,7 +106,7 @@ def _projection(conn, owner_id: UUID) -> dict:
 
 @router.post("/exports", response_class=Response)
 def create_export(
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
     _key: str = Header(alias="Idempotency-Key"),
 ):
     pg, user = _pg(), _pg().auth(token)
@@ -162,7 +164,7 @@ def create_export(
 @router.delete("/exports/{export_id}", status_code=204)
 def revoke_export(
     export_id: UUID,
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
     _key: str = Header(alias="Idempotency-Key"),
 ):
     pg, user = _pg(), _pg().auth(token)
@@ -181,7 +183,7 @@ def delete_private_record(
     record_type: str,
     record_id: UUID,
     purge: bool = False,
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
     _key: str = Header(alias="Idempotency-Key"),
 ):
     pg, user = _pg(), _pg().auth(token)
@@ -226,7 +228,7 @@ def delete_private_record(
 @router.delete("/life-trend-executions/{execution_id}/ai-narrative", status_code=202)
 def delete_ai_narrative(
     execution_id: UUID,
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
     _key: str = Header(alias="Idempotency-Key"),
 ):
     pg, user = _pg(), _pg().auth(token)
@@ -253,7 +255,7 @@ def delete_ai_narrative(
 @router.delete("/account", status_code=202)
 def delete_account(
     confirmation: str = Header(alias="X-Delete-Confirmation"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
     _key: str = Header(alias="Idempotency-Key"),
 ):
     pg, user = _pg(), _pg().auth(token)

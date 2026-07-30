@@ -15,12 +15,12 @@ from psycopg_pool import ConnectionPool
 
 from apps.api.app.core.encryption import EnvironmentKeyProvider, TestKeyProvider, assert_key_provider_allowed
 from apps.api.app.core.ids import uuid7
-from apps.api.app.core.runtime import load_runtime_config
+from apps.api.app.core.runtime import SESSION_COOKIE_NAME, load_runtime_config
 from apps.api.app.core.security import new_token, token_hash
 from apps.api.app.schemas.models import InvitationAccept, ProfileCreate, ProfilePatch
 
 config = load_runtime_config()
-SESSION_COOKIE = "sanji-session" if config.app_env == "development" else "__Host-session"
+SESSION_COOKIE = SESSION_COOKIE_NAME
 backend = os.environ.get("STORAGE_BACKEND", "")
 key_provider_name = os.environ.get("KEY_PROVIDER", "")
 if backend != "postgres":

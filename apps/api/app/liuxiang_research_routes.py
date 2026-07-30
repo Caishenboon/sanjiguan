@@ -9,6 +9,8 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Cookie, Header, HTTPException
 from sanji_engine import execute, replay
 
+from apps.api.app.core.runtime import SESSION_COOKIE_NAME
+
 from apps.api.app.core.ids import uuid7
 from packages.research_data.core import load_manifests
 
@@ -65,7 +67,7 @@ def _request(payload: dict, run_id: str) -> dict:
 
 
 @router.get("/sources")
-def list_sources(token: str | None = Cookie(None, alias="__Host-session")):
+def list_sources(token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     _owner(token)
     return {"items": [{
         "dataset_id": value["dataset_id"],
@@ -77,7 +79,7 @@ def list_sources(token: str | None = Cookie(None, alias="__Host-session")):
 
 
 @router.get("/quality")
-def quality(token: str | None = Cookie(None, alias="__Host-session")):
+def quality(token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     _owner(token)
     return json.loads(
         (ROOT / "research-data/reports/vedastro-quality-2026-07-28.json").read_text(
@@ -87,12 +89,12 @@ def quality(token: str | None = Cookie(None, alias="__Host-session")):
 
 
 @router.get("/matching")
-def matching(token: str | None = Cookie(None, alias="__Host-session")):
+def matching(token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     return quality(token)["matching"]
 
 
 @router.get("/aggregate-report")
-def aggregate_report(token: str | None = Cookie(None, alias="__Host-session")):
+def aggregate_report(token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     _owner(token)
     return {
         "quality": quality(token),
@@ -109,7 +111,7 @@ def aggregate_report(token: str | None = Cookie(None, alias="__Host-session")):
 def create_execution(
     payload: dict = Body(...),
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     module, user = _pg(), _owner(token)
     asset_class = payload.get("asset_class")
@@ -217,7 +219,7 @@ def _stored(execution_id: UUID, token: str | None) -> tuple[dict, dict, dict]:
 @router.get("/executions/{execution_id}")
 def get_execution(
     execution_id: UUID,
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     _, result, _ = _stored(execution_id, token)
     return {
@@ -228,18 +230,18 @@ def get_execution(
 
 
 @router.get("/executions/{execution_id}/candidates")
-def get_candidates(execution_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def get_candidates(execution_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     return {"items": get_execution(execution_id, token)["result"]["candidates"]}
 
 
 @router.get("/executions/{execution_id}/evidence")
-def get_evidence(execution_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def get_evidence(execution_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     _, result, _ = _stored(execution_id, token)
     return result["module_results"]["signals"]["result"]
 
 
 @router.get("/executions/{execution_id}/trace")
-def get_trace(execution_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def get_trace(execution_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     _, result, _ = _stored(execution_id, token)
     return {"trace": result["trace"], "trace_hash": result["trace_hash"]}
 
@@ -247,7 +249,7 @@ def get_trace(execution_id: UUID, token: str | None = Cookie(None, alias="__Host
 @router.post("/executions/{execution_id}/replay")
 def replay_execution(
     execution_id: UUID,
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     request, original, manifest = _stored(execution_id, token)
     reproduced = replay(manifest, request)
@@ -260,7 +262,7 @@ def replay_execution(
 @router.post("/compare")
 def compare_research(
     payload: dict = Body(...),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     _owner(token)
     variants = payload.get("variants")

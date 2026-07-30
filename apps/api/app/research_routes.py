@@ -5,6 +5,8 @@ from datetime import datetime,timezone
 from pathlib import Path
 from uuid import UUID
 from fastapi import APIRouter,Body,Cookie,Header,HTTPException,Response
+from apps.api.app.core.runtime import SESSION_COOKIE_NAME
+
 from apps.api.app.core.ids import uuid7
 from packages.research_inference.engine import run_inference,stable_hash
 from packages.research_inference.providers import DeepSeekProvider,FakeProvider,TemplateProvider,merge_prose
@@ -32,7 +34,7 @@ def encrypt(value):
 
 @router.post("/analyses",status_code=201)
 def create_analysis(payload:dict=Body(...),response:Response=None,key:str=Header(alias="Idempotency-Key"),
-                    token:str|None=Cookie(None,alias="__Host-session")):
+                    token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     if payload.get("mode")!="research_preview" or not payload.get("synthetic_or_research"):
         raise HTTPException(422,"research_preview_fixture_or_research_profile_required")
@@ -67,7 +69,7 @@ def create_analysis(payload:dict=Body(...),response:Response=None,key:str=Header
 
 
 @router.get("/analyses")
-def list_analyses(token:str|None=Cookie(None,alias="__Host-session")):
+def list_analyses(token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
@@ -77,7 +79,7 @@ def list_analyses(token:str|None=Cookie(None,alias="__Host-session")):
 
 
 @router.get("/analyses/{analysis_id}")
-def get_analysis(analysis_id:UUID,token:str|None=Cookie(None,alias="__Host-session")):
+def get_analysis(analysis_id:UUID,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
@@ -89,7 +91,7 @@ def get_analysis(analysis_id:UUID,token:str|None=Cookie(None,alias="__Host-sessi
 
 @router.post("/analyses/{analysis_id}/run")
 def run_analysis(analysis_id:UUID,key:str=Header(alias="Idempotency-Key"),
-                 token:str|None=Cookie(None,alias="__Host-session")):
+                 token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     request={"analysis_id":str(analysis_id)}
     with module.pool.connection() as conn,conn.transaction():
@@ -208,7 +210,7 @@ def run_analysis(analysis_id:UUID,key:str=Header(alias="Idempotency-Key"),
 
 @router.post("/analyses/{analysis_id}/retry-prose")
 def retry_prose(analysis_id:UUID,key:str=Header(alias="Idempotency-Key"),
-                token:str|None=Cookie(None,alias="__Host-session")):
+                token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token);request={"analysis_id":str(analysis_id),"operation":"retry-prose"}
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
@@ -263,7 +265,7 @@ def _estimated_cost(usage):
 
 
 @router.get("/analyses/{analysis_id}/signals")
-def signals(analysis_id:UUID,token:str|None=Cookie(None,alias="__Host-session")):
+def signals(analysis_id:UUID,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user); rows=conn.execute(
@@ -272,7 +274,7 @@ def signals(analysis_id:UUID,token:str|None=Cookie(None,alias="__Host-session"))
 
 
 @router.get("/analyses/{analysis_id}/hypotheses")
-def hypotheses(analysis_id:UUID,token:str|None=Cookie(None,alias="__Host-session")):
+def hypotheses(analysis_id:UUID,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user);row=conn.execute("SELECT result_json FROM analysis_runs WHERE id=%s",(analysis_id,)).fetchone()
@@ -281,7 +283,7 @@ def hypotheses(analysis_id:UUID,token:str|None=Cookie(None,alias="__Host-session
 
 
 @router.get("/analyses/{analysis_id}/retrieval")
-def retrieval(analysis_id:UUID,token:str|None=Cookie(None,alias="__Host-session")):
+def retrieval(analysis_id:UUID,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
@@ -294,7 +296,7 @@ def retrieval(analysis_id:UUID,token:str|None=Cookie(None,alias="__Host-session"
 
 
 @router.get("/analyses/{analysis_id}/report")
-def report(analysis_id:UUID,token:str|None=Cookie(None,alias="__Host-session")):
+def report(analysis_id:UUID,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user);row=conn.execute(
@@ -308,7 +310,7 @@ def report(analysis_id:UUID,token:str|None=Cookie(None,alias="__Host-session")):
 
 @router.delete("/analyses/{analysis_id}/report",status_code=204)
 def delete_report(analysis_id:UUID,key:str=Header(alias="Idempotency-Key"),
-                  token:str|None=Cookie(None,alias="__Host-session")):
+                  token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token);request={"analysis_id":str(analysis_id),"operation":"delete-report"}
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)

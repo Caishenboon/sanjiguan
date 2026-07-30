@@ -9,6 +9,8 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Cookie, Header, HTTPException
 from sanji_engine import execute, replay
 
+from apps.api.app.core.runtime import SESSION_COOKIE_NAME
+
 from apps.api.app.core.ids import uuid7
 from apps.api.app.liuxiang_archive_routes import (
     DATA_VERSIONS, _collect_facts, _dec, _enc, _hash, _owned_profile, _pg, _user,
@@ -194,7 +196,7 @@ def _persist(
 
 @router.get("/profiles/{profile_id}/life-trend/evidence")
 def available_evidence(
-    profile_id: UUID, token: str | None = Cookie(None, alias="__Host-session")
+    profile_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -210,7 +212,7 @@ def available_evidence(
 def create_execution(
     profile_id: UUID, payload: dict = Body(default={}),
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -246,7 +248,7 @@ def create_execution(
 
 @router.get("/life-trend-executions/{execution_id}")
 def get_execution(
-    execution_id: UUID, token: str | None = Cookie(None, alias="__Host-session")
+    execution_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -270,7 +272,7 @@ def get_execution(
 @router.get("/life-trend-executions/{execution_id}/buckets/{bucket_id}")
 def get_bucket(
     execution_id: UUID, bucket_id: str,
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -289,7 +291,7 @@ def get_bucket(
 def create_narrative(
     execution_id: UUID, payload: dict = Body(default={}),
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -345,7 +347,7 @@ def create_narrative(
 @router.post("/life-trend-executions/{execution_id}/replay")
 def replay_execution(
     execution_id: UUID, key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -386,7 +388,7 @@ def replay_execution(
 @router.delete("/life-trend-executions/{execution_id}/input-snapshot", status_code=202)
 def purge_input_snapshot(
     execution_id: UUID, key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     """Irreversibly erase normalized private input; Replay then fails explicitly."""
     pg, user = _pg(), _user(token)
@@ -425,7 +427,7 @@ def purge_input_snapshot(
 def reanalyze(
     execution_id: UUID, payload: dict = Body(default={}),
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -461,7 +463,7 @@ def reanalyze(
 @router.post("/life-trend-executions/compare")
 def compare(
     payload: dict = Body(...), key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     try:
         left_id, right_id = UUID(payload["left_execution_id"]), UUID(payload["right_execution_id"])
