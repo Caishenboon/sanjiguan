@@ -22,8 +22,8 @@ with psycopg.connect(dsn, autocommit=True) as conn:
         applied_at timestamptz NOT NULL DEFAULT now())"""
     )
     for path in sorted((root / "infra/migrations").glob("*.sql")):
-        sql = path.read_text(encoding="utf-8")
-        checksum = hashlib.sha256(sql.encode()).hexdigest()
+        migration_sql = path.read_text(encoding="utf-8")
+        checksum = hashlib.sha256(migration_sql.encode()).hexdigest()
         prior = conn.execute(
             "SELECT checksum FROM schema_migrations WHERE version=%s", (path.name,)
         ).fetchone()
@@ -31,7 +31,7 @@ with psycopg.connect(dsn, autocommit=True) as conn:
             if prior[0] != checksum:
                 raise SystemExit(f"migration drift: {path.name}")
             continue
-        conn.execute(sql)
+        conn.execute(migration_sql)
         conn.execute(
             "INSERT INTO schema_migrations(version,checksum) VALUES (%s,%s)",
             (path.name, checksum),
