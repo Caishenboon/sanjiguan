@@ -33,6 +33,8 @@ assert "ingress:" in compose
 assert "PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://127.0.0.1:3000}" in compose
 demo = (root / "scripts/demo.py").read_text(encoding="utf-8")
 assert 'life_trend["deterministic_report_hash"]' in demo
+restore_rehearsal = (root / "scripts/ci_restore_rehearsal.sh").read_text(encoding="utf-8")
+assert 'test "$stable_checks" -ge 3' in restore_rehearsal
 assert "5432:5432" not in compose
 assert "service_completed_successfully" in compose
 assert "condition: service_healthy" in compose

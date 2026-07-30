@@ -43,12 +43,19 @@ docker run -d --name "$restore_container" \
   -v "$restore_volume:/var/lib/postgresql/data" \
   postgres:16.10-bookworm >/dev/null
 
+stable_checks=0
 for attempt in $(seq 1 30); do
   if docker exec "$restore_container" pg_isready -U migration_owner -d "$POSTGRES_DB" >/dev/null 2>&1; then
-    break
+    stable_checks=$((stable_checks + 1))
+    if [ "$stable_checks" -ge 3 ]; then
+      break
+    fi
+  else
+    stable_checks=0
   fi
   sleep 1
 done
+test "$stable_checks" -ge 3
 docker exec "$restore_container" pg_isready -U migration_owner -d "$POSTGRES_DB"
 docker exec "$restore_container" psql -U migration_owner -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -c \
   "CREATE ROLE app_runtime NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS;"
