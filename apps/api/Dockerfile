@@ -3,6 +3,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHONPATH=/app/packages/sanji-
 WORKDIR /app
 RUN groupadd --system sanji && useradd --system --gid sanji --home-dir /app sanji
 COPY apps/api/requirements.txt /tmp/requirements.txt
+COPY packages/sanji-engine /app/packages/sanji-engine
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 COPY apps /app/apps
 COPY packages /app/packages

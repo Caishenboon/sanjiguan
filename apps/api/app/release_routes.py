@@ -11,7 +11,7 @@ import io
 import json
 import os
 import zipfile
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from uuid import UUID
 
 from fastapi import APIRouter, Cookie, Header, HTTPException
@@ -29,7 +29,7 @@ def _pg():
 
 
 def _json(value):
-    if isinstance(value, (datetime,)):
+    if isinstance(value, (date, datetime)):
         return value.isoformat()
     if isinstance(value, UUID):
         return str(value)
