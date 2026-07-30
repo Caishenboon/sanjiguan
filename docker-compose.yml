@@ -1,45 +1,87 @@
 services:
   postgres:
-    image: pgvector/pgvector:pg16
+    image: postgres:16.10-bookworm
     environment:
-      POSTGRES_DB: samsara
+      POSTGRES_DB: ${POSTGRES_DB:?set via ignored .env}
       POSTGRES_USER: migration_owner
-      POSTGRES_PASSWORD: ${POSTGRES_MIGRATION_PASSWORD:?set in ignored local environment}
-    ports:
-      - "127.0.0.1:5432:5432"
+      POSTGRES_PASSWORD: ${POSTGRES_MIGRATION_PASSWORD:?set via ignored .env}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U migration_owner -d samsara"]
+      test: ["CMD-SHELL", "pg_isready -U migration_owner -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 3s
-      retries: 10
+      retries: 20
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./infra/migrations:/docker-entrypoint-initdb.d:ro
+    restart: unless-stopped
+    networks: [private, egress]
+
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    command: ["python", "scripts/bootstrap_db.py"]
+    environment:
+      MIGRATION_DATABASE_URL: postgresql://migration_owner:${POSTGRES_MIGRATION_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      POSTGRES_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:?set via ignored .env}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [private]
+    restart: "no"
 
   api:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
     environment:
-      APP_ENV: development
-      DATABASE_URL: postgresql://app_runtime:${POSTGRES_APP_PASSWORD:?set in ignored local environment}@postgres:5432/samsara
-      DEEPSEEK_API_KEY: ""
+      APP_ENV: ${APP_ENV:-development}
+      SANJI_VERSION: ${SANJI_VERSION:-v1-candidate}
+      STORAGE_BACKEND: postgres
+      DATABASE_URL: postgresql://app_runtime:${POSTGRES_APP_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://127.0.0.1:3000}
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
+      KEY_PROVIDER: ${KEY_PROVIDER:?set via ignored .env}
+      FIELD_ENCRYPTION_KEY_ID: ${FIELD_ENCRYPTION_KEY_ID:?set via ignored .env}
+      FIELD_ENCRYPTION_KEY_HEX: ${FIELD_ENCRYPTION_KEY_HEX:?set via ignored .env}
+      OWNER_BOOTSTRAP_TOKEN: ${OWNER_BOOTSTRAP_TOKEN:-}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-chat}
+      DB_POOL_MAX: ${DB_POOL_MAX:-8}
     depends_on:
-      postgres:
-        condition: service_healthy
-    ports:
-      - "127.0.0.1:8000:8000"
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready')"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+    networks: [private]
 
   web:
     build:
       context: .
       dockerfile: apps/web/Dockerfile
     environment:
-      API_BASE_URL: http://api:8000
+      SANJI_API_ORIGIN: http://api:8000
+      NEXT_PUBLIC_SANJI_VERSION: ${SANJI_VERSION:-v1-candidate}
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     ports:
       - "127.0.0.1:3000:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000').then(r=>{if(!r.ok)process.exit(1)})"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+    networks: [private]
 
 volumes:
   postgres-data:
+
+networks:
+  private:
+    internal: true
+  egress:

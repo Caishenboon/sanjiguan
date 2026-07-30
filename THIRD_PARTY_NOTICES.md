@@ -19,6 +19,8 @@ human-readable summary and is not a repository license.
 | Noto Sans SC via Fontsource | 5.3.0 | OFL-1.1 | Deterministic interface typography |
 | Noto Serif SC via Fontsource | 5.3.0 | OFL-1.1 | Deterministic title typography |
 | Noto Sans Mono via Fontsource | 5.3.0 | OFL-1.1 | Deterministic hash and trace typography |
+| PostgreSQL container | 16.10-bookworm | PostgreSQL License | Private relational storage and RLS |
+| Caddy container | 2.10.0-alpine | Apache-2.0 | Optional single-server HTTPS reverse proxy |
 
 Oracle projects are never authority for Sanji Engine output. Their modern
 interpretation prose, visual designs, AI prompts, and unlicensed assets are not

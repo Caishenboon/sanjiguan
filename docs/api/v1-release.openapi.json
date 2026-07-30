@@ -1,0 +1,27 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "三际观 V1 release operations",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {"get": {"summary": "Liveness"}},
+    "/ready": {"get": {"summary": "Database, migration and provider readiness"}},
+    "/api/v1/auth/bootstrap-owner": {"post": {"summary": "One-time first owner creation"}},
+    "/api/v1/exports": {"post": {"summary": "Create a short-lived personal archive"}},
+    "/api/v1/exports/{export_id}": {"delete": {"summary": "Immediately revoke an export"}},
+    "/api/v1/private-records/{record_type}/{record_id}": {
+      "delete": {"summary": "Withdraw, soft-delete or purge a private record"}
+    },
+    "/api/v1/life-trend-executions/{execution_id}/ai-narrative": {
+      "delete": {"summary": "Delete AI prose without changing deterministic core"}
+    },
+    "/api/v1/account": {"delete": {"summary": "Purge the current account and private derivatives"}}
+  },
+  "x-security-boundary": {
+    "session": "__Host-session; HttpOnly; SameSite=Strict",
+    "idempotency": "24-hour user, route and request fingerprint binding",
+    "private-storage": "PostgreSQL FORCE RLS",
+    "llm": "never receives credentials or unapproved private prose"
+  }
+}

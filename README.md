@@ -1,78 +1,84 @@
-# 三际观——宿世因缘与命势推演系统
+# 三际观
 
-内部工程名继续使用 `samsara-engine`。确定性核心位于 `packages/sanji-engine`；
-八字、紫微与实物三钱已有 Owner-only、可回放的确定性机械研究引擎；
-其生产规则仍未激活。解释性易经、密宗、中阴、宿世身份、因缘评分和
-命势 K 线继续禁用。八字与紫微必须显式选择研究 Profile，不存在默认
-方法；所有解释层均为空。
+三际观是一个面向少数授权使用者的私人研究工具。V1 将个人记录、易经三钱、
+八字与紫微机械结构、六象研究、宿世观、中阴观、缘契观、命势长图、人生 K 线、
+三际断章和三际录串成一条可回放、可重新分析的确定性链路。
 
-## API
+六象及专题融合属于三际观原创研究体系，不是古代既定算法。相关规则保持
+`research_active / UNCONFIRMED / production_activatable=false`。结构化结果由
+`packages/sanji-engine` 决定；DeepSeek 可以造景，不能造术。没有 AI 密钥时，
+完整确定性报告仍可使用。
 
-```bash
-python -m venv work/.venv
-work/.venv/Scripts/python -m pip install -r apps/api/requirements.txt
-work/.venv/Scripts/python -m uvicorn apps.api.app.main:app --reload
-```
+仓库目前保持 Private。代码许可证、规则数据许可证、知识内容权利和测试数据许可
+仍需项目所有者分别书面决定；当前没有默认开源许可证。
 
-内存适配器只用于单元测试和本地快速演示，并且必须显式设置
-`STORAGE_BACKEND=memory`；未声明 backend 不会自动回退。`APP_ENV=production`
-时内存适配器会拒绝启动。
+## 快速开始
 
-真实 PostgreSQL 测试模式：
+需要 Git、Docker 和 Docker Compose：
 
 ```bash
-set APP_ENV=test
-set STORAGE_BACKEND=postgres
-set KEY_PROVIDER=test-only
-set TEST_ENCRYPTION_KEY_HEX=<64 hex test-only key>
-set DATABASE_URL=postgresql://.../sanjiguan_test
-work/.venv/Scripts/python -m uvicorn apps.api.app.postgres_app:app
+git clone <private-repository-url>
+cd sanjiguan
+python scripts/init_env.py
+docker compose up --build
 ```
 
-该入口实现邀请、会话和 Profile CRUD 的 HTTP→PostgreSQL 链路。测试 key
-provider 在生产环境被拒绝。
-PostgreSQL 16 migration：
+打开 `http://127.0.0.1:3000/start`，使用忽略文件 `.env` 中的
+`OWNER_BOOTSTRAP_TOKEN` 完成首次所有者建立。口令只在本机读取，不要粘贴到聊天、
+日志或提交记录。
+
+停止与重启：
 
 ```bash
-set DATABASE_URL=postgresql://migration_owner:...@localhost/sanjiguan
-work/.venv/Scripts/python scripts/migrate.py
+docker compose down
+docker compose up -d
+docker compose logs -f web api
 ```
 
-生产数据库凭据和加密密钥必须由 Secret Manager/KMS 注入。仓库中的测试 key
-provider 明确禁止在生产环境使用。
+`docker compose down` 不删除数据库卷。彻底清理必须显式执行
+`docker compose down --volumes`；该操作不可恢复。
 
-## Web
+## 虚构 Demo
+
+在全新、可丢弃的本地数据库中：
 
 ```bash
-cd apps/web
-pnpm install --frozen-lockfile
-pnpm build
-pnpm dev
+python scripts/demo.py create
 ```
 
-共享设计系统与组件故事：
+Demo 中的主体、地点、梦境、关系和事件全部虚构，不代表现实验证，也不依赖
+DeepSeek 或外部完整数据集。
+
+## 运行边界
+
+- 普通用户入口固定为：首页、记录、合参、三际录、我的。
+- 研究管理员区受服务端会话和角色门禁保护。
+- PostgreSQL 是三际录和执行历史的唯一事实来源；浏览器仅保留未提交草稿与显示状态。
+- 原版本 Replay 使用不可变版本和 Hash；彻底删除私人快照后明确返回不可回放。
+- AI 不参与排盘、证据、评分、排序、吉凶、应期或 Hash。
+- API、Web 与 LLM 层不得复制核心算法。
+
+## 文档入口
+
+- [系统架构](docs/architecture/sanji-engine-contract.md)
+- [V1 功能与发布清单](docs/releases/v1-checklist.md)
+- [本地和服务器部署](docs/deployment/server.md)
+- [备份与恢复](docs/operations/backup-restore.md)
+- [换电脑迁移](docs/operations/move-computer.md)
+- [导出与删除](docs/privacy/data-export-delete.md)
+- [DeepSeek 配置](docs/integrations/deepseek-v1.md)
+- [安全说明](SECURITY.md)
+- [贡献指南](CONTRIBUTING.md)
+- [开源准备状态](docs/open-source/readiness.md)
+- [API 契约](docs/api/openapi.yaml)
+
+## 开发验证
 
 ```bash
-cd packages/sanji-ui
-pnpm install --frozen-lockfile
-pnpm build-storybook
+python -m unittest discover -s tests -p "test_*.py"
+python scripts/validate_v1_release.py
+cd apps/web && pnpm install --frozen-lockfile && pnpm build
 ```
 
-External Oracle 仅用于合成/批准数据的差分研究，不进入 Engine Hash，
-也不允许生产调用。固定版本与许可证见 `third-party-lock.json`。
-
-## 验收
-
-```bash
-work/.venv/Scripts/python -m unittest discover -s tests -p "test_*.py"
-work/.venv/Scripts/python -m unittest discover -s apps/api/tests -p "test_*.py"
-work/.venv/Scripts/python scripts/validate_sprint1a5.py
-work/.venv/Scripts/python scripts/validate_sprint1a6.py
-work/.venv/Scripts/python scripts/validate_sanji_engine.py
-work/.venv/Scripts/python scripts/validate_bazi_method_foundation.py
-work/.venv/Scripts/python scripts/validate_ziwei_oracle_ui.py
-work/.venv/Scripts/python scripts/check_doc_links.py
-```
-
-真实 PostgreSQL 16 测试需要 `TEST_DATABASE_URL`；CI 会从空库执行全部 migration、
-重复迁移、RLS/授权/撤权和并发幂等测试。
+完整 CI 还会运行 PostgreSQL 16、RLS、HTTP→PostgreSQL E2E、Windows/Linux
+确定性、视觉回归、Lighthouse、Gitleaks、许可证和 Docker 干净启动门禁。
