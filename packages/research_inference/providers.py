@@ -20,6 +20,12 @@ judgement 的 benefit 回答真正有利之处，risk 回答最需警惕之处�
 相争：两路皆有来处尚未分主次；分别说明双方证据与分差，待关键结构稳定后以仍能持续者为主。
 不成断：反复意象若与近期接触相合，只能入卷不能独立成证；待更早记录或独立证契后再议。"""
 
+LIFE_TREND_REPORT_PROMPT = """你是三际观三际断章的受控成文器。三际枢已经锁定时间桶、K线、吉凶、应期、证据、逆证、候选字段和认识状态。
+你只能润色断章、象辞、释义、往际、当下、未来与行动提示，不能增加、删除或修改任何结构事实。
+不得修改姓名、年代、地点、身份、死因、轮回次数、因果债务、K线、吉凶、应期、Strength、Confidence、排序、支持或逆证。
+任何带【可能】【相争】【可能·资料不足】的字段必须原样保留认识状态。不得增加精确日期，不得伪造古籍、经典、传承、历史人物或宏大身份。
+只输出JSON，且字段必须且只能是 chapter、image_text、plain_interpretation、past、current、future、action_guidance；所有字段均为非空字符串。"""
+
 
 class FakeProvider:
     name="fake"
@@ -80,6 +86,40 @@ class DeepSeekProvider:
                     type(self).failure_count=0
                     content=json.loads(parsed["choices"][0]["message"]["content"])
                     validate_prose(content)
+                    usage=parsed.get("usage") or {}
+                    return {"content":content,"model":parsed.get("model",self.model),
+                      "usage":{"prompt_tokens":usage.get("prompt_tokens",0),
+                      "completion_tokens":usage.get("completion_tokens",0),
+                      "total_tokens":usage.get("total_tokens",0)}}
+            except (urllib.error.HTTPError,urllib.error.URLError,TimeoutError,ValueError,KeyError,json.JSONDecodeError) as exc:
+                type(self).failure_count+=1
+                if type(self).failure_count>=3:type(self).circuit_open_until=time.time()+60
+                retryable=not isinstance(exc,urllib.error.HTTPError) or exc.code in (429,500,502,503,504)
+                if not retryable or attempt==self.retries:raise RuntimeError("deepseek_provider_failure") from None
+                time.sleep(2**attempt)
+
+    def generate_life_trend_with_metrics(self,payload:dict)->dict:
+        if not self.configured:raise RuntimeError("deepseek_not_configured")
+        if time.time()<type(self).circuit_open_until:raise RuntimeError("deepseek_circuit_open")
+        if type(self).request_count>=self.max_requests:raise RuntimeError("deepseek_request_budget_exhausted")
+        allowed={"prompt_version","core_output_hash","narrative_input_hash","report_outline",
+          "locked_timeline","locked_timing_windows","protected_entities",
+          "epistemic_suffixes","payload_hash"}
+        safe={key:payload[key] for key in allowed if key in payload}
+        body=json.dumps({"model":self.model,"messages":[
+          {"role":"system","content":LIFE_TREND_REPORT_PROMPT},
+          {"role":"user","content":json.dumps(safe,ensure_ascii=False)}],
+          "response_format":{"type":"json_object"},"max_tokens":self.max_tokens,
+          "stream":False,"thinking":{"type":"disabled"}}).encode()
+        request=urllib.request.Request(f"{self.base}/chat/completions",body,
+          {"Authorization":f"Bearer {self.key}","Content-Type":"application/json"})
+        for attempt in range(self.retries+1):
+            type(self).request_count+=1
+            try:
+                with urllib.request.urlopen(request,timeout=self.timeout) as response:
+                    parsed=json.loads(response.read())
+                    type(self).failure_count=0
+                    content=json.loads(parsed["choices"][0]["message"]["content"])
                     usage=parsed.get("usage") or {}
                     return {"content":content,"model":parsed.get("model",self.model),
                       "usage":{"prompt_tokens":usage.get("prompt_tokens",0),

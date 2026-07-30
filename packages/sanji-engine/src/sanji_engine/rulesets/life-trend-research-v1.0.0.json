@@ -1,0 +1,22 @@
+{
+  "schema_version": "ruleset-bundle/1.0.0",
+  "bundle_id": "life-trend-research-v1.0.0",
+  "bundle_version": "1.0.0",
+  "status": "research_active",
+  "system_class": "sanji_original_research",
+  "review_status": "UNCONFIRMED",
+  "license_status": "UNDECIDED",
+  "production_activatable": false,
+  "modules": {
+    "calendar": {"method_id": "CALENDAR.MIGRATION.BASELINE.V1", "status": "research_active", "enabled": false},
+    "signals": {"method_id": "SIGNALS.LIFE_TREND.INPUT.REFERENCES.V1", "status": "research_active", "enabled": false, "production_activatable": false},
+    "inference": {"method_id": "INFERENCE.LIFE_TREND.RESEARCH.V1", "status": "research_active", "enabled": false, "production_activatable": false},
+    "bazi": {"method_id": "BAZI.INTERPRETIVE.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "ziwei": {"method_id": "ZIWEI.INTERPRETIVE.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "yijing": {"method_id": "YIJING.INTERPRETIVE.UNCONFIRMED", "status": "draft", "enabled": false, "review_status": "UNCONFIRMED"},
+    "past-life": {"method_id": "PAST_LIFE.TOPIC.RESEARCH.V1", "status": "research_active", "enabled": false, "review_status": "UNCONFIRMED", "production_activatable": false},
+    "bardo": {"method_id": "BARDO.TOPIC.RESEARCH.V1", "status": "research_active", "enabled": false, "review_status": "UNCONFIRMED", "production_activatable": false},
+    "relationship": {"method_id": "RELATIONSHIP.TOPIC.RESEARCH.V1", "status": "research_active", "enabled": false, "review_status": "UNCONFIRMED", "production_activatable": false},
+    "life-chart": {"method_id": "LIFE_TREND.SANJI_ORIGINAL.RESEARCH.V1", "status": "research_active", "enabled": true, "review_status": "UNCONFIRMED", "production_activatable": false}
+  }
+}

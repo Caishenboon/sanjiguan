@@ -11,6 +11,7 @@ const TOOLS = [
   { id:"sushe", title:"宿世观", kind:"原创专题研究", status:"研究可用", needs:"已授权的主体记录与结构标签", description:"生成一至三组确定性研究候选；姓名、年代、地点、身份与死因均明确标注为可能，不主张历史事实。", href:"/consult/sushe" },
   { id:"zhongyin", title:"中阴观", kind:"原创专题研究", status:"研究可用", needs:"人生过渡记录；离世模式另需明确离世事实", description:"观察人生结构过渡；不会预测在世主体的死亡时间、死法或寿命。", href:"/consult/zhongyin" },
   { id:"yuanqi", title:"缘契观", kind:"原创专题研究", status:"研究可用", needs:"关系事件、承诺与相应同意范围", description:"区分单方观察与双方合参，不输出命定伴侣、必然复合或不可改变的关系结论。", href:"/consult/yuanqi" },
+  { id:"life-trend", title:"命势长图", kind:"原创时序研究", status:"研究可用", needs:"已授权的人生事件、行为、愿向与关系记录", description:"确定性展示往际、当下和规则推演的未来；空白处不插值，K线不是证券价格。", href:"/consult/life-trend" },
 ] as const;
 
 export default function ConsultCenter(){

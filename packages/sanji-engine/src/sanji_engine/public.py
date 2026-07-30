@@ -36,6 +36,11 @@ from .topics.v1 import (
     SIGNAL_METHOD_ID as TOPIC_SIGNAL_METHOD_ID,
     run_topic_research_v1,
 )
+from .life_chart import (
+    METHOD_ID as LIFE_TREND_METHOD_ID,
+    OPERATION as LIFE_TREND_OPERATION,
+    run_life_trend_v1,
+)
 from .errors import (
     EngineError,
     INPUT_INVALID,
@@ -132,6 +137,14 @@ def validate_request(request: dict) -> dict:
         raise EngineError(
             INPUT_INVALID,
             "physical three-coin yijing must be requested as an isolated mechanical module",
+        )
+    if "life-chart" in modules and (
+        modules != ["life-chart"]
+        or value["ruleset_bundle_id"] != "life-trend-research-v1.0.0"
+    ):
+        raise EngineError(
+            INPUT_INVALID,
+            "life trend research must be an isolated life-chart request with its research ruleset",
         )
     context = _require_mapping(value["deterministic_context"], "deterministic_context")
     if context.get("random_method") != "none" or context.get("random_seed") is not None:
@@ -250,6 +263,12 @@ def validate_request(request: dict) -> dict:
             raise EngineError(
                 INPUT_INVALID,
                 "research operation and ruleset bundle do not match",
+            )
+    if bundle["bundle_id"] == "life-trend-research-v1.0.0":
+        if snapshot.get("operation") != LIFE_TREND_OPERATION:
+            raise EngineError(
+                INPUT_INVALID,
+                "life trend operation and ruleset bundle do not match",
             )
     if bundle.get("status") == "revoked_for_future_runs" and value["run_mode"] != "replay":
         raise EngineError(
@@ -696,6 +715,17 @@ def execute(request: dict) -> dict:
                     content_hash(item),
                 ),
             )
+    elif bundle["bundle_id"] == "life-trend-research-v1.0.0":
+        snapshot = validated["input_snapshot"]
+        factors = snapshot.get("factors", [])
+        if isinstance(factors, list):
+            snapshot["factors"] = sorted(
+                factors,
+                key=lambda item: (
+                    str(item.get("factor_id", "")) if isinstance(item, dict) else "",
+                    content_hash(item),
+                ),
+            )
     input_projection = deepcopy(validated)
     input_projection.pop("run_id", None)
     # Execution and replay are transport intents, not calculation inputs. Excluding
@@ -709,6 +739,7 @@ def execute(request: dict) -> dict:
     yijing_metadata: dict = {}
     bazi_metadata: dict = {}
     ziwei_metadata: dict = {}
+    life_trend_metadata: dict = {}
     research_requested = {"signals", "inference"} <= set(
         validated["requested_modules"]
     )
@@ -802,6 +833,46 @@ def execute(request: dict) -> dict:
             }
             ziwei_result = {**module, "content_hash": content_hash(module)}
             trace.extend(ziwei_trace)
+    life_trend_result = None
+    if "life-chart" in validated["requested_modules"]:
+        definition = bundle["modules"]["life-chart"]
+        if definition["enabled"]:
+            result, life_trend_trace = run_life_trend_v1(
+                validated["input_snapshot"]
+            )
+            life_trend_metadata = {
+                "life_trend_core_output_hash": result["core_output_hash"],
+                "life_trend_deterministic_report_hash": result[
+                    "deterministic_report_hash"
+                ],
+                "life_trend_narrative_input_hash": result["narrative_input_hash"],
+                "life_trend_domain_trace_hash": result["trace_hash"],
+                "life_trend_result_hash": result["result_hash"],
+            }
+            module = {
+                "module_id": "life-chart",
+                "module_version": "1.0.0",
+                "method_id": LIFE_TREND_METHOD_ID,
+                "method_status": "research_active",
+                "tradition_scope": "sanji_original",
+                "review_status": "UNCONFIRMED",
+                "production_activatable": False,
+                "result": result,
+                "trace_step_ids": [step["step_id"] for step in life_trend_trace],
+                "rule_refs": [result["ruleset_version"]],
+                "source_refs": ["SANJI_ORIGINAL_RESEARCH"],
+                "uncertainties": [
+                    "LIFE_TREND_RULES_UNCONFIRMED",
+                    "NO_REAL_WORLD_PREDICTIVE_VALIDATION",
+                ],
+                "sensitivity_flags": sorted({
+                    "boundary_sensitive"
+                    for factor in result["factors"]
+                    if factor["boundary_sensitive"]
+                }),
+            }
+            life_trend_result = {**module, "content_hash": content_hash(module)}
+            trace.extend(life_trend_trace)
     for module_id in validated["requested_modules"]:
         definition = bundle["modules"][module_id]
         if module_id == "calendar" and definition["enabled"]:
@@ -817,6 +888,8 @@ def execute(request: dict) -> dict:
             module_results[module_id] = bazi_result
         elif module_id == "ziwei" and ziwei_result is not None:
             module_results[module_id] = ziwei_result
+        elif module_id == "life-chart" and life_trend_result is not None:
+            module_results[module_id] = life_trend_result
         else:
             module_results[module_id] = disabled_result(module_id, definition)
             disabled_modules.append(module_id)
@@ -854,6 +927,11 @@ def execute(request: dict) -> dict:
             "ziwei": bundle["modules"]["ziwei"]["method_id"],
         }
         manifest_base["domain_result_hashes"] = ziwei_metadata
+    if life_trend_result is not None:
+        manifest_base["method_versions"] = {
+            "life-chart": bundle["modules"]["life-chart"]["method_id"],
+        }
+        manifest_base["domain_result_hashes"] = life_trend_metadata
     replay_manifest = {
         **manifest_base,
         "content_hash": content_hash(manifest_base),

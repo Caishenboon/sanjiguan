@@ -177,3 +177,35 @@ test("topic journey: low-confidence generated identity stays visible and qualifi
   await page.getByText("研究详情", {exact:true}).click();
   await expect(page.getByText("sha256:synthetic-output")).toBeVisible();
 });
+
+test("life trend journey: gaps, future projection and deterministic report stay distinct", async ({ page }) => {
+  await seedSubject(page);
+  await page.route(`**/api/v1/profiles/${profileId}/life-trend/evidence`, async route =>
+    route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({factors:[
+      {factor_id:"e1:lx_shi",factor_type:"lx_shi",occurred_on:"2024-03-01",tags:["学习"]},
+      {factor_id:"e2:lx_yuan",factor_type:"lx_yuan",occurred_on:"2025-05-01",tags:["持续"]},
+    ]})})
+  );
+  await page.route(`**/api/v1/profiles/${profileId}/life-trend/executions`, async route =>
+    route.fulfill({status:201,contentType:"application/json",body:JSON.stringify({
+      id:"life-trend-synthetic",archive_id:"life-trend-archive",status:"provisional",
+      timeline:[
+        {bucket_id:"2024",start:"2024-01-01",end:"2024-12-31",segment:"observed_past",candle:{open:0,high:18,low:0,close:18},confidence_bp:6400,coverage_bp:4200,status:"provisional",auspice:{label:"吉中有阻"},missing:[]},
+        {bucket_id:"2025",start:"2025-01-01",end:"2025-12-31",segment:"observed_past",candle:{open:18,high:25,low:12,close:21},confidence_bp:6500,coverage_bp:4300,status:"contested",auspice:{label:"吉凶相争"},missing:[]},
+        {bucket_id:"2026",start:"2026-01-01",end:"2026-12-31",segment:"insufficient_gap",candle:null,confidence_bp:0,coverage_bp:0,status:"insufficient",auspice:{label:"资料不足，暂不定吉凶"},missing:["no_allocated_evidence"]},
+        {bucket_id:"2027",start:"2027-01-01",end:"2027-12-31",segment:"projected_future",candle:{open:21,high:24,low:21,close:24},confidence_bp:4100,coverage_bp:2800,status:"provisional",auspice:{label:"吉中有阻"},missing:[]},
+      ],
+      timing_windows:[{window_id:"timing:2027",start:"2027-01-01",end:"2027-12-31",type:"action_window",confidence_bp:4100}],
+      report:{chapter:"云开有碍 · 吉中有阻",symbolic_title:"云开有碍",image_text:"长卷依时展开，明处据实落笔，空处仍留白。",plain_interpretation:"这是完全虚构的确定性页面契约。",past:"往际有两段事实窗口。",current:"当下资料留白。",future:"未来为规则推演，可信度递减。",auspice:"吉中有阻",action_guidance:"先处理逆证，再稳步推进。"},
+      core_output_hash:"sha256:synthetic-core",deterministic_report_hash:"sha256:synthetic-report",trace_hash:"sha256:synthetic-trace",
+    })})
+  );
+  await page.goto("/consult/life-trend");
+  await page.getByRole("button",{name:"生成命势长图与断章"}).click();
+  await expect(page.getByRole("heading",{name:"云开有碍 · 吉中有阻"})).toBeVisible();
+  const readableTimeline=page.viewportSize()!.width<=767?page.locator(".mobile-buckets"):page.locator(".table-scroll");
+  await expect(readableTimeline.getByText("留白",{exact:true})).toBeVisible();
+  await expect(readableTimeline.getByText("未来推演",{exact:page.viewportSize()!.width>767})).toBeVisible();
+  await expect(page.getByText("人生K线不是证券价格")).toBeVisible();
+  if(page.viewportSize()!.width>767)await expect(page.getByText("命势长图文字表格回退")).toBeVisible();
+});

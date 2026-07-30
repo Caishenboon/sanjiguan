@@ -231,3 +231,5 @@ from apps.api.app.liuxiang_archive_routes import router as liuxiang_archive_rout
 app.include_router(liuxiang_archive_router)
 from apps.api.app.topic_routes import router as topic_router
 app.include_router(topic_router)
+from apps.api.app.life_trend_routes import router as life_trend_router
+app.include_router(life_trend_router)

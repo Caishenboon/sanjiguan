@@ -238,6 +238,80 @@ class PostgreSQLHttpE2E(unittest.TestCase):
         self.assertEqual(409, unavailable.status_code, unavailable.text)
         self.assertEqual("replay_unavailable", unavailable.json()["detail"]["code"])
 
+    def test_life_trend_report_is_persistent_replayable_and_ai_optional(self):
+        self.login()
+        created = self.client.post(
+            "/api/v1/profiles", json=self.payload("Synthetic Life Trend"),
+            headers={"Idempotency-Key": "life-trend-profile-e2e-0001"},
+        )
+        self.assertEqual(201, created.status_code, created.text)
+        profile_id = created.json()["id"]
+        for index, entry_date in enumerate(("2024-01-10", "2025-03-12"), 1):
+            record = self.client.post(
+                f"/api/v1/profiles/{profile_id}/journal",
+                json={
+                    "entry_date": entry_date, "entry_type": "life_event",
+                    "fields": {
+                        "title": f"synthetic event {index}",
+                        "date_precision": "exact_date", "state": "completed",
+                        "direction": "positive",
+                    },
+                    "free_text": "fully synthetic private fixture",
+                    "tags": [], "evidence_ids": [], "candidate_evidence": True,
+                },
+                headers={"Idempotency-Key": f"life-trend-journal-{index:04d}"},
+            )
+            self.assertEqual(201, record.status_code, record.text)
+        evidence = self.client.get(f"/api/v1/profiles/{profile_id}/life-trend/evidence")
+        self.assertEqual(200, evidence.status_code, evidence.text)
+        self.assertFalse(evidence.json()["full_private_text_included"])
+        created_run = self.client.post(
+            f"/api/v1/profiles/{profile_id}/life-trend/executions",
+            json={
+                "as_of": "2026-07-30T00:00:00Z", "start_date": "2024-01-01",
+                "end_date": "2028-12-31", "granularity": "year",
+                "future_bucket_count": 2,
+            },
+            headers={"Idempotency-Key": "life-trend-execution-e2e-0001"},
+        )
+        self.assertEqual(201, created_run.status_code, created_run.text)
+        body, execution_id = created_run.json(), created_run.json()["id"]
+        self.assertIn("core_output_hash", body)
+        self.assertTrue(any(item["segment"] == "projected_future" for item in body["timeline"]))
+        replayed = self.client.post(
+            f"/api/v1/life-trend-executions/{execution_id}/replay",
+            headers={"Idempotency-Key": "life-trend-replay-e2e-0001"},
+        )
+        self.assertEqual(200, replayed.status_code, replayed.text)
+        self.assertTrue(replayed.json()["matched"])
+        fallback = self.client.post(
+            f"/api/v1/life-trend-executions/{execution_id}/narrative",
+            json={"external_model_confirmed": False},
+            headers={"Idempotency-Key": "life-trend-narrative-e2e-0001"},
+        )
+        self.assertEqual(200, fallback.status_code, fallback.text)
+        self.assertEqual("deterministic_template", fallback.json()["source"])
+        reanalyzed = self.client.post(
+            f"/api/v1/life-trend-executions/{execution_id}/reanalyze",
+            json={"as_of": "2026-07-30T00:00:00Z", "granularity": "year"},
+            headers={"Idempotency-Key": "life-trend-reanalysis-e2e-0001"},
+        )
+        self.assertEqual(201, reanalyzed.status_code, reanalyzed.text)
+        compared = self.client.post(
+            "/api/v1/life-trend-executions/compare",
+            json={
+                "left_execution_id": execution_id,
+                "right_execution_id": reanalyzed.json()["id"],
+            },
+            headers={"Idempotency-Key": "life-trend-compare-e2e-0001"},
+        )
+        self.assertEqual(200, compared.status_code, compared.text)
+        self.assertIn("policy_changed", compared.json()["differences"])
+        archive = self.client.get(f"/api/v1/chronicle?profile_id={profile_id}")
+        self.assertTrue(any(
+            item["entry_type"] == "life_trend_report" for item in archive.json()["items"]
+        ))
+
     def test_owner_only_research_preview_pipeline_is_replayable(self):
         self.login()
         self.assertEqual(403,self.client.get("/api/v1/admin/research/analyses").status_code)

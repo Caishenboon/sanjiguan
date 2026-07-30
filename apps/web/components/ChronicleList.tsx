@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import ProductShell, { PageState } from "./ProductShell";
 import { apiRequest, readProductSession } from "../lib/product-session";
 type Entry={id:string;profile_id:string;execution_id:string|null;entry_type:string;title:string;status:string;replay_available:boolean;created_at:string;withdrawn:boolean};
-const typeName:Record<string,string>={record:"记录",mechanical_result:"机械结果",liuxiang_research:"六象研究"};
+const typeName:Record<string,string>={record:"记录",mechanical_result:"机械结果",liuxiang_research:"六象研究",topic_research:"专题推演",life_trend_report:"命势长图与断章"};
 const statusName:Record<string,string>={decisive:"象意较明",provisional:"初见其象",contested:"诸象相争",insufficient:"资料不足，暂不成断",recorded:"已记录"};
 export default function ChronicleList(){
  const [items,setItems]=useState<Entry[]>([]);const [type,setType]=useState("");const [status,setStatus]=useState("");const [query,setQuery]=useState("");const [loading,setLoading]=useState(true);const [error,setError]=useState("");

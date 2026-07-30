@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.invalid/schemas/life-trend-result/1.0.0",
+  "title": "Deterministic life trend result",
+  "type": "object",
+  "required": [
+    "schema_version", "tradition_scope", "activation", "review_status",
+    "production_activatable", "buckets", "timing_windows", "core_output_hash",
+    "deterministic_report_hash", "narrative_input_hash", "trace_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "life-trend-result/1.0.0"},
+    "tradition_scope": {"const": "sanji_original"},
+    "activation": {"const": "research_active"},
+    "review_status": {"const": "UNCONFIRMED"},
+    "production_activatable": {"const": false},
+    "granularity": {"enum": ["day", "month", "quarter", "year", "phase"]},
+    "buckets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["bucket_id", "start", "end", "segment", "candle", "confidence_bp", "coverage_bp", "status"],
+        "properties": {
+          "segment": {"enum": ["observed_past", "current_state", "projected_future", "insufficient_gap"]},
+          "candle": {
+            "type": ["object", "null"],
+            "properties": {
+              "open": {"type": "integer", "minimum": -10000, "maximum": 10000},
+              "high": {"type": "integer", "minimum": -10000, "maximum": 10000},
+              "low": {"type": "integer", "minimum": -10000, "maximum": 10000},
+              "close": {"type": "integer", "minimum": -10000, "maximum": 10000}
+            },
+            "required": ["open", "high", "low", "close"]
+          },
+          "confidence_bp": {"type": "integer", "minimum": 0, "maximum": 10000},
+          "coverage_bp": {"type": "integer", "minimum": 0, "maximum": 10000}
+        }
+      }
+    },
+    "timing_windows": {"type": "array"},
+    "core_output_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "deterministic_report_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "narrative_input_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "trace_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+  },
+  "additionalProperties": true
+}
