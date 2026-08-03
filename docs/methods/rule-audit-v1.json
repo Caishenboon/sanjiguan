@@ -77,7 +77,7 @@
     },
     {
       "rule_id": "BZ-STRUCT-BASIC-001", "system": "bazi", "layer": "mechanical",
-      "current_implementation": "Emits four stems/branches plus their indexed yin-yang and five-element reference data.",
+      "current_implementation": "Emits four stems/branches and their cycle, stem and branch indices; it does not emit yin-yang or five-element statistics.",
       "code_location": "packages/sanji-engine/src/sanji_engine/bazi/four_pillars.py::calculate_four_pillars",
       "current_ruleset_version": "mechanical-reference-tables-1.0.0", "method_or_school": "basic sexagenary structure",
       "source_type": "internal_asset", "source_reference": "SRC-BZ-REFERENCE-TABLES", "source_reliability": "C",
@@ -85,7 +85,7 @@
       "supported_profiles": ["CIVIL_MIDNIGHT", "APPARENT_ZICHU", "DUAL_SPLIT_ZI"], "implementation_status": "IMPLEMENTED",
       "test_status": "COVERED", "golden_status": "MECHANICAL_REFERENCE", "production_status": "RESEARCH_ONLY",
       "impact_if_changed": "Changes fundamental chart structure.", "replay_compatibility": "Asset version is pinned.",
-      "copyright_or_license_note": "Short factual tables; provenance should still be strengthened.", "reviewer_note": "Does not constitute strength, pattern or useful-god analysis."
+      "copyright_or_license_note": "Short factual tables; provenance should still be strengthened.", "reviewer_note": "Five-element statistics are NOT_IMPLEMENTED; this does not constitute strength, pattern or useful-god analysis."
     },
     {
       "rule_id": "BZ-INTERPRET-001", "system": "bazi", "layer": "traditional_interpretation",
