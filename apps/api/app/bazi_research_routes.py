@@ -9,6 +9,8 @@ from fastapi import APIRouter, Body, Cookie, Header, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 from sanji_engine import execute
 
+from apps.api.app.core.runtime import SESSION_COOKIE_NAME
+
 from apps.api.app.core.ids import uuid7
 
 router = APIRouter(prefix="/api/v1/admin/research/bazi-four-pillars")
@@ -108,7 +110,7 @@ def _engine_request(payload: dict, run_id: str) -> dict:
 def execute_bazi_research(
     payload_model: BaziExecutePayload = Body(...),
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     module = _pg()
     user = _owner(token)
@@ -178,7 +180,7 @@ def execute_bazi_research(
 @router.post("/compare")
 def compare_bazi_profiles(
     payload_model: BaziComparePayload = Body(...),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     _owner(token)
     payload = payload_model.model_dump(mode="json")

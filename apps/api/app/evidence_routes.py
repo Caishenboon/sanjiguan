@@ -8,6 +8,8 @@ from uuid import UUID
 from fastapi import APIRouter, Cookie, Header, HTTPException, Response
 from sanji_engine import execute
 
+from apps.api.app.core.runtime import SESSION_COOKIE_NAME
+
 from apps.api.app.core.ids import uuid7
 from apps.api.app.schemas.models import (
     EvidenceCreate, EvidencePatch, JournalCreate, JournalPatch, OnboardingUpdate,
@@ -56,7 +58,7 @@ def _finish(conn, claim, key, status, result):
 @router.put("/profiles/{profile_id}/onboarding")
 def save_onboarding(profile_id: UUID, payload: OnboardingUpdate,
                     key: str = Header(alias="Idempotency-Key"),
-                    token: str | None = Cookie(None, alias="__Host-session")):
+                    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user, data = _deps(), _user(token), payload.model_dump(mode="json")
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -77,7 +79,7 @@ def save_onboarding(profile_id: UUID, payload: OnboardingUpdate,
 
 
 @router.get("/profiles/{profile_id}/onboarding")
-def get_onboarding(profile_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def get_onboarding(profile_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _deps(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -105,7 +107,7 @@ def _evidence_result(row):
 @router.post("/profiles/{profile_id}/evidence", status_code=201)
 def create_evidence(profile_id: UUID, payload: EvidenceCreate, response: Response,
                     key: str = Header(alias="Idempotency-Key"),
-                    token: str | None = Cookie(None, alias="__Host-session")):
+                    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user, data = _deps(), _user(token), payload.model_dump(mode="json")
     reliability = assess_reliability({**data, **data["structured_payload"]})
     with pg.pool.connection() as conn, conn.transaction():
@@ -135,7 +137,7 @@ def create_evidence(profile_id: UUID, payload: EvidenceCreate, response: Respons
 
 
 @router.get("/profiles/{profile_id}/evidence")
-def list_evidence(profile_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def list_evidence(profile_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _deps(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -147,7 +149,7 @@ def list_evidence(profile_id: UUID, token: str | None = Cookie(None, alias="__Ho
 
 
 @router.get("/evidence/{evidence_id}")
-def get_evidence(evidence_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def get_evidence(evidence_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _deps(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -161,7 +163,7 @@ def get_evidence(evidence_id: UUID, token: str | None = Cookie(None, alias="__Ho
 @router.patch("/evidence/{evidence_id}")
 def patch_evidence(evidence_id: UUID, payload: EvidencePatch,
                    key: str = Header(alias="Idempotency-Key"),
-                   token: str | None = Cookie(None, alias="__Host-session")):
+                   token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user, data = _deps(), _user(token), payload.model_dump(mode="json", exclude_unset=True)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -199,7 +201,7 @@ def patch_evidence(evidence_id: UUID, payload: EvidencePatch,
 
 @router.delete("/evidence/{evidence_id}", status_code=202)
 def delete_evidence(evidence_id: UUID, key: str = Header(alias="Idempotency-Key"),
-                    token: str | None = Cookie(None, alias="__Host-session")):
+                    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _deps(), _user(token)
     data = {"id": str(evidence_id)}
     with pg.pool.connection() as conn, conn.transaction():
@@ -214,7 +216,7 @@ def delete_evidence(evidence_id: UUID, key: str = Header(alias="Idempotency-Key"
 
 
 @router.get("/profiles/{profile_id}/completeness")
-def profile_completeness(profile_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def profile_completeness(profile_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _deps(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -236,7 +238,7 @@ def profile_completeness(profile_id: UUID, token: str | None = Cookie(None, alia
 
 
 @router.get("/profiles/{profile_id}/timeline")
-def timeline(profile_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def timeline(profile_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _deps(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -252,7 +254,7 @@ def timeline(profile_id: UUID, token: str | None = Cookie(None, alias="__Host-se
 @router.post("/profiles/{profile_id}/journal", status_code=201)
 def create_journal(profile_id: UUID, payload: JournalCreate, response: Response,
                    key: str = Header(alias="Idempotency-Key"),
-                   token: str | None = Cookie(None, alias="__Host-session")):
+                   token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user, data = _deps(), _user(token), payload.model_dump(mode="json")
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -288,7 +290,7 @@ def create_journal(profile_id: UUID, payload: JournalCreate, response: Response,
 
 
 @router.get("/profiles/{profile_id}/journal")
-def list_journal(profile_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def list_journal(profile_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _deps(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -306,7 +308,7 @@ def list_journal(profile_id: UUID, token: str | None = Cookie(None, alias="__Hos
 @router.patch("/journal/{journal_id}")
 def patch_journal(journal_id: UUID, payload: JournalPatch,
                   key: str = Header(alias="Idempotency-Key"),
-                  token: str | None = Cookie(None, alias="__Host-session")):
+                  token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user, data = _deps(), _user(token), payload.model_dump(mode="json", exclude_unset=True)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -334,7 +336,7 @@ def patch_journal(journal_id: UUID, payload: JournalPatch,
 
 @router.delete("/journal/{journal_id}", status_code=202)
 def delete_journal(journal_id: UUID, key: str = Header(alias="Idempotency-Key"),
-                   token: str | None = Cookie(None, alias="__Host-session")):
+                   token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _deps(), _user(token)
     data = {"id": str(journal_id)}
     with pg.pool.connection() as conn, conn.transaction():
@@ -355,7 +357,7 @@ IDENTIFYING_KEYS = {"name", "full_name", "phone", "email", "social_account", "ex
 @router.post("/profiles/{profile_id}/relationships", status_code=201)
 def create_relationship(profile_id: UUID, payload: RelationshipSubjectCreate, response: Response,
                         key: str = Header(alias="Idempotency-Key"),
-                        token: str | None = Cookie(None, alias="__Host-session")):
+                        token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user, data = _deps(), _user(token), payload.model_dump(mode="json")
     if data["mode"] == "anonymous_event" and (data.get("alias") or IDENTIFYING_KEYS & set(data["event_payload"])):
         raise HTTPException(422, "anonymous_event_must_not_contain_identifiers")
@@ -382,7 +384,7 @@ def create_relationship(profile_id: UUID, payload: RelationshipSubjectCreate, re
 @router.patch("/relationships/{subject_id}/consent")
 def update_relationship_consent(subject_id: UUID, payload: RelationshipConsentUpdate,
                                 key: str = Header(alias="Idempotency-Key"),
-                                token: str | None = Cookie(None, alias="__Host-session")):
+                                token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user, data = _deps(), _user(token), payload.model_dump(mode="json")
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -414,7 +416,7 @@ def update_relationship_consent(subject_id: UUID, payload: RelationshipConsentUp
 @router.post("/profiles/{profile_id}/divinations/three-coin", status_code=201)
 def create_three_coin(profile_id: UUID, payload: ThreeCoinDivinationCreate, response: Response,
                       key: str = Header(alias="Idempotency-Key"),
-                      token: str | None = Cookie(None, alias="__Host-session")):
+                      token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user, data = _deps(), _user(token), payload.model_dump(mode="json")
     try:
         tosses = validate_six_tosses(data["tosses"])
@@ -521,7 +523,7 @@ def create_three_coin(profile_id: UUID, payload: ThreeCoinDivinationCreate, resp
 
 
 @router.get("/profiles/{profile_id}/divinations")
-def list_divinations(profile_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def list_divinations(profile_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _deps(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -536,7 +538,7 @@ def list_divinations(profile_id: UUID, token: str | None = Cookie(None, alias="_
 
 
 @router.get("/divinations/{divination_id}")
-def get_divination(divination_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def get_divination(divination_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _deps(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)

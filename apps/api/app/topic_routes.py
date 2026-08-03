@@ -9,6 +9,8 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Cookie, Header, HTTPException
 from sanji_engine import execute, replay
 
+from apps.api.app.core.runtime import SESSION_COOKIE_NAME
+
 from apps.api.app.core.ids import uuid7
 from apps.api.app.liuxiang_archive_routes import (
     DATA_VERSIONS,
@@ -213,7 +215,7 @@ def _persist(
 @router.get("/profiles/{profile_id}/topics/{topic_type}/evidence")
 def available_evidence(
     profile_id: UUID, topic_type: str,
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     if topic_type not in TOPICS:
         raise HTTPException(404, "topic_not_found")
@@ -235,7 +237,7 @@ def available_evidence(
 def create_execution(
     profile_id: UUID, topic_type: str, payload: dict = Body(default={}),
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     if topic_type not in TOPICS:
         raise HTTPException(404, "topic_not_found")
@@ -287,7 +289,7 @@ def create_execution(
 @router.get("/topic-executions/{execution_id}")
 def get_execution(
     execution_id: UUID,
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -306,7 +308,7 @@ def get_execution(
 @router.post("/topic-executions/{execution_id}/replay")
 def replay_execution(
     execution_id: UUID, key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -341,7 +343,7 @@ def replay_execution(
 @router.delete("/topic-executions/{execution_id}/input-snapshot", status_code=202)
 def purge_execution_input_snapshot(
     execution_id: UUID, key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     """Irreversibly erase normalized private input and graph snapshots."""
     pg, user = _pg(), _user(token)
@@ -383,7 +385,7 @@ def purge_execution_input_snapshot(
 def reanalyze_execution(
     execution_id: UUID, payload: dict = Body(default={}),
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -440,7 +442,7 @@ def _comparison(left: dict, right: dict, left_request: dict, right_request: dict
 @router.post("/topic-executions/compare")
 def compare_executions(
     payload: dict = Body(...), key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     try:
         left_id = UUID(payload["left_execution_id"])

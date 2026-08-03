@@ -196,6 +196,36 @@
       "upgrade": "explicit license review and Linux visual baseline review",
       "rollback": "restore previous exact package version and pnpm lock",
       "alternative": "another pinned OFL monospaced font with reviewed baselines"
+    },
+    {
+      "name": "postgres",
+      "version": "16.10-bookworm",
+      "repository": "https://github.com/docker-library/postgres",
+      "commit": "official-image-16.10-bookworm",
+      "license": "PostgreSQL",
+      "asset_license": "upstream-image-license",
+      "purpose": "private relational storage, migrations and row-level security",
+      "scope": "runtime-development-ci",
+      "touches_user_data": true,
+      "affects_engine_determinism": false,
+      "upgrade": "explicit database compatibility and restore rehearsal",
+      "rollback": "restore prior pinned image with pre-upgrade backup",
+      "alternative": "compatible self-hosted PostgreSQL 16 distribution"
+    },
+    {
+      "name": "caddy",
+      "version": "2.10.0-alpine",
+      "repository": "https://github.com/caddyserver/caddy",
+      "commit": "v2.10.0",
+      "license": "Apache-2.0",
+      "asset_license": "upstream-image-license",
+      "purpose": "optional single-server HTTPS reverse proxy",
+      "scope": "production-deployment",
+      "touches_user_data": false,
+      "affects_engine_determinism": false,
+      "upgrade": "explicit TLS and configuration review",
+      "rollback": "restore previous pinned proxy image",
+      "alternative": "operator-approved existing reverse proxy"
     }
   ]
 }

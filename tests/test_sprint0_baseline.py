@@ -58,17 +58,21 @@ class Sprint0BaselineTests(unittest.TestCase):
 
     def test_no_obvious_deepseek_secret_pattern_in_tracked_sources(self):
         suspicious = re.compile(r"\bsk-[A-Za-z0-9_-]{20,}\b")
-        excluded = {".git", "work", "outputs"}
-        for path in ROOT.rglob("*"):
-            if not path.is_file() or any(part in excluded for part in path.parts):
-                continue
-            if path.suffix.lower() in {".docx", ".png", ".pdf", ".pyc"}:
-                continue
-            try:
-                text = path.read_text(encoding="utf-8")
-            except UnicodeDecodeError:
-                continue
-            self.assertIsNone(suspicious.search(text), str(path))
+        excluded = {
+            ".git", "work", "outputs", "node_modules", ".next", ".cache",
+            ".pytest_cache", "coverage", "playwright-report", "test-results",
+        }
+        for current, dirs, files in os.walk(ROOT):
+            dirs[:] = [name for name in dirs if name not in excluded]
+            for name in files:
+                path = Path(current) / name
+                if path.suffix.lower() in {".docx", ".png", ".pdf", ".pyc"}:
+                    continue
+                try:
+                    text = path.read_text(encoding="utf-8")
+                except UnicodeDecodeError:
+                    continue
+                self.assertIsNone(suspicious.search(text), str(path))
 
 
 if __name__ == "__main__":

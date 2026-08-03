@@ -1,34 +1,70 @@
 from __future__ import annotations
 
 import hashlib
+import hmac
 import json
+import logging
 import os
-from datetime import datetime, timedelta, timezone
+import time
 from uuid import UUID
 
 import psycopg
-from fastapi import Cookie, FastAPI, Header, HTTPException, Response
+from fastapi import Cookie, FastAPI, Header, HTTPException, Request, Response
 from psycopg.rows import dict_row
 from psycopg_pool import ConnectionPool
 
-from apps.api.app.core.encryption import TestKeyProvider, assert_key_provider_allowed
+from apps.api.app.core.encryption import EnvironmentKeyProvider, TestKeyProvider, assert_key_provider_allowed
 from apps.api.app.core.ids import uuid7
+from apps.api.app.core.runtime import SESSION_COOKIE_NAME, load_runtime_config
 from apps.api.app.core.security import new_token, token_hash
 from apps.api.app.schemas.models import InvitationAccept, ProfileCreate, ProfilePatch
 
-SESSION_COOKIE = "__Host-session"
-app_env = os.environ.get("APP_ENV", "")
+config = load_runtime_config()
+SESSION_COOKIE = SESSION_COOKIE_NAME
 backend = os.environ.get("STORAGE_BACKEND", "")
 key_provider_name = os.environ.get("KEY_PROVIDER", "")
-if app_env != "test" or backend != "postgres" or key_provider_name != "test-only":
-    raise RuntimeError("postgres_test_app_requires_explicit_test_mode")
-
-key_hex = os.environ.get("TEST_ENCRYPTION_KEY_HEX", "")
-provider = TestKeyProvider(bytes.fromhex(key_hex))
-assert_key_provider_allowed(app_env, provider)
-pool = ConnectionPool(os.environ["DATABASE_URL"], min_size=1, max_size=8,
+if backend != "postgres":
+    raise RuntimeError("postgres_backend_must_be_explicit")
+if key_provider_name == "test-only":
+    provider = TestKeyProvider(bytes.fromhex(config.field_encryption_key_hex))
+elif key_provider_name == "env-aesgcm":
+    provider = EnvironmentKeyProvider(
+        bytes.fromhex(config.field_encryption_key_hex), config.field_encryption_key_id
+    )
+else:
+    raise RuntimeError("unsupported_key_provider")
+assert_key_provider_allowed(config.app_env, provider)
+pool = ConnectionPool(config.database_url, min_size=1, max_size=int(os.getenv("DB_POOL_MAX", "8")),
                       kwargs={"row_factory": dict_row}, open=True)
-app = FastAPI(title="三际观 PostgreSQL E2E API", version="0.1.6-test")
+app = FastAPI(title="三际观 API", version=config.version)
+logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"), format="%(message)s")
+logger = logging.getLogger("sanjiguan.api")
+
+
+@app.middleware("http")
+async def release_security(request: Request, call_next):
+    request_id = request.headers.get("X-Request-ID") or os.urandom(8).hex()
+    request.state.request_id = request_id
+    started = time.monotonic()
+    if request.method in {"POST", "PATCH", "PUT", "DELETE"}:
+        origin = request.headers.get("origin")
+        if origin and origin.rstrip("/") != config.public_origin:
+            return Response(status_code=403, content="origin_not_allowed")
+    response = await call_next(request)
+    response.headers["X-Request-ID"] = request_id
+    response.headers["Cache-Control"] = "no-store"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    logger.info(json.dumps({
+        "event": "http_request",
+        "request_id": request_id,
+        "method": request.method,
+        "route": request.url.path,
+        "status": response.status_code,
+        "duration_ms": round((time.monotonic() - started) * 1000),
+        "private_body_logged": False,
+    }, separators=(",", ":")))
+    return response
 
 
 def fingerprint(payload: object) -> str:
@@ -41,8 +77,7 @@ def auth(token: str | None = Cookie(None, alias=SESSION_COOKIE)) -> dict:
         raise HTTPException(401, "authentication_required")
     with pool.connection() as conn:
         row = conn.execute(
-            """SELECT u.id,u.role FROM sessions s JOIN users u ON u.id=s.user_id
-               WHERE s.token_hash=%s AND s.revoked_at IS NULL AND s.expires_at>now()""",
+            "SELECT id,role FROM authenticate_session(%s)",
             (token_hash(token),),
         ).fetchone()
         if not row:
@@ -89,44 +124,102 @@ def complete(conn, record_id: UUID, key: str, status: int, response_data: dict):
     )
 
 
+@app.get("/health")
 @app.get("/healthz")
+@app.get("/api/health")
 def health():
+    return {"status": "ok", "version": config.version}
+
+
+@app.get("/ready")
+@app.get("/api/ready")
+def ready():
     with pool.connection() as conn:
         version = conn.execute("SHOW server_version").fetchone()["server_version"]
-    return {"status": "ok", "storage": "postgres", "postgres_version": version}
+        migration = conn.execute(
+            "SELECT COALESCE(max(version),'none') AS version FROM schema_migrations"
+        ).fetchone()["version"]
+    return {
+        "status": "ready",
+        "version": config.version,
+        "storage": "postgres",
+        "postgres_version": version,
+        "migration": migration,
+        "provider": "configured" if os.getenv("DEEPSEEK_API_KEY") else "deterministic_fallback",
+    }
+
+
+@app.post("/api/v1/auth/bootstrap-owner", status_code=201)
+def bootstrap_owner(payload: dict, response: Response):
+    expected = config.owner_bootstrap_token
+    supplied = str(payload.get("bootstrap_token", ""))
+    if not expected or not supplied or not hmac.compare_digest(expected, supplied):
+        raise HTTPException(422, "bootstrap_unavailable")
+    user_id, session_id, session_token = uuid7(), uuid7(), new_token()
+    email = str(payload.get("email", "local-owner")).strip()[:254] or "local-owner"
+    try:
+        with pool.connection() as conn, conn.transaction():
+            conn.execute(
+                "SELECT bootstrap_owner(%s,%s,%s,%s)",
+                (
+                    user_id,
+                    provider.encrypt(email.encode("utf-8")),
+                    session_id,
+                    token_hash(session_token),
+                ),
+            )
+    except psycopg.errors.RaiseException as exc:
+        raise HTTPException(409, "owner_already_initialized") from exc
+    response.set_cookie(
+        SESSION_COOKIE,
+        session_token,
+        secure=config.cookie_secure,
+        httponly=True,
+        samesite="strict",
+        path="/",
+        max_age=12 * 3600,
+    )
+    return {"user_id": str(user_id), "role": "owner"}
 
 
 @app.post("/api/v1/auth/invitations/accept")
 def accept(payload: InvitationAccept, response: Response):
-    now = datetime.now(timezone.utc)
-    with pool.connection() as conn, conn.transaction():
-        invite = conn.execute(
-            """SELECT * FROM invitations WHERE token_hash=%s AND accepted_at IS NULL
-               AND revoked_at IS NULL AND expires_at>now() FOR UPDATE""", (token_hash(payload.token),)
-        ).fetchone()
-        if not invite:
-            raise HTTPException(422, "invalid_or_expired_invitation")
-        user_id, session_id, session_token = uuid7(), uuid7(), new_token()
-        conn.execute("INSERT INTO users(id,email_ciphertext,role) VALUES(%s,%s,%s)",
-                     (user_id, b"test-only", invite["role"]))
-        conn.execute("""INSERT INTO sessions(id,user_id,token_hash,expires_at)
-                        VALUES(%s,%s,%s,%s)""",
-                     (session_id, user_id, token_hash(session_token), now + timedelta(hours=12)))
-        conn.execute("UPDATE invitations SET accepted_by=%s,accepted_at=%s WHERE id=%s",
-                     (user_id, now, invite["id"]))
-    response.set_cookie(SESSION_COOKIE, session_token, secure=True, httponly=True,
+    user_id, session_id, session_token = uuid7(), uuid7(), new_token()
+    try:
+        with pool.connection() as conn, conn.transaction():
+            role = conn.execute(
+                "SELECT accept_invitation_session(%s,%s,%s,%s,%s) AS role",
+                (
+                    token_hash(payload.token),
+                    user_id,
+                    session_id,
+                    token_hash(session_token),
+                    provider.encrypt(b"invited-user"),
+                ),
+            ).fetchone()["role"]
+    except psycopg.errors.RaiseException as exc:
+        raise HTTPException(422, "invalid_or_expired_invitation") from exc
+    response.set_cookie(SESSION_COOKIE, session_token, secure=config.cookie_secure, httponly=True,
                         samesite="strict", path="/")
-    return {"user_id": str(user_id), "role": invite["role"]}
+    return {"user_id": str(user_id), "role": role}
 
 
 @app.post("/api/v1/auth/logout", status_code=204)
 def logout(response: Response, token: str | None = Cookie(None, alias=SESSION_COOKIE)):
     user = auth(token)
-    with pool.connection() as conn:
+    with pool.connection() as conn, conn.transaction():
+        runtime(conn, user)
         conn.execute("UPDATE sessions SET revoked_at=now() WHERE token_hash=%s AND user_id=%s",
                      (token_hash(token or ""), user["id"]))
-        conn.commit()
-    response.delete_cookie(SESSION_COOKIE, secure=True, httponly=True, samesite="strict", path="/")
+    response.delete_cookie(
+        SESSION_COOKIE, secure=config.cookie_secure, httponly=True, samesite="strict", path="/"
+    )
+
+
+@app.get("/api/v1/me")
+def me(token: str | None = Cookie(None, alias=SESSION_COOKIE)):
+    user = auth(token)
+    return {"user_id": str(user["id"]), "role": user["role"]}
 
 
 @app.post("/api/v1/profiles", status_code=201)
@@ -233,3 +326,5 @@ from apps.api.app.topic_routes import router as topic_router
 app.include_router(topic_router)
 from apps.api.app.life_trend_routes import router as life_trend_router
 app.include_router(life_trend_router)
+from apps.api.app.release_routes import router as release_router
+app.include_router(release_router)

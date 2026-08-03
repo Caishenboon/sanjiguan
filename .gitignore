@@ -57,3 +57,7 @@ pgdata/
 tmp/
 temp/
 .cache/
+backups/
+exports/
+*.dump
+*.backup

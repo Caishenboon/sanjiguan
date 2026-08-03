@@ -10,6 +10,8 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Cookie, Header, HTTPException
 from sanji_engine import execute, replay
 
+from apps.api.app.core.runtime import SESSION_COOKIE_NAME
+
 from apps.api.app.core.ids import uuid7
 
 router = APIRouter(prefix="/api/v1")
@@ -455,7 +457,7 @@ def _persist_execution(
 
 
 @router.get("/profiles/{profile_id}/liuxiang/coverage")
-def coverage(profile_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def coverage(profile_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -469,7 +471,7 @@ def coverage(profile_id: UUID, token: str | None = Cookie(None, alias="__Host-se
 
 
 @router.get("/profiles/{profile_id}/liuxiang/evidence")
-def selectable_evidence(profile_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def selectable_evidence(profile_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -487,7 +489,7 @@ def selectable_evidence(profile_id: UUID, token: str | None = Cookie(None, alias
 def create_execution(
     profile_id: UUID, payload: dict = Body(default={}),
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     excluded = payload.get("excluded_record_ids", [])
@@ -528,7 +530,7 @@ def create_execution(
 
 
 @router.get("/liuxiang/executions/{execution_id}")
-def get_execution(execution_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def get_execution(execution_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -543,7 +545,7 @@ def get_execution(execution_id: UUID, token: str | None = Cookie(None, alias="__
 
 
 @router.get("/liuxiang/executions/{execution_id}/evidence")
-def execution_evidence(execution_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def execution_evidence(execution_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)
@@ -563,7 +565,7 @@ def execution_evidence(execution_id: UUID, token: str | None = Cookie(None, alia
 def replay_execution(
     execution_id: UUID,
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -601,7 +603,7 @@ def replay_execution(
 def purge_execution_input_snapshot(
     execution_id: UUID,
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     """Irreversibly remove the canonical private input facts used for replay."""
     pg, user = _pg(), _user(token)
@@ -643,7 +645,7 @@ def purge_execution_input_snapshot(
 def reanalyze(
     execution_id: UUID, payload: dict = Body(default={}),
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -704,7 +706,7 @@ def _comparison(left: dict, right: dict, left_request: dict, right_request: dict
 def compare_executions(
     payload: dict = Body(...),
     key: str = Header(alias="Idempotency-Key"),
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     try:
@@ -745,7 +747,7 @@ def compare_executions(
 @router.get("/chronicle")
 def list_archive(
     profile_id: UUID | None = None,
-    token: str | None = Cookie(None, alias="__Host-session"),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
 ):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
@@ -776,7 +778,7 @@ def list_archive(
 
 
 @router.get("/chronicle/{entry_id}")
-def get_archive(entry_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def get_archive(entry_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     pg, user = _pg(), _user(token)
     with pg.pool.connection() as conn, conn.transaction():
         pg.runtime(conn, user)

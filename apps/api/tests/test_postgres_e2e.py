@@ -1,7 +1,9 @@
 import importlib
+import io
 import json
 import os
 import unittest
+import zipfile
 from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 
@@ -20,6 +22,7 @@ class PostgreSQLHttpE2E(unittest.TestCase):
         os.environ.update(
             APP_ENV="test", STORAGE_BACKEND="postgres", KEY_PROVIDER="test-only",
             DATABASE_URL=DSN or "", TEST_ENCRYPTION_KEY_HEX="11" * 32,
+            OWNER_BOOTSTRAP_TOKEN="test-bootstrap-token-" + "x" * 32,
         )
         module = importlib.import_module("apps.api.app.postgres_app")
         cls.app_module = module
@@ -91,6 +94,71 @@ class PostgreSQLHttpE2E(unittest.TestCase):
             "SELECT count(*) FROM profiles WHERE id=%s AND deleted_at IS NOT NULL", (pid,)
         ).fetchone()[0]
         self.assertEqual(1, count)
+
+    def test_first_owner_bootstrap_is_single_use(self):
+        payload = {
+            "bootstrap_token": "test-bootstrap-token-" + "x" * 32,
+            "email": "synthetic-owner@invalid.example",
+        }
+        first = self.client.post("/api/v1/auth/bootstrap-owner", json=payload)
+        self.assertEqual(201, first.status_code, first.text)
+        self.assertEqual("owner", first.json()["role"])
+        second = TestClient(self.app_module.app, base_url="https://testserver").post(
+            "/api/v1/auth/bootstrap-owner", json=payload
+        )
+        self.assertGreaterEqual(second.status_code, 400)
+
+    def test_v1_export_record_deletion_and_account_purge(self):
+        self.login()
+        created = self.client.post(
+            "/api/v1/profiles",
+            json=self.payload("Synthetic Export Owner"),
+            headers={"Idempotency-Key": "v1-export-profile-0001"},
+        )
+        self.assertEqual(201, created.status_code, created.text)
+        profile_id = created.json()["id"]
+        record = self.client.post(
+            f"/api/v1/profiles/{profile_id}/journal",
+            json={
+                "entry_date": "2026-07-30",
+                "entry_type": "dream",
+                "fields": {"date_precision": "exact_date", "synthetic": True},
+                "free_text": "fully synthetic private dream text",
+                "tags": ["synthetic"],
+                "evidence_ids": [],
+                "candidate_evidence": False,
+            },
+            headers={"Idempotency-Key": "v1-export-journal-0001"},
+        )
+        self.assertEqual(201, record.status_code, record.text)
+        export = self.client.post(
+            "/api/v1/exports",
+            headers={"Idempotency-Key": "v1-export-create-0001"},
+        )
+        self.assertEqual(200, export.status_code, export.text)
+        self.assertEqual("application/zip", export.headers["content-type"])
+        self.assertTrue(export.headers["x-export-manifest-hash"].startswith("sha256:"))
+        with zipfile.ZipFile(io.BytesIO(export.content)) as archive:
+            self.assertEqual(["data.json", "manifest.json", "report.md"], sorted(archive.namelist()))
+            manifest = json.loads(archive.read("manifest.json"))
+            data = archive.read("data.json").decode()
+        self.assertEqual("sanji-export/1.0", manifest["schema_version"])
+        self.assertNotIn("fully synthetic private dream text", data)
+        deleted = self.client.delete(
+            f"/api/v1/private-records/journal/{record.json()['id']}",
+            headers={"Idempotency-Key": "v1-delete-record-0001"},
+        )
+        self.assertEqual(202, deleted.status_code, deleted.text)
+        self.assertEqual("soft_delete", deleted.json()["mode"])
+        account = self.client.delete(
+            "/api/v1/account",
+            headers={
+                "Idempotency-Key": "v1-delete-account-0001",
+                "X-Delete-Confirmation": "DELETE MY SANJIGUAN DATA",
+            },
+        )
+        self.assertEqual(202, account.status_code, account.text)
+        self.assertEqual(401, self.client.get("/api/v1/me").status_code)
 
     def test_onboarding_evidence_completeness_and_physical_coin_recording(self):
         self.login()

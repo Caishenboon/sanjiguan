@@ -5,6 +5,8 @@ from uuid import UUID
 
 from fastapi import APIRouter, Body, Cookie, Header, HTTPException, Response
 
+from apps.api.app.core.runtime import SESSION_COOKIE_NAME
+
 from apps.api.app.core.ids import uuid7
 from packages.knowledge_governance.policy import validate_claim, validate_research_rule
 
@@ -36,7 +38,7 @@ def audit(conn, user, action, kind, rid, metadata=None):
 
 
 @router.get("/knowledge/documents")
-def documents(token: str | None = Cookie(None, alias="__Host-session")):
+def documents(token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     module, user = pg(), owner(token)
     with module.pool.connection() as conn, conn.transaction():
         module.runtime(conn, user)
@@ -48,7 +50,7 @@ def documents(token: str | None = Cookie(None, alias="__Host-session")):
 @router.post("/knowledge/documents", status_code=201)
 def create_document(payload: dict = Body(...), response: Response = None,
                     key: str = Header(alias="Idempotency-Key"),
-                    token: str | None = Cookie(None, alias="__Host-session")):
+                    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     module, user = pg(), owner(token)
     with module.pool.connection() as conn, conn.transaction():
         module.runtime(conn, user)
@@ -77,7 +79,7 @@ def create_document(payload: dict = Body(...), response: Response = None,
 
 
 @router.get("/knowledge/documents/{document_id}")
-def get_document(document_id: UUID, token: str | None = Cookie(None, alias="__Host-session")):
+def get_document(document_id: UUID, token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
@@ -88,7 +90,7 @@ def get_document(document_id: UUID, token: str | None = Cookie(None, alias="__Ho
 
 @router.patch("/knowledge/documents/{document_id}")
 def patch_document(document_id:UUID,payload:dict=Body(...),key:str=Header(alias="Idempotency-Key"),
-                   token:str|None=Cookie(None,alias="__Host-session")):
+                   token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
@@ -112,7 +114,7 @@ def patch_document(document_id:UUID,payload:dict=Body(...),key:str=Header(alias=
 
 @router.post("/knowledge/claims",status_code=201)
 def create_claim(payload: dict=Body(...),response:Response=None,key:str=Header(alias="Idempotency-Key"),
-                 token:str|None=Cookie(None,alias="__Host-session")):
+                 token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
@@ -137,7 +139,7 @@ def create_claim(payload: dict=Body(...),response:Response=None,key:str=Header(a
 
 
 @router.get("/knowledge/claims")
-def list_claims(include_history:bool=False,token:str|None=Cookie(None,alias="__Host-session")):
+def list_claims(include_history:bool=False,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
@@ -150,7 +152,7 @@ def list_claims(include_history:bool=False,token:str|None=Cookie(None,alias="__H
 
 @router.patch("/knowledge/claims/{claim_id}")
 def patch_claim(claim_id:UUID,payload:dict=Body(...),key:str=Header(alias="Idempotency-Key"),
-                token:str|None=Cookie(None,alias="__Host-session")):
+                token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
@@ -175,19 +177,19 @@ def patch_claim(claim_id:UUID,payload:dict=Body(...),key:str=Header(alias="Idemp
 
 @router.post("/knowledge/claims/{claim_id}/submit-review")
 def submit_claim(claim_id:UUID,key:str=Header(alias="Idempotency-Key"),
-                 token:str|None=Cookie(None,alias="__Host-session")):
+                 token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     return _claim_transition(claim_id,"researched","submit-review",key,token)
 
 
 @router.post("/knowledge/claims/{claim_id}/reject")
 def reject_claim(claim_id:UUID,key:str=Header(alias="Idempotency-Key"),
-                 token:str|None=Cookie(None,alias="__Host-session")):
+                 token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     return _claim_transition(claim_id,"rejected","reject",key,token)
 
 
 @router.post("/knowledge/claims/{claim_id}/approve")
 def approve_claim(claim_id:UUID,key:str=Header(alias="Idempotency-Key"),
-                  token:str|None=Cookie(None,alias="__Host-session")):
+                  token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token); payload={"id":str(claim_id),"status":"approved"}
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
@@ -210,7 +212,7 @@ def approve_claim(claim_id:UUID,key:str=Header(alias="Idempotency-Key"),
 
 @router.post("/knowledge/claims/{claim_id}/retire")
 def retire_claim(claim_id:UUID,key:str=Header(alias="Idempotency-Key"),
-                 token:str|None=Cookie(None,alias="__Host-session")):
+                 token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     return _claim_transition(claim_id,"retired","retire",key,token)
 
 
@@ -227,7 +229,7 @@ def _claim_transition(claim_id,status,action,key,token):
 
 
 @router.get("/knowledge/search")
-def search(q:str="",token:str|None=Cookie(None,alias="__Host-session")):
+def search(q:str="",token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
@@ -241,7 +243,7 @@ def search(q:str="",token:str|None=Cookie(None,alias="__Host-session")):
 
 
 @router.get("/knowledge/impact/{claim_id}")
-def impact(claim_id:UUID,token:str|None=Cookie(None,alias="__Host-session")):
+def impact(claim_id:UUID,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
@@ -251,7 +253,7 @@ def impact(claim_id:UUID,token:str|None=Cookie(None,alias="__Host-session")):
 
 
 @router.post("/rules/{rule_id}/validate")
-def validate_rule_endpoint(rule_id:str,token:str|None=Cookie(None,alias="__Host-session")):
+def validate_rule_endpoint(rule_id:str,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
     module,user=pg(),owner(token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user)
