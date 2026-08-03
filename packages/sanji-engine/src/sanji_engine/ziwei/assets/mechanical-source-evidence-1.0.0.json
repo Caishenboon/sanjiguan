@@ -1,0 +1,18 @@
+{
+  "schema_version": "ziwei-mechanical-source-evidence/1.0.0",
+  "asset_version": "ziwei-mechanical-source-evidence/1.0.0",
+  "review_status": "UNCONFIRMED",
+  "production_status": "RESEARCH_ONLY",
+  "production_activatable": false,
+  "rules": [
+    {"rule_id":"ZW-CLAIM-MINGSHEN-001","scope":"life_and_body_palace_placement","method_or_school":"limited_sanhe_candidate","source_status":"UNCONFIRMED","traditional_source":null,"engineering_evidence":["SRC-IZTRO-2.5.8"],"consensus_status":"UNCONFIRMED"},
+    {"rule_id":"ZW-CLAIM-WUXINGJU-001","scope":"five_element_bureau_from_life_palace_ganzhi_nayin","method_or_school":"candidate_lookup","source_status":"UNCONFIRMED","traditional_source":null,"engineering_evidence":["SRC-IZTRO-2.5.8"],"consensus_status":"UNCONFIRMED"},
+    {"rule_id":"ZW-CLAIM-MAJOR-STARS-001","scope":"fourteen_major_star_placement","method_or_school":"candidate_offset_table","source_status":"UNCONFIRMED","traditional_source":null,"engineering_evidence":["SRC-IZTRO-2.5.8"],"consensus_status":"UNCONFIRMED"},
+    {"rule_id":"ZW-CLAIM-SIHUA-001","scope":"birth_year_four_transformations","method_or_school":"table_candidate","source_status":"UNCONFIRMED","traditional_source":null,"engineering_evidence":[],"consensus_status":"DISPUTED"},
+    {"rule_id":"ZW-CLAIM-DECADE-001","scope":"decade_start_and_direction","method_or_school":"candidate_cycle_policy","source_status":"UNCONFIRMED","traditional_source":null,"engineering_evidence":[],"consensus_status":"DISPUTED"},
+    {"rule_id":"ZW-CLAIM-ANNUAL-001","scope":"annual_target_branch","method_or_school":"simplified_mechanical_placeholder","source_status":"UNCONFIRMED","traditional_source":null,"engineering_evidence":[],"consensus_status":"UNCONFIRMED"},
+    {"rule_id":"ZW-CLAIM-LEAP-001","scope":"leap_month_treatment","method_or_school":"parallel_profiles","source_status":"UNCONFIRMED","traditional_source":null,"engineering_evidence":[],"consensus_status":"DISPUTED"}
+  ],
+  "conclusion": "The independent Oracle comparison supports engineering reproducibility for selected core fields only. It does not establish traditional authority, school purity, transformation correctness, or interpretive validity.",
+  "content_hash": "sha256:53ccfbe29af0baedb5db725417e3c5f53d73fc52682da60950711da457dc52ac"
+}

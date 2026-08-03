@@ -109,6 +109,38 @@ class OracleAdapterTests(unittest.TestCase):
         self.assertEqual("normalized_match", diff["status"])
         self.assertFalse(diff["affects_engine_result"])
 
+    def test_iztro_matches_all_versioned_mechanical_references(self):
+        references = json.loads(
+            (
+                Path(__file__).resolve().parents[1]
+                / "packages/sanji-engine/src/sanji_engine/golden_cases/ziwei/mechanical-trust-references-1.0.0.json"
+            ).read_text(encoding="utf-8")
+        )
+        compared = 0
+        for case in references["cases"]:
+            if case["comparison_status"] != "NORMALIZED_MATCH":
+                continue
+            value = case["input"]
+            engine_request = ziwei_request(case["profile_id"])
+            engine_request["run_id"] = f"oracle-trust-{case['case_id']}"
+            engine_request["input_snapshot"]["lunar_birth"] = value
+            oracle = execute_oracle(
+                "ziwei.iztro",
+                {
+                    "lunar_year": value["year"],
+                    "lunar_month": value["month"],
+                    "lunar_day": value["day"],
+                    "hour_index": value["hour_branch_index"],
+                    "traditional_sex": value["traditional_sex"],
+                    "profile_id": case["profile_id"],
+                },
+            )
+            diff = diff_against_engine(oracle, execute(engine_request))
+            self.assertEqual("normalized_match", diff["status"], case["case_id"])
+            self.assertFalse(diff["affects_engine_result"])
+            compared += 1
+        self.assertEqual(10, compared)
+
     def test_unknown_oracle_is_rejected(self):
         with self.assertRaises(ValueError):
             identify_oracle("unknown")

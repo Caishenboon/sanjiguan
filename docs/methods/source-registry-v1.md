@@ -27,6 +27,7 @@
 | SRC-SXTWL-2.0.7 | `sxtwl 2.0.7`, https://github.com/yuangu/sxtwl_cpp | 八字机械独立差分 | A1/开源实现 | BSD-3-Clause；独立工程对照，不是传统权威 |
 | SRC-LUNAR-PYTHON-1.4.8 | `lunar-python 1.4.8`, https://github.com/6tail/lunar-python | 八字机械差分 | A1/开源实现 | MIT；与 tyme4py 同提供方，不计为两份独立证据 |
 | SRC-TYME4PY-1.5.0 | `tyme4py 1.5.0`, https://github.com/6tail/tyme4py | 八字机械差分 | A1/开源实现 | MIT；同上 |
+| SRC-IZTRO-2.5.8 | `iztro 2.5.8`, https://github.com/SylarLong/iztro，commit `9d39f17` | 紫微命身宫、五行局与十四主星机械差分 | A1/开源实现 | MIT；独立工程对照，不是传统权威，不批准四化、大限或解释 |
 | SRC-CTEXT-KUNXUE-JIWEN-COINS | 《困学纪闻》卷一公开文本, https://ctext.org/wiki.pl?chapter=909326&if=gb&remap=gb | 三钱 6/7/8/9 陈述线索 | A2 候选 | 需版本校勘；不直接形成生产规则 |
 | SRC-CTEXT-QUYI-SHU-COIN-DISPUTE | 《祛疑说》公开文本, https://ctext.org/wiki.pl?chapter=471318&if=gb&remap=gb | 钱面阴阳争议 | A2 候选 | 证明标签存在传统差异，不批准唯一标签 |
 | SRC-D002 | `docs/decisions/decision-register.md` D-002 | 子时换日 | U | 未冻结 |
