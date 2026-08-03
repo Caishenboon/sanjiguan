@@ -5,6 +5,60 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/v1/admin/research/bazi-four-pillars/structure": {
+      "post": {
+        "summary": "Execute Bazi Structure",
+        "operationId": "execute_bazi_structure_api_v1_admin_research_bazi_four_pillars_structure_post",
+        "parameters": [
+          {
+            "name": "__Host-session",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "  Host-Session"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BaziStructurePayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/research/bazi-four-pillars/execute": {
       "post": {
         "summary": "Execute Bazi Research",
@@ -197,6 +251,70 @@
         ],
         "title": "BaziExecutePayload"
       },
+      "BaziStructurePayload": {
+        "properties": {
+          "source_four_pillars": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/StructurePillar"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Source Four Pillars"
+          },
+          "source_candidate_id": {
+            "type": "string",
+            "title": "Source Candidate Id"
+          },
+          "source_ruleset_id": {
+            "type": "string",
+            "title": "Source Ruleset Id",
+            "default": "bazi-four-pillars-research-1.0.0"
+          },
+          "source_method_id": {
+            "type": "string",
+            "title": "Source Method Id",
+            "default": "BAZI.FOUR_PILLARS.MECHANICAL.RESEARCH.V1"
+          },
+          "source_method_version": {
+            "type": "string",
+            "title": "Source Method Version",
+            "default": "1.0.0"
+          },
+          "profile_id": {
+            "type": "string",
+            "title": "Profile Id",
+            "default": "bazi-traditional-structure-research-v1"
+          },
+          "profile_version": {
+            "type": "string",
+            "title": "Profile Version",
+            "default": "1.0.0"
+          },
+          "hidden_stems_profile_id": {
+            "type": "string",
+            "title": "Hidden Stems Profile Id"
+          },
+          "month_context": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Month Context"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_four_pillars",
+          "source_candidate_id",
+          "hidden_stems_profile_id"
+        ],
+        "title": "BaziStructurePayload"
+      },
       "BirthPlace": {
         "properties": {
           "latitude": {
@@ -309,6 +427,25 @@
           "profile_version"
         ],
         "title": "ProfileRef"
+      },
+      "StructurePillar": {
+        "properties": {
+          "stem": {
+            "type": "string",
+            "title": "Stem"
+          },
+          "branch": {
+            "type": "string",
+            "title": "Branch"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "stem",
+          "branch"
+        ],
+        "title": "StructurePillar"
       },
       "ValidationError": {
         "properties": {

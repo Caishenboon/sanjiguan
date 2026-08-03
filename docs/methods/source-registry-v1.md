@@ -26,6 +26,8 @@
 | SRC-YJ-CODE | `yijing/three_coin.py` | 三钱 2/3、6/7/8/9、爻序 | C | 当前契约，不是传统权威来源 |
 | SRC-SXTWL-2.0.7 | `sxtwl 2.0.7`, https://github.com/yuangu/sxtwl_cpp | 八字机械独立差分 | A1/开源实现 | BSD-3-Clause；独立工程对照，不是传统权威 |
 | SRC-LUNAR-PYTHON-1.4.8 | `lunar-python 1.4.8`, https://github.com/6tail/lunar-python | 八字机械差分 | A1/开源实现 | MIT；与 tyme4py 同提供方，不计为两份独立证据 |
+| SRC-LUNAR-PYTHON-1.4.8-STRUCTURE | `lunar-python 1.4.8`, https://github.com/6tail/lunar-python | 藏干顺序与十神 100 组合工程对照 | A1/开源实现 | MIT；只是一份独立代码实现，不是传统权威签署；巳支藏干顺序差异必须保留为 Profile |
+| SRC-BAZI-STRUCTURE-TRADITION-PENDING | 待合格原典、正式出版物与方法审校人闭环 | 藏干、十神、干支关系的传统依据 | U | `UNCONFIRMED`；不得用博客、营销文章或 AI 内容补齐 |
 | SRC-TYME4PY-1.5.0 | `tyme4py 1.5.0`, https://github.com/6tail/tyme4py | 八字机械差分 | A1/开源实现 | MIT；同上 |
 | SRC-IZTRO-2.5.8 | `iztro 2.5.8`, https://github.com/SylarLong/iztro，commit `9d39f17` | 紫微命身宫、五行局与十四主星机械差分 | A1/开源实现 | MIT；独立工程对照，不是传统权威，不批准四化、大限或解释 |
 | SRC-CTEXT-KUNXUE-JIWEN-COINS | 《困学纪闻》卷一公开文本, https://ctext.org/wiki.pl?chapter=909326&if=gb&remap=gb | 三钱 6/7/8/9 陈述线索 | A2 候选 | 需版本校勘；不直接形成生产规则 |
