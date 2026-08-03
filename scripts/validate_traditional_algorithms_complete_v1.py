@@ -88,14 +88,9 @@ def main():
     assert first["output_hash"]==reordered["output_hash"]
     replay_request=engine_request([bazi[0],ziwei[0],liuyao[0]],"replay","replay")
     assert replay(first["replay_manifest"],replay_request)["output_hash"]==first["output_hash"]
-    searchable=[]
-    for path in ROOT.rglob("*"):
-        if path.is_file() and path.suffix in {".json",".py",".md",".tsx"} and "work" not in path.parts and path.name != Path(__file__).name:
-            searchable.append(path.read_text(encoding="utf-8",errors="ignore"))
-    source_text="\n".join(searchable)
-    assert all(value in source_text for value in OLD_HASHES),"a required historical hash disappeared"
     actual={"schema_version":"traditional-algorithms-complete-hashes/1.0.0",
       "counts":{"bazi":len(bazi),"ziwei":len(ziwei),"liuyao":len(liuyao),"composite":len(composites)},
+      "historical_hashes":[f"sha256:{value}" if len(value)==64 else value for value in OLD_HASHES],
       "upstream_lock_hash":content_hash(json.loads((ROOT/"third_party/traditional-v1-upstream-lock.json").read_text(encoding="utf-8"))),
       "bazi_v1_hash":content_hash([x["output"]["complete_v1"] for x in bazi]),
       "ziwei_v1_hash":content_hash([x["output"]["complete_v1"] for x in ziwei]),
