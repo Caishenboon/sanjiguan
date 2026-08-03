@@ -15,6 +15,7 @@ from .conformance import (
     validate_profile,
 )
 from .four_pillars import calculate_four_pillars
+from .traditional_structure import calculate_traditional_structure
 from .profiles import (
     REGISTRY_VERSION as EXECUTION_PROFILE_REGISTRY_VERSION,
     execution_profile_registry,
@@ -31,6 +32,7 @@ __all__ = [
     "run_conformance",
     "validate_profile",
     "calculate_four_pillars",
+    "calculate_traditional_structure",
     "execution_profile_registry",
     "load_execution_profile",
     "EXECUTION_PROFILE_REGISTRY_VERSION",

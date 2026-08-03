@@ -1,0 +1,81 @@
+{
+  "schema_version": "mechanical-reference/1.0.0",
+  "reference_id": "bazi-traditional-structure-mechanical-reference-v1",
+  "classification": "mechanical_reference",
+  "authority_status": "NOT_AUTHORITY_GOLDEN",
+  "human_review_status": "PENDING_QUALIFIED_REVIEW",
+  "production_activatable": false,
+  "method_id": "BAZI.TRADITIONAL_STRUCTURE.RESEARCH.V1",
+  "method_version": "1.0.0",
+  "profile_id": "bazi-traditional-structure-research-v1",
+  "source_registry": [
+    {
+      "source_id": "SRC-LUNAR-PYTHON-1.4.8-INDEPENDENT-CODE-COMPARISON",
+      "type": "independent_open_source_implementation",
+      "version": "1.4.8",
+      "scope": ["hidden_stems", "ten_gods"],
+      "independence_limit": "one implementation; not a traditional authority and not independent human attestation",
+      "license": "MIT"
+    },
+    {
+      "source_id": "TRADITIONAL_SOURCE_ATTESTATION_PENDING",
+      "type": "source_gap",
+      "scope": ["hidden_stems", "ten_gods", "stem_relations", "branch_relations"],
+      "consensus_status": "UNCONFIRMED"
+    }
+  ],
+  "case_groups": [
+    {"group_id":"hidden-stems-12","case_count":12,"coverage":"all twelve branches; both order profiles include an explicit Si-order dispute"},
+    {"group_id":"ten-gods-100","case_count":100,"coverage":"ten day stems by ten target stems"},
+    {"group_id":"stem-five-combines-5","case_count":5,"coverage":"all five structural pair candidates; no transformation"},
+    {"group_id":"branch-pairs-31","case_count":31,"coverage":"six harmonies, clashes, harms, breaks, mutual and self punishment candidates"},
+    {"group_id":"three-member-sets-10","case_count":10,"coverage":"four three-harmonies, four three-meetings, two three-punishments"},
+    {"group_id":"attacks-and-boundaries-8","case_count":8,"coverage":"partial groups, duplicate branches, positions, unknown hour, disputed profile and ordering"}
+  ],
+  "reference_tables": {
+    "hidden_stems_primary_profile": {
+      "子":["癸"], "丑":["己","癸","辛"], "寅":["甲","丙","戊"], "卯":["乙"],
+      "辰":["戊","乙","癸"], "巳":["丙","戊","庚"], "午":["丁","己"], "未":["己","丁","乙"],
+      "申":["庚","壬","戊"], "酉":["辛"], "戌":["戊","辛","丁"], "亥":["壬","甲"]
+    },
+    "hidden_stems_lunar_python_comparison_profile": {
+      "子":["癸"], "丑":["己","癸","辛"], "寅":["甲","丙","戊"], "卯":["乙"],
+      "辰":["戊","乙","癸"], "巳":["丙","庚","戊"], "午":["丁","己"], "未":["己","丁","乙"],
+      "申":["庚","壬","戊"], "酉":["辛"], "戌":["戊","辛","丁"], "亥":["壬","甲"]
+    },
+    "ten_gods_matrix": {
+      "target_stem_order":["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"],
+      "甲":["比肩","劫财","食神","伤官","偏财","正财","七杀","正官","偏印","正印"],
+      "乙":["劫财","比肩","伤官","食神","正财","偏财","正官","七杀","正印","偏印"],
+      "丙":["偏印","正印","比肩","劫财","食神","伤官","偏财","正财","七杀","正官"],
+      "丁":["正印","偏印","劫财","比肩","伤官","食神","正财","偏财","正官","七杀"],
+      "戊":["七杀","正官","偏印","正印","比肩","劫财","食神","伤官","偏财","正财"],
+      "己":["正官","七杀","正印","偏印","劫财","比肩","伤官","食神","正财","偏财"],
+      "庚":["偏财","正财","七杀","正官","偏印","正印","比肩","劫财","食神","伤官"],
+      "辛":["正财","偏财","正官","七杀","正印","偏印","劫财","比肩","伤官","食神"],
+      "壬":["食神","伤官","偏财","正财","七杀","正官","偏印","正印","比肩","劫财"],
+      "癸":["伤官","食神","正财","偏财","正官","七杀","正印","偏印","劫财","比肩"]
+    },
+    "stem_five_combines":["甲己","乙庚","丙辛","丁壬","戊癸"],
+    "branch_pair_catalog": {
+      "six_harmony":["子丑","寅亥","卯戌","辰酉","巳申","午未"],
+      "six_clash":["子午","丑未","寅申","卯酉","辰戌","巳亥"],
+      "six_harm":["子未","丑午","寅巳","卯辰","申亥","酉戌"],
+      "six_break":["子酉","丑辰","寅亥","卯午","巳申","未戌"],
+      "mutual_punishment":["子卯"],
+      "self_punishment":["辰辰","午午","酉酉","亥亥"]
+    },
+    "three_member_catalog": {
+      "three_harmony":["申子辰","亥卯未","寅午戌","巳酉丑"],
+      "three_meeting":["亥子丑","寅卯辰","巳午未","申酉戌"],
+      "three_punishment":["寅巳申","丑未戌"]
+    }
+  },
+  "declared_case_count": 166,
+  "known_disputes": [
+    "Si hidden-stem sequence differs between the two explicit profiles",
+    "branch-break and punishment scopes require qualified traditional review",
+    "partial combinations are candidates only and never imply formation"
+  ],
+  "prohibited_claims": ["traditional correctness", "strength", "formation", "transformation", "auspiciousness", "timing"]
+}

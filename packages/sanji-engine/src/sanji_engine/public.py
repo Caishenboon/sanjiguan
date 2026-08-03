@@ -9,6 +9,7 @@ from . import __version__
 from .bazi import (
     ConformanceError,
     calculate_four_pillars,
+    calculate_traditional_structure,
     load_execution_profile,
     load_profile,
 )
@@ -194,7 +195,10 @@ def validate_request(request: dict) -> dict:
             raise EngineError(REPLAY_DATA_VERSION_MISMATCH, "Ziwei source-claim asset version is unavailable")
         load_ziwei_profile(profile_id, profile_version)
     if "bazi" in modules:
-        executable = value["ruleset_bundle_id"] == "bazi-four-pillars-research-1.0.0"
+        executable = value["ruleset_bundle_id"] in {
+            "bazi-four-pillars-research-1.0.0",
+            "bazi-traditional-structure-research-1.0.0",
+        }
         if executable and modules != ["bazi"]:
             raise EngineError(
                 INPUT_INVALID,
@@ -209,8 +213,10 @@ def validate_request(request: dict) -> dict:
                 INPUT_INVALID,
                 "bazi execution requires an explicit method profile; no default is permitted",
             )
+        structure_execution = value["ruleset_bundle_id"] == "bazi-traditional-structure-research-1.0.0"
         expected_registry = (
-            "bazi-execution-profiles/1.0.0" if executable
+            "bazi-traditional-structure-profiles/1.0.0" if structure_execution
+            else "bazi-execution-profiles/1.0.0" if executable
             else "bazi-method-profile-registry/1.0.0"
         )
         if data_versions.get("bazi_method_profiles") != expected_registry:
@@ -219,7 +225,12 @@ def validate_request(request: dict) -> dict:
                 "bazi method-profile registry version is unavailable",
             )
         try:
-            if executable:
+            if structure_execution:
+                if snapshot.get("profile_id") != "bazi-traditional-structure-research-v1" or snapshot.get("profile_version") != "1.0.0":
+                    raise EngineError(INPUT_INVALID, "explicit supported BaZi structure profile is required")
+                if data_versions.get("bazi_traditional_structure") != "bazi-traditional-structure-assets/1.0.0":
+                    raise EngineError(REPLAY_DATA_VERSION_MISMATCH, "BaZi traditional-structure assets are unavailable")
+            elif executable:
                 profile_version = snapshot.get("profile_version")
                 if not isinstance(profile_version, str) or not profile_version:
                     raise EngineError(
@@ -778,30 +789,29 @@ def execute(request: dict) -> dict:
     if "bazi" in validated["requested_modules"]:
         definition = bundle["modules"]["bazi"]
         if definition["enabled"]:
-            result, bazi_trace, bazi_metadata = calculate_four_pillars(
-                validated["input_snapshot"]
-            )
+            is_structure = bundle["bundle_id"] == "bazi-traditional-structure-research-1.0.0"
+            if is_structure:
+                result, bazi_trace, bazi_metadata = calculate_traditional_structure(validated["input_snapshot"])
+            else:
+                result, bazi_trace, bazi_metadata = calculate_four_pillars(validated["input_snapshot"])
             module = {
                 "module_id": "bazi",
                 "module_version": "1.0.0",
                 "method_id": definition["method_id"],
-                "method_status": "traditional_mechanical_research_candidate",
+                "method_status": "traditional_structure_research" if is_structure else "traditional_mechanical_research_candidate",
                 "production_activatable": False,
                 "result": result,
                 "trace_step_ids": [step["step_id"] for step in bazi_trace],
                 "rule_refs": [definition["method_id"]],
                 "source_refs": definition["source_ids"],
-                "uncertainties": [
-                    "D002_UNCONFIRMED",
-                    "D003_UNCONFIRMED",
-                    "SOURCE_ATTESTATION_PENDING",
-                ],
-                "sensitivity_flags": sorted({
-                    flag
-                    for candidate in result["candidates"]
-                    for flag, active in candidate["boundary_flags"].items()
-                    if active
-                }),
+                "uncertainties": (
+                    ["TRADITIONAL_SOURCE_ATTESTATION_PENDING", "DISPUTED_BRANCH_RELATION_SCOPE"]
+                    if is_structure else ["D002_UNCONFIRMED", "D003_UNCONFIRMED", "SOURCE_ATTESTATION_PENDING"]
+                ),
+                "sensitivity_flags": (
+                    (["month_boundary_sensitive"] if result["month_command"]["boundary_sensitive"] else [])
+                    if is_structure else sorted({flag for candidate in result["candidates"] for flag, active in candidate["boundary_flags"].items() if active})
+                ),
             }
             bazi_result = {**module, "content_hash": content_hash(module)}
             trace.extend(bazi_trace)

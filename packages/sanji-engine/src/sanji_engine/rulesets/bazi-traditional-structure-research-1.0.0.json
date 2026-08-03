@@ -1,0 +1,32 @@
+{
+  "schema_version": "ruleset-bundle/1.0.0",
+  "bundle_id": "bazi-traditional-structure-research-1.0.0",
+  "bundle_version": "1.0.0",
+  "status": "research_active",
+  "system_class": "traditional_structure_research",
+  "license_status": "UNDECIDED",
+  "production_activatable": false,
+  "modules": {
+    "calendar": {"method_id":"CALENDAR.DISABLED","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "signals": {"method_id":"SIGNALS.DISABLED","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "inference": {"method_id":"INFERENCE.DISABLED","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "bazi": {
+      "method_id":"BAZI.TRADITIONAL_STRUCTURE.RESEARCH.V1",
+      "method_version":"1.0.0",
+      "status":"research_active",
+      "enabled":true,
+      "review_status":"UNCONFIRMED",
+      "production_activatable":false,
+      "profile_registry_version":"bazi-traditional-structure-profiles/1.0.0",
+      "asset_version":"bazi-traditional-structure-assets/1.0.0",
+      "interpretation_enabled":false,
+      "source_ids":["SRC-LUNAR-PYTHON-1.4.8-INDEPENDENT-CODE-COMPARISON","TRADITIONAL_SOURCE_ATTESTATION_PENDING"]
+    },
+    "ziwei": {"method_id":"ZIWEI.DISABLED","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "yijing": {"method_id":"YIJING.DISABLED","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "past-life": {"method_id":"PAST_LIFE.DISABLED","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "bardo": {"method_id":"BARDO.DISABLED","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "relationship": {"method_id":"RELATIONSHIP.DISABLED","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "life-chart": {"method_id":"LIFE_CHART.DISABLED","status":"draft","enabled":false,"review_status":"OUT_OF_SCOPE"}
+  }
+}

@@ -25,6 +25,14 @@ DATA_VERSIONS = {
     "bazi_boundary_cases": "bazi-boundary-cases/1.0.0",
     "solar_terms": "astronomy-engine/2.1.19",
 }
+STRUCTURE_RULESET_ID = "bazi-traditional-structure-research-1.0.0"
+STRUCTURE_DATA_VERSIONS = {
+    "tzdb": "2025.2",
+    "ephemeris": "astronomy-engine/2.1.19",
+    "calendar_dataset": "calendar-migration-baseline-1.0.0",
+    "bazi_method_profiles": "bazi-traditional-structure-profiles/1.0.0",
+    "bazi_traditional_structure": "bazi-traditional-structure-assets/1.0.0",
+}
 class StrictModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -61,6 +69,23 @@ class BaziComparePayload(StrictModel):
     profiles: list[ProfileRef] = Field(min_length=1, max_length=3)
     birth_record: BirthRecord
     input_provenance: dict[str, str] = Field(default_factory=dict)
+
+
+class StructurePillar(StrictModel):
+    stem: str
+    branch: str
+
+
+class BaziStructurePayload(StrictModel):
+    source_four_pillars: dict[str, StructurePillar | None]
+    source_candidate_id: str
+    source_ruleset_id: str = RULESET_ID
+    source_method_id: str = "BAZI.FOUR_PILLARS.MECHANICAL.RESEARCH.V1"
+    source_method_version: str = "1.0.0"
+    profile_id: str = "bazi-traditional-structure-research-v1"
+    profile_version: str = "1.0.0"
+    hidden_stems_profile_id: str
+    month_context: dict = Field(default_factory=dict)
 
 
 def _pg():
@@ -103,6 +128,35 @@ def _engine_request(payload: dict, run_id: str) -> dict:
             "random_method": "none",
             "random_seed": None,
         },
+    }
+
+
+def _structure_engine_request(payload: dict, run_id: str) -> dict:
+    return {
+        "schema_version": "engine-request/1.0.0", "engine_api_version": "1.0",
+        "run_id": run_id, "run_mode": "research_preview", "requested_modules": ["bazi"],
+        "input_snapshot": {"operation": "calculate_bazi_traditional_structure", **deepcopy(payload)},
+        "ruleset_bundle_id": STRUCTURE_RULESET_ID,
+        "data_versions": deepcopy(STRUCTURE_DATA_VERSIONS),
+        "deterministic_context": {"as_of": "2000-01-01T00:00:00Z", "random_method": "none", "random_seed": None},
+    }
+
+
+@router.post("/structure")
+def execute_bazi_structure(
+    payload_model: BaziStructurePayload = Body(...),
+    token: str | None = Cookie(None, alias=SESSION_COOKIE_NAME),
+):
+    _owner(token)
+    try:
+        result = execute(_structure_engine_request(payload_model.model_dump(mode="json"), str(uuid7())))
+    except ValueError as exc:
+        detail = exc.as_dict() if hasattr(exc, "as_dict") else {"code": "INPUT_INVALID"}
+        raise HTTPException(422, detail) from exc
+    return {
+        "mode": "research_preview",
+        "banner": "传统结构研究结果，不等于完整八字论命。",
+        "result": result,
     }
 
 
