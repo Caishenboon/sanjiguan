@@ -93,6 +93,21 @@
       "alternative": "fixed independently reviewed fixtures"
     },
     {
+      "name": "Sudo-Biao/suangua",
+      "version": "snapshot-2026-08-03",
+      "repository": "https://github.com/Sudo-Biao/suangua",
+      "commit": "9cf2783e84739e19c936389a5862d6d32b361617",
+      "license": "MIT",
+      "asset_license": "license grant in upstream README section 14; no prose redistributed",
+      "purpose": "BaZi algorithm source comparison for an UNCONFIRMED research profile",
+      "scope": "research-source-only",
+      "touches_user_data": false,
+      "affects_engine_determinism": false,
+      "upgrade": "manual source and license review",
+      "rollback": "remove comparison claim; runtime is unaffected",
+      "alternative": "no interpretation profile"
+    },
+    {
       "name": "@radix-ui/react-tabs",
       "version": "1.1.21",
       "repository": "https://github.com/radix-ui/primitives",

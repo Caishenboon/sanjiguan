@@ -1,0 +1,17 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sanjiguan.local/schemas/traditional-complete-result/1.0.0",
+  "title":"Traditional algorithms complete V1 research result",
+  "type":"object",
+  "required":["schema_version","ruleset_version","activation","review_status","production_activatable","systems","evidence_graph","strength_bp","confidence_bp","status","result_hash"],
+  "properties":{
+    "schema_version":{"const":"sanji-traditional-composite-result/1.0.0"},
+    "ruleset_version":{"const":"sanji-traditional-composite-1.0.0"},
+    "activation":{"const":"research_active"},"review_status":{"const":"UNCONFIRMED"},
+    "production_activatable":{"const":false},"systems":{"type":"array","minItems":1,"maxItems":3},
+    "evidence_graph":{"type":"object"},"strength_bp":{"type":"integer","minimum":-10000,"maximum":10000},
+    "confidence_bp":{"type":"integer","minimum":0,"maximum":10000},
+    "status":{"enum":["decisive","provisional","contested","insufficient"]},
+    "result_hash":{"pattern":"^sha256:[a-f0-9]{64}$"}
+  },"additionalProperties":true
+}

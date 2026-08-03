@@ -60,6 +60,7 @@ from .yijing import cast_physical_three_coin
 from .yijing.assets import ASSET_VERSION as YIJING_ASSET_VERSION
 from .ziwei import calculate_chart as calculate_ziwei_chart, load_profile as load_ziwei_profile
 from .upstream import METHOD_ID as UPSTREAM_METHOD_ID, OPERATION as UPSTREAM_OPERATION, compose_upstream_traditional_v1
+from .traditional_complete import METHOD_ID as TRADITIONAL_COMPLETE_METHOD_ID, OPERATION as TRADITIONAL_COMPLETE_OPERATION, compose_traditional_complete_v1
 
 __all__ = ["validate_request", "execute", "replay", "inspect_ruleset"]
 
@@ -68,7 +69,7 @@ REQUEST_SCHEMA_VERSION = "engine-request/1.0.0"
 RESULT_SCHEMA_VERSION = "engine-result/1.0.0"
 MODULES = {
     "calendar", "bazi", "ziwei", "yijing", "signals", "inference",
-    "past-life", "bardo", "relationship", "life-chart", "upstream",
+    "past-life", "bardo", "relationship", "life-chart", "upstream", "traditional-complete",
 }
 
 
@@ -155,6 +156,12 @@ def validate_request(request: dict) -> dict:
         or snapshot.get("operation") != UPSTREAM_OPERATION
     ):
         raise EngineError(INPUT_INVALID, "upstream composition must be an isolated explicit research request")
+    if "traditional-complete" in modules and (
+        modules != ["traditional-complete"]
+        or value["ruleset_bundle_id"] != "sanji-traditional-composite-1.0.0"
+        or snapshot.get("operation") != TRADITIONAL_COMPLETE_OPERATION
+    ):
+        raise EngineError(INPUT_INVALID, "complete traditional composition must be an isolated explicit research request")
     context = _require_mapping(value["deterministic_context"], "deterministic_context")
     if context.get("random_method") != "none" or context.get("random_seed") is not None:
         raise EngineError(
@@ -744,7 +751,7 @@ def execute(request: dict) -> dict:
                     content_hash(item),
                 ),
             )
-    elif bundle["bundle_id"] == "sanji-upstream-composite-1.0.0":
+    elif bundle["bundle_id"] in {"sanji-upstream-composite-1.0.0", "sanji-traditional-composite-1.0.0"}:
         snapshot = validated["input_snapshot"]
         results = snapshot.get("adapter_results", [])
         if isinstance(results, list):
@@ -770,6 +777,7 @@ def execute(request: dict) -> dict:
     ziwei_metadata: dict = {}
     life_trend_metadata: dict = {}
     upstream_metadata: dict = {}
+    traditional_complete_metadata: dict = {}
     research_requested = {"signals", "inference"} <= set(
         validated["requested_modules"]
     )
@@ -918,6 +926,26 @@ def execute(request: dict) -> dict:
                   "sensitivity_flags": [item.get("field") for item in result["disputes"]]}
         upstream_result = {**module, "content_hash": content_hash(module)}
         trace.extend(upstream_trace)
+    traditional_complete_result = None
+    if "traditional-complete" in validated["requested_modules"]:
+        definition = bundle["modules"]["traditional-complete"]
+        result, traditional_trace = compose_traditional_complete_v1(validated["input_snapshot"])
+        traditional_complete_metadata = {
+            "traditional_complete_domain_hash": result["result_hash"],
+            "evidence_graph_hash": result["evidence_graph"]["graph_hash"],
+        }
+        module = {
+            "module_id": "traditional-complete", "module_version": "1.0.0",
+            "method_id": TRADITIONAL_COMPLETE_METHOD_ID, "method_status": "research_active",
+            "production_activatable": False, "result": result,
+            "trace_step_ids": [step["step_id"] for step in traditional_trace],
+            "rule_refs": ["sanji-traditional-composite-1.0.0"],
+            "source_refs": definition["source_ids"],
+            "uncertainties": ["TRADITIONAL_PROFILE_REVIEW_PENDING", "NO_REAL_WORLD_VALIDATION"],
+            "sensitivity_flags": result["missing_systems"],
+        }
+        traditional_complete_result = {**module, "content_hash": content_hash(module)}
+        trace.extend(traditional_trace)
     for module_id in validated["requested_modules"]:
         definition = bundle["modules"][module_id]
         if module_id == "calendar" and definition["enabled"]:
@@ -937,6 +965,8 @@ def execute(request: dict) -> dict:
             module_results[module_id] = life_trend_result
         elif module_id == "upstream" and upstream_result is not None:
             module_results[module_id] = upstream_result
+        elif module_id == "traditional-complete" and traditional_complete_result is not None:
+            module_results[module_id] = traditional_complete_result
         else:
             module_results[module_id] = disabled_result(module_id, definition)
             disabled_modules.append(module_id)
@@ -982,6 +1012,9 @@ def execute(request: dict) -> dict:
     if upstream_result is not None:
         manifest_base["method_versions"] = {"upstream": UPSTREAM_METHOD_ID}
         manifest_base["domain_result_hashes"] = upstream_metadata
+    if traditional_complete_result is not None:
+        manifest_base["method_versions"] = {"traditional-complete": TRADITIONAL_COMPLETE_METHOD_ID}
+        manifest_base["domain_result_hashes"] = traditional_complete_metadata
     replay_manifest = {
         **manifest_base,
         "content_hash": content_hash(manifest_base),

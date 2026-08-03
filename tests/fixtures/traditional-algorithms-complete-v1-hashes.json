@@ -1,0 +1,10 @@
+{
+  "schema_version": "traditional-algorithms-complete-hashes/1.0.0",
+  "counts": {"bazi": 60, "ziwei": 48, "liuyao": 4096, "composite": 12},
+  "upstream_lock_hash": "sha256:63d6bf9166e2b9b718b3270e6dc6d9b939ba349346b331d17b304d619b521592",
+  "bazi_v1_hash": "sha256:a595504b9f4806c74f7fb7935bf720ee2256d437c1253dfaf4e61cca60494a73",
+  "ziwei_v1_hash": "sha256:40594f6e1fe71938b3d357b6f2ab31059596eee46252a80d7407bd78e7e5fd6d",
+  "liuyao_v1_hash": "sha256:76a0dd1092cec8b6e41adf3a6037226fd8b24d16bf03a74b3a365ac8541b92e2",
+  "composite_v1_hash": "sha256:675ac443dc5868c38255593cad2f711880aa1a315a010a5bfb6189a9fd2253c2",
+  "replay_output_hash": "sha256:1ba7afc7323ec93c708f4a733460b80d2fe8f7e438520dfff79ad7cd480dd8e9"
+}

@@ -29,3 +29,8 @@ traditional consensus or a Sanji verdict. Their modern
 interpretation prose, visual designs, AI prompts, and unlicensed assets are not
 copied into this repository. Before public release, legal review must verify
 the upstream notices and every transitive dependency.
+## Sudo-Biao/suangua
+
+- Snapshot commit: `9cf2783e84739e19c936389a5862d6d32b361617`
+- License: MIT (grant and copyright notice are in upstream README section 14)
+- Use: source-algorithm comparison for the research-only BaZi complete Profile; no runtime import and no upstream prose is redistributed.

@@ -37,6 +37,10 @@ jobs:
         env:
           SANJI_IZTRO_RUNTIME_DIR: packages/oracle-adapters/src/oracle_adapters/ziwei/iztro
         run: python scripts/validate_upstream_traditional_engines.py
+      - name: Traditional algorithms complete V1 determinism
+        env:
+          SANJI_IZTRO_RUNTIME_DIR: packages/oracle-adapters/src/oracle_adapters/ziwei/iztro
+        run: python scripts/validate_traditional_algorithms_complete_v1.py
       - name: Engine boundary and activation gates
         run: |
           python scripts/validate_sanji_engine.py
@@ -180,6 +184,7 @@ jobs:
           python scripts/export_bazi_four_pillars_openapi.py
           python scripts/export_ziwei_openapi.py
           python scripts/export_upstream_traditional_openapi.py
+          python scripts/export_traditional_complete_openapi.py --check
           python scripts/export_liuxiang_openapi.py --check
           python scripts/export_liuxiang_archive_openapi.py --check
           python scripts/export_topic_openapi.py --check
@@ -227,6 +232,10 @@ jobs:
         env:
           SANJI_IZTRO_RUNTIME_DIR: packages/oracle-adapters/src/oracle_adapters/ziwei/iztro
         run: python scripts/validate_upstream_traditional_engines.py
+      - name: Execute traditional algorithms complete V1 conformance
+        env:
+          SANJI_IZTRO_RUNTIME_DIR: packages/oracle-adapters/src/oracle_adapters/ziwei/iztro
+        run: python scripts/validate_traditional_algorithms_complete_v1.py
       - name: Storybook build and accessibility stories
         working-directory: packages/sanji-ui
         env:

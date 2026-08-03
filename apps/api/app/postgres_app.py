@@ -330,3 +330,5 @@ from apps.api.app.release_routes import router as release_router
 app.include_router(release_router)
 from apps.api.app.upstream_traditional_routes import router as upstream_traditional_router
 app.include_router(upstream_traditional_router)
+from apps.api.app.traditional_complete_routes import router as traditional_complete_router
+app.include_router(traditional_complete_router)
