@@ -1,0 +1,53 @@
+{
+  "schema_version": "ziwei-mechanical-trust-profiles/1.0.0",
+  "asset_version": "ziwei-mechanical-trust-profiles/1.0.0",
+  "tradition_scope": "traditional_mechanical_research_candidate",
+  "activation_status": "research_active",
+  "review_status": "UNCONFIRMED",
+  "production_activatable": false,
+  "default_profile_id": null,
+  "selection_policy": "explicit_profile_required_no_hidden_default",
+  "input_contract": {
+    "calendar_mode": "manual_verified_lunar_input_only",
+    "automatic_gregorian_to_lunar": "NOT_IMPLEMENTED",
+    "required_fields": ["year", "month", "day", "is_leap_month", "hour_branch_index", "traditional_sex"],
+    "structural_ranges": {"month": [1, 12], "day": [1, 30], "hour_branch_index": [0, 11]},
+    "verified_provenance_required": true,
+    "unknown_or_uncertain_hour": "INPUT_INVALID_FOR_EXECUTION_RETAIN_AS_CANDIDATE_UPSTREAM",
+    "unknown_or_uncertain_leap_status": "INPUT_INVALID_FOR_EXECUTION_RETAIN_AS_CANDIDATE_UPSTREAM",
+    "impossible_lunar_date": "UPSTREAM_CALENDAR_VERIFICATION_REQUIRED_ENGINE_CANNOT_ASSERT",
+    "leap_month_existence": "UPSTREAM_CALENDAR_VERIFICATION_REQUIRED_ENGINE_CANNOT_ASSERT"
+  },
+  "profiles": [
+    {
+      "profile_id": "ZIWEI.SANHE.MANUAL_LUNAR.LEAP_SAME_MONTH.V1",
+      "profile_version": "1.0.0",
+      "leap_month_policy": "same_month_number",
+      "transformation_table": "birth-year-transformations-candidate/1.0.0",
+      "transformation_status": "UNCONFIRMED_MECHANICAL_DISPLAY_ONLY",
+      "decade_policy": "bureau_number_start_yang_male_yin_female_forward_other_reverse",
+      "annual_policy": "target_year_branch_only",
+      "status": "research_active",
+      "review_status": "UNCONFIRMED",
+      "production_activatable": false
+    },
+    {
+      "profile_id": "ZIWEI.SANHE.MANUAL_LUNAR.LEAP_SPLIT_15.V1",
+      "profile_version": "1.0.0",
+      "leap_month_policy": "day_1_15_same_month_day_16_plus_next_month",
+      "transformation_table": "birth-year-transformations-candidate/1.0.0",
+      "transformation_status": "UNCONFIRMED_MECHANICAL_DISPLAY_ONLY",
+      "decade_policy": "bureau_number_start_yang_male_yin_female_forward_other_reverse",
+      "annual_policy": "target_year_branch_only",
+      "status": "research_active",
+      "review_status": "UNCONFIRMED",
+      "production_activatable": false
+    }
+  ],
+  "disabled_capabilities": [
+    "automatic_gregorian_to_lunar", "auxiliary_and_malefic_star_expansion", "palace_stem_flying_transformations",
+    "complete_sanfang_sizheng_interpretation", "mingzhu_shenzhu", "temple_brightness_tables",
+    "complete_decade_annual_monthly_interpretation", "auspiciousness", "identity_or_past_life_mapping"
+  ],
+  "content_hash": "sha256:d2aec14b053abbadd42fddee8d03a23c5421ff9afea210ed6f55959c69065f35"
+}
