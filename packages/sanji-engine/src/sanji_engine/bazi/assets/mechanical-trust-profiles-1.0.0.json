@@ -1,0 +1,47 @@
+{
+  "schema_version": "bazi-mechanical-trust-profiles/1.0.0",
+  "asset_version": "bazi-mechanical-trust-profiles/1.0.0",
+  "method_id": "BAZI.FOUR_PILLARS.MECHANICAL.RESEARCH.V1",
+  "method_version": "1.0.0",
+  "ruleset_id": "bazi-four-pillars-research-1.0.0",
+  "activation_status": "research_active",
+  "review_status": "UNCONFIRMED",
+  "production_activatable": false,
+  "default_profile_id": null,
+  "frozen_engineering_policies": {
+    "year_boundary": "lichun_astronomical_instant",
+    "month_boundary": "twelve_jie_astronomical_instants",
+    "boundary_inclusion": "start_inclusive_end_exclusive",
+    "civil_time": "preserve_user_supplied_historical_legal_time",
+    "timezone": "iana_named_zone_with_historical_offset_and_dst",
+    "solar_time": "calculate_local_mean_and_local_apparent_without_silent_replacement",
+    "unknown_time": "enumerate_13_split_intervals_and_deduplicate"
+  },
+  "parallel_disputed_profiles": [
+    {
+      "profile_id": "BAZI.PROFILE.CIVIL_MIDNIGHT.CANDIDATE.V1",
+      "day_boundary": "midnight",
+      "time_basis": "civil",
+      "traditional_status": "UNCONFIRMED"
+    },
+    {
+      "profile_id": "BAZI.PROFILE.APPARENT_ZICHU.CANDIDATE.V1",
+      "day_boundary": "zichu_23",
+      "time_basis": "local_apparent_solar",
+      "traditional_status": "UNCONFIRMED"
+    },
+    {
+      "profile_id": "BAZI.PROFILE.DUAL_SPLIT_ZI.CANDIDATE.V1",
+      "day_boundary": "civil_midnight_plus_late_early_zi_split",
+      "time_basis": "civil_and_local_apparent_solar",
+      "traditional_status": "UNCONFIRMED"
+    }
+  ],
+  "display_requirements": [
+    "show_profile_id_and_ruleset_version",
+    "show_research_active_and_UNCONFIRMED",
+    "show_boundary_sensitivity_when_candidates_change",
+    "state_that_four_pillars_are_not_complete_bazi_interpretation"
+  ],
+  "content_hash": "sha256:b6570e47f4866d1f5d179d387b94d0405b82f64793192c0652ea3c415492e098"
+}

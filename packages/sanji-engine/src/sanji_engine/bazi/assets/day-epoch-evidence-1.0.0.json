@@ -1,0 +1,52 @@
+{
+  "schema_version": "bazi-day-epoch-evidence/1.0.0",
+  "asset_version": "bazi-day-epoch-evidence/1.0.0",
+  "subject_asset": "bazi-day-epoch/1.0.0",
+  "implementation": {
+    "code_location": "sanji_engine.bazi.four_pillars::_jdn_gregorian::_day_index",
+    "jdn_formula": "Fliegel-Van Flandern integer Gregorian JDN",
+    "anchor_date": "1949-10-01",
+    "anchor_cycle_index": 0,
+    "anchor_ganzhi": "甲子",
+    "effective_formula": "(anchor_cycle_index + JDN(date) - JDN(anchor_date)) mod 60"
+  },
+  "source_assessment": {
+    "jdn_source_id": "SRC-USNO-JD",
+    "jdn_source_status": "CONSENSUS_MECHANICAL",
+    "sexagenary_anchor_source_status": "UNCONFIRMED",
+    "review_status": "UNCONFIRMED",
+    "production_status": "RESEARCH_ONLY",
+    "blocking_reason": "The engineering JDN conversion is independently documented, but the sexagenary anchor still lacks a qualified traditional edition, signed reviewer decision, and source-attested boundary goldens."
+  },
+  "independent_implementations": [
+    {
+      "implementation_id": "bazi.sxtwl",
+      "version": "2.0.7",
+      "upstream_commit": "pypi-release-2.0.7",
+      "upstream": "https://github.com/yuangu/sxtwl_cpp",
+      "independence": "independent_project_and_codebase",
+      "use": "CI differential comparison only",
+      "production_allowed": false
+    },
+    {
+      "implementation_id": "bazi.lunar_python",
+      "version": "1.4.8",
+      "upstream_commit": "000c8a3d74eed098d6256a28fdd51b869324c559",
+      "upstream": "https://github.com/6tail/lunar-python",
+      "independence": "external_codebase_but_same_provider_as_tyme4py",
+      "use": "secondary differential comparison only",
+      "production_allowed": false
+    },
+    {
+      "implementation_id": "bazi.tyme4py",
+      "version": "1.5.0",
+      "upstream_commit": "0ad0b416b6b9562f893921e3868b86e2bc68400b",
+      "upstream": "https://github.com/6tail/tyme4py",
+      "independence": "external_codebase_but_not_independent_from_lunar_python_provider",
+      "use": "secondary differential comparison only",
+      "production_allowed": false
+    }
+  ],
+  "conclusion": "No current algorithm error was established. The existing epoch remains immutable, research-only and UNCONFIRMED; it was not replaced or promoted.",
+  "content_hash": "sha256:80d60ac18e3aa4884667cedf8f8a074941d8c05e8aa7b90f568eca9b14981d02"
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": "yijing-coin-value-profile/1.0.0",
+  "asset_version": "yijing-coin-value-profile/1.0.0",
+  "method_id": "YIJING.THREE_COIN.PHYSICAL.MECHANICAL.V1",
+  "canonical_contract": {
+    "allowed_single_coin_values": [2, 3],
+    "coins_per_toss": 3,
+    "tosses_per_hexagram": 6,
+    "input_order": "bottom_to_top",
+    "line_sums": {
+      "6": {"state": "old_yin", "base_polarity": 0, "moving": true, "transformed_polarity": 1},
+      "7": {"state": "young_yang", "base_polarity": 1, "moving": false, "transformed_polarity": 1},
+      "8": {"state": "young_yin", "base_polarity": 0, "moving": false, "transformed_polarity": 0},
+      "9": {"state": "old_yang", "base_polarity": 1, "moving": true, "transformed_polarity": 0}
+    }
+  },
+  "face_label_profile": {
+    "profile_id": "COIN_FACES.HEADS_3_TAILS_2.V1",
+    "value_3_current_ui_label": "正面",
+    "value_2_current_ui_label": "反面",
+    "status": "profile_interpretation_not_canonical_identity",
+    "dispute_notice": "Historical face/back and inscribed/plain conventions differ; stored numeric values 2/3 are authoritative for replay."
+  },
+  "historical_compatibility": {
+    "direct_line_values_6_7_8_9": "unchanged",
+    "ruleset_id": "yijing-three-coin-mechanical-0.1.0",
+    "canonical_result_hash_changes": false
+  },
+  "review_status": "UNCONFIRMED",
+  "activation_status": "research_active",
+  "production_activatable": false,
+  "not_implemented": ["纳甲", "世应", "六亲", "六神", "月建", "日辰", "旬空", "旺衰", "用神", "完整六爻断法"],
+  "source_ids": ["SRC-CTEXT-KUNXUE-JIWEN-COINS", "SRC-CTEXT-QUYI-SHU-COIN-DISPUTE"],
+  "content_hash": "sha256:8b3c118b629817ef6dbed65b856c01ba31ca2f096bdce6bad9bf3a182d37ef43"
+}
