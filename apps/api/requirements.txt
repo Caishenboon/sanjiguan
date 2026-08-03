@@ -1,5 +1,8 @@
 astronomy-engine==2.1.19
 -e packages/sanji-engine
+-e packages/oracle-adapters
+-e packages/upstream-adapters
+lunar-python==1.4.8
 cryptography==45.0.6
 fastapi==0.116.1
 httpx==0.28.1

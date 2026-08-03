@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import shutil
 from pathlib import Path
 
 
@@ -13,8 +14,11 @@ def execute(value: dict) -> dict:
     runner = runtime_dir / "runner.mjs"
     if not runner.is_file():
         raise RuntimeError("configured iztro runtime does not contain runner.mjs")
+    node_binary = os.environ.get("SANJI_NODE_BINARY") or shutil.which("node")
+    if not node_binary:
+        raise RuntimeError("pinned local Node.js runtime is unavailable")
     completed = subprocess.run(
-        ["node", str(runner)],
+        [node_binary, str(runner)],
         input=json.dumps(value, ensure_ascii=False),
         text=True,
         encoding="utf-8",
@@ -33,5 +37,8 @@ def normalize(raw: dict) -> dict:
         "life_palace_branch": raw["life_palace_branch"],
         "body_palace_branch": raw["body_palace_branch"],
         "five_element_bureau": raw["five_element_bureau"],
-        "palaces": raw["palaces"],
+        "palaces": [
+            {key: palace[key] for key in ("index", "name", "branch", "heavenly_stem", "major_stars")}
+            for palace in raw["palaces"]
+        ],
     }

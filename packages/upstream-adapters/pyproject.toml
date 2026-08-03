@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sanji-upstream-adapters"
+version = "1.0.0"
+description = "Pinned offline traditional-method adapters for Sanjiguan research"
+requires-python = ">=3.11"
+dependencies = [
+  "lunar-python==1.4.8",
+  "sanji-oracle-adapters==0.1.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+upstream_adapters = ["vendor/liuyao_engine_0_1_0/*"]

@@ -59,6 +59,7 @@ from .rulesets import load_bundle
 from .yijing import cast_physical_three_coin
 from .yijing.assets import ASSET_VERSION as YIJING_ASSET_VERSION
 from .ziwei import calculate_chart as calculate_ziwei_chart, load_profile as load_ziwei_profile
+from .upstream import METHOD_ID as UPSTREAM_METHOD_ID, OPERATION as UPSTREAM_OPERATION, compose_upstream_traditional_v1
 
 __all__ = ["validate_request", "execute", "replay", "inspect_ruleset"]
 
@@ -67,7 +68,7 @@ REQUEST_SCHEMA_VERSION = "engine-request/1.0.0"
 RESULT_SCHEMA_VERSION = "engine-result/1.0.0"
 MODULES = {
     "calendar", "bazi", "ziwei", "yijing", "signals", "inference",
-    "past-life", "bardo", "relationship", "life-chart",
+    "past-life", "bardo", "relationship", "life-chart", "upstream",
 }
 
 
@@ -128,6 +129,7 @@ def validate_request(request: dict) -> dict:
     unknown = sorted(set(modules) - MODULES)
     if unknown:
         raise EngineError(INPUT_INVALID, "unknown requested module", {"modules": unknown})
+    snapshot = _require_mapping(value["input_snapshot"], "input_snapshot")
     research_modules = set(modules) & {"signals", "inference"}
     if research_modules and research_modules != {"signals", "inference"}:
         raise EngineError(
@@ -147,6 +149,12 @@ def validate_request(request: dict) -> dict:
             INPUT_INVALID,
             "life trend research must be an isolated life-chart request with its research ruleset",
         )
+    if "upstream" in modules and (
+        modules != ["upstream"]
+        or value["ruleset_bundle_id"] != "sanji-upstream-composite-1.0.0"
+        or snapshot.get("operation") != UPSTREAM_OPERATION
+    ):
+        raise EngineError(INPUT_INVALID, "upstream composition must be an isolated explicit research request")
     context = _require_mapping(value["deterministic_context"], "deterministic_context")
     if context.get("random_method") != "none" or context.get("random_seed") is not None:
         raise EngineError(
@@ -170,7 +178,6 @@ def validate_request(request: dict) -> dict:
             REPLAY_DATA_VERSION_MISMATCH,
             "yijing hexagram mapping data version is unavailable",
         )
-    snapshot = _require_mapping(value["input_snapshot"], "input_snapshot")
     if "ziwei" in modules:
         if modules != ["ziwei"] or value["ruleset_bundle_id"] not in {
             "ziwei-sanhe-research-1.0.0",
@@ -737,6 +744,17 @@ def execute(request: dict) -> dict:
                     content_hash(item),
                 ),
             )
+    elif bundle["bundle_id"] == "sanji-upstream-composite-1.0.0":
+        snapshot = validated["input_snapshot"]
+        results = snapshot.get("adapter_results", [])
+        if isinstance(results, list):
+            snapshot["adapter_results"] = sorted(
+                results,
+                key=lambda item: (
+                    str(item.get("upstream_name", "")) if isinstance(item, dict) else "",
+                    str(item.get("canonical_hash", "")) if isinstance(item, dict) else "",
+                ),
+            )
     input_projection = deepcopy(validated)
     input_projection.pop("run_id", None)
     # Execution and replay are transport intents, not calculation inputs. Excluding
@@ -751,6 +769,7 @@ def execute(request: dict) -> dict:
     bazi_metadata: dict = {}
     ziwei_metadata: dict = {}
     life_trend_metadata: dict = {}
+    upstream_metadata: dict = {}
     research_requested = {"signals", "inference"} <= set(
         validated["requested_modules"]
     )
@@ -883,6 +902,22 @@ def execute(request: dict) -> dict:
             }
             life_trend_result = {**module, "content_hash": content_hash(module)}
             trace.extend(life_trend_trace)
+    upstream_result = None
+    if "upstream" in validated["requested_modules"]:
+        definition = bundle["modules"]["upstream"]
+        result, upstream_trace = compose_upstream_traditional_v1(validated["input_snapshot"])
+        upstream_metadata = {"upstream_domain_hash": result["result_hash"],
+                             "evidence_graph_hash": result["evidence_graph"]["graph_hash"]}
+        module = {"module_id": "upstream", "module_version": "1.0.0",
+                  "method_id": UPSTREAM_METHOD_ID, "method_status": "research_active",
+                  "production_activatable": False, "result": result,
+                  "trace_step_ids": [step["step_id"] for step in upstream_trace],
+                  "rule_refs": ["sanji-upstream-composite-1.0.0"],
+                  "source_refs": definition["source_ids"],
+                  "uncertainties": ["TRADITIONAL_INTERPRETATION_NOT_ADMITTED"],
+                  "sensitivity_flags": [item.get("field") for item in result["disputes"]]}
+        upstream_result = {**module, "content_hash": content_hash(module)}
+        trace.extend(upstream_trace)
     for module_id in validated["requested_modules"]:
         definition = bundle["modules"][module_id]
         if module_id == "calendar" and definition["enabled"]:
@@ -900,6 +935,8 @@ def execute(request: dict) -> dict:
             module_results[module_id] = ziwei_result
         elif module_id == "life-chart" and life_trend_result is not None:
             module_results[module_id] = life_trend_result
+        elif module_id == "upstream" and upstream_result is not None:
+            module_results[module_id] = upstream_result
         else:
             module_results[module_id] = disabled_result(module_id, definition)
             disabled_modules.append(module_id)
@@ -942,6 +979,9 @@ def execute(request: dict) -> dict:
             "life-chart": bundle["modules"]["life-chart"]["method_id"],
         }
         manifest_base["domain_result_hashes"] = life_trend_metadata
+    if upstream_result is not None:
+        manifest_base["method_versions"] = {"upstream": UPSTREAM_METHOD_ID}
+        manifest_base["domain_result_hashes"] = upstream_metadata
     replay_manifest = {
         **manifest_base,
         "content_hash": content_hash(manifest_base),

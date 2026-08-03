@@ -1,0 +1,7 @@
+{
+  "upstream_lock_hash":"sha256:4afb5b89669e2227640b3eb98de171bc22f7a6ffe8577557287b9f049bac4484",
+  "bazi_adapter_cases_hash":"sha256:29e29f11f034b8393c414eaaa1b22c6ecc18c9043a1fab66730bba22c1d097d9",
+  "ziwei_adapter_cases_hash":"sha256:0e71861145676e738ff923c46d2c846e8bc856fa6e801700e740847ad98e60ea",
+  "liuyao_adapter_cases_hash":"sha256:67e98ef06a2119bc460cf04cbe1278c71590196b8c20f19fb8d522e521646f94",
+  "composite_cases_hash":"sha256:d351e99362c2702e2f06c2b6eca512699b37a0bdd6429c6d95e7010857b7629e"
+}

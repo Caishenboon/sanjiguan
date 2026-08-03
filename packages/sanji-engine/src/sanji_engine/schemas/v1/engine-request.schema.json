@@ -35,7 +35,8 @@
           "past-life",
           "bardo",
           "relationship",
-          "life-chart"
+          "life-chart",
+          "upstream"
         ]
       }
     },
@@ -50,7 +51,8 @@
         "bazi-method-foundation-0.1.0",
         "bazi-four-pillars-research-1.0.0",
         "ziwei-sanhe-research-1.0.0",
-        "ziwei-sanhe-research-1.0.0-revoked-fixture"
+        "ziwei-sanhe-research-1.0.0-revoked-fixture",
+        "sanji-upstream-composite-1.0.0"
       ]
     },
     "data_versions": {
