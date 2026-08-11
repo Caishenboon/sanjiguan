@@ -1,0 +1,22 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sanjiguan.local/schemas/upstream-adapter-result/1.0.0",
+  "title":"Pinned upstream adapter result",
+  "type":"object",
+  "required":["schema_version","upstream_name","upstream_version","upstream_commit","license","adapter_version","method_profile","canonical_input","output","warnings","disputes","trace","raw_hash","canonical_hash"],
+  "properties":{
+    "schema_version":{"const":"sanji-upstream-adapter/1.0.0"},
+    "upstream_name":{"enum":["6tail/lunar-python","SylarLong/iztro","yaomancy/liuyao-engine"]},
+    "upstream_version":{"type":"string"},"upstream_commit":{"pattern":"^[a-f0-9]{40}$"},
+    "license":{"enum":["MIT","Apache-2.0","BSD-2-Clause","BSD-3-Clause"]},
+    "adapter_version":{"type":"string"},"method_profile":{"type":"object"},
+    "canonical_input":{"type":"object"},"output":{"type":"object"},
+    "warnings":{"type":"array","items":{"type":"string"}},
+    "disputes":{"type":"array","items":{"type":"object"}},
+    "trace":{"type":"array","items":{"type":"object"}},
+    "raw_hash":{"pattern":"^sha256:[a-f0-9]{64}$"},"canonical_hash":{"pattern":"^sha256:[a-f0-9]{64}$"},
+    "ruleset_version":{"type":"string"},
+    "supporting_evidence":{"type":"array"},
+    "counter_evidence":{"type":"array"}
+  },"additionalProperties":false
+}

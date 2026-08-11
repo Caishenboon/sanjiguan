@@ -1,0 +1,22 @@
+{
+  "schema_version":"ruleset-bundle/1.0.0",
+  "bundle_id":"sanji-upstream-composite-1.0.0",
+  "bundle_version":"1.0.0",
+  "status":"research_active",
+  "system_class":"pinned_upstream_composite_research",
+  "license_status":"SEPARATE_UPSTREAM_LICENSES",
+  "production_activatable":false,
+  "modules":{
+    "upstream":{"method_id":"SANJI.UPSTREAM.COMPOSITE.RESEARCH.V1","method_version":"1.0.0","status":"research_active","enabled":true,"review_status":"UNCONFIRMED","production_activatable":false,"source_ids":["UPSTREAM-LOCK-1.0.0"]},
+    "calendar":{"method_id":"CALENDAR.DISABLED","status":"disabled","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "bazi":{"method_id":"BAZI.DISABLED","status":"disabled","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "ziwei":{"method_id":"ZIWEI.DISABLED","status":"disabled","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "yijing":{"method_id":"YIJING.DISABLED","status":"disabled","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "signals":{"method_id":"SIGNALS.DISABLED","status":"disabled","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "inference":{"method_id":"INFERENCE.DISABLED","status":"disabled","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "past-life":{"method_id":"PAST_LIFE.DISABLED","status":"disabled","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "bardo":{"method_id":"BARDO.DISABLED","status":"disabled","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "relationship":{"method_id":"RELATIONSHIP.DISABLED","status":"disabled","enabled":false,"review_status":"OUT_OF_SCOPE"},
+    "life-chart":{"method_id":"LIFE_CHART.DISABLED","status":"disabled","enabled":false,"review_status":"OUT_OF_SCOPE"}
+  }
+}

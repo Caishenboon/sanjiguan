@@ -1,0 +1,13 @@
+{
+  "schema_version":"ruleset-bundle/1.0.0",
+  "bundle_id":"sanji-traditional-composite-1.0.0",
+  "bundle_version":"1.0.0",
+  "status":"research_active",
+  "system_class":"versioned_traditional_profile_composite",
+  "review_status":"UNCONFIRMED",
+  "production_activatable":false,
+  "modules":{
+    "traditional-complete":{"method_id":"SANJI.TRADITIONAL.COMPOSITE.V1","method_version":"1.0.0","status":"research_active","enabled":true,"review_status":"UNCONFIRMED","production_activatable":false,"source_ids":["UPSTREAM-LOCK-1.1.0","BAZI-ZIPING-COMPLETE-1.0.0","ZIWEI-SANHE-COMPLETE-1.0.0","LIUYAO-JINGFANG-NAJIA-1.0.0"]},
+    "calendar":{"method_id":"CALENDAR.DISABLED","status":"disabled","enabled":false},"bazi":{"method_id":"BAZI.DISABLED","status":"disabled","enabled":false},"ziwei":{"method_id":"ZIWEI.DISABLED","status":"disabled","enabled":false},"yijing":{"method_id":"YIJING.DISABLED","status":"disabled","enabled":false},"signals":{"method_id":"SIGNALS.DISABLED","status":"disabled","enabled":false},"inference":{"method_id":"INFERENCE.DISABLED","status":"disabled","enabled":false},"past-life":{"method_id":"PAST_LIFE.DISABLED","status":"disabled","enabled":false},"bardo":{"method_id":"BARDO.DISABLED","status":"disabled","enabled":false},"relationship":{"method_id":"RELATIONSHIP.DISABLED","status":"disabled","enabled":false},"life-chart":{"method_id":"LIFE_CHART.DISABLED","status":"disabled","enabled":false},"upstream":{"method_id":"UPSTREAM.DISABLED","status":"disabled","enabled":false}
+  }
+}

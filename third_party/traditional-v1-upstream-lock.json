@@ -1,0 +1,16 @@
+{
+  "schema_version":"sanji-traditional-v1-upstream-lock/1.0.0",
+  "rulesets":["bazi-ziping-complete-1.0.0","ziwei-sanhe-complete-1.0.0","liuyao-jingfang-najia-1.0.0","sanji-traditional-composite-1.0.0"],
+  "admission_policy":"MIT_OR_APACHE_2_OR_BSD_ONLY_PINNED_OFFLINE_NO_LLM",
+  "entries":[
+    {"name":"6tail/lunar-python","repository":"https://github.com/6tail/lunar-python","version":"1.4.8","tag":"v1.4.8","commit":"000c8a3d74eed098d6256a28fdd51b869324c559","license":"MIT","copyright":"Copyright (c) 2020 6tail","scope":"runtime","integration":"exact package dependency","used_modules":["Solar","Lunar","EightChar","Yun","DaYun","LiuNian"],"vendor":false,"local_modifications":false,"update_strategy":"manual review and explicit ruleset version"},
+    {"name":"SylarLong/iztro","repository":"https://github.com/SylarLong/iztro","version":"2.5.8","tag":null,"commit":"9d39f1743bf31c2b3c635c9b9556215d9c90ee2c","license":"MIT","copyright":"Copyright (c) 2023 All Contributors","scope":"runtime","integration":"exact npm package","used_modules":["astro.byLunar","palaces","horoscope"],"vendor":false,"local_modifications":false,"modern_interpretation_text_excluded":true,"update_strategy":"manual fixture diff and explicit ruleset version"},
+    {"name":"yaomancy/liuyao-engine","repository":"https://github.com/yaomancy/liuyao-engine","version":"0.1.0","tag":"v0.1.0","commit":"562b902eb3ec47d4dadb326b6dc98e8ee09b4295","license":"Apache-2.0","copyright":"Copyright 2026 Jincheng Xie / Yaomancy","scope":"runtime-selected-snapshot","integration":"unmodified selected-file snapshot plus Sanji adapter","used_modules":["liuyao/hexagram.py::cast_chart","liuyao/hexagram.py::find_fushen"],"vendor":true,"vendored_path":"third_party/yaomancy-liuyao-engine/562b902eb3ec47d4dadb326b6dc98e8ee09b4295","runtime_package_snapshot":"packages/upstream-adapters/src/upstream_adapters/vendor/liuyao_engine_0_1_0","vendored_file_sha256":"e01071302ece21d825bb6020a7924e15807a9d587d47a79fb2bfca3e87e4d3b0","local_modifications":false,"update_strategy":"manual snapshot replacement and 4096 regression"},
+    {"name":"bopo/najia","repository":"https://github.com/bopo/najia","version":"2.0.1","tag":"v2.0.1","commit":"c67a5398632a80f368a17a884c1c71b203aab719","license":"MIT","copyright":"Copyright (c) 2019, najia","scope":"test-only","integration":"exact differential package","used_modules":["Najia"],"vendor":false,"local_modifications":false,"update_strategy":"manual differential review"},
+    {"name":"Sudo-Biao/suangua","repository":"https://github.com/Sudo-Biao/suangua","version":"snapshot-2026-08-03","tag":null,"commit":"9cf2783e84739e19c936389a5862d6d32b361617","license":"MIT","license_location":"README.md section 14","copyright":"Copyright (c) 2024-2025 BaGua Divination System Contributors","scope":"source-algorithm-comparison","integration":"no runtime import; transparent BaZi research profile comparison","used_modules":["core/bazi/analyzer.py","core/bazi/forecaster.py","core/bazi/day_master_profiles.py"],"vendor":false,"local_modifications":false,"interpretation_text_excluded":true,"update_strategy":"manual source review"}
+  ],
+  "rejected":[
+    {"name":"richard3153/bazi-calculator","reason":"public source and license could not be independently retrieved"},
+    {"name":"china-testing/bazi","reason":"no verifiable repository license grant"}
+  ]
+}

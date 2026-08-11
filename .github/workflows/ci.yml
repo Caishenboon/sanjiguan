@@ -16,14 +16,31 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+      - uses: pnpm/action-setup@v4.4.0
+        with:
+          version: "11.9.0"
       - name: Install sanji-engine independently
         run: python -m pip install packages/sanji-engine
       - name: Install deterministic test dependencies
-        run: python -m pip install "jsonschema[format]==4.25.1"
+        run: python -m pip install "jsonschema[format]==4.25.1" packages/oracle-adapters packages/upstream-adapters najia==2.0.1
+      - name: Install pinned iztro upstream
+        working-directory: packages/oracle-adapters/src/oracle_adapters/ziwei/iztro
+        run: pnpm install --frozen-lockfile
       - name: Cross-platform deterministic core tests
         run: python -m unittest tests.test_sanji_engine_core tests.test_sanji_engine_research tests.test_sanji_engine_yijing tests.test_sanji_engine_bazi_conformance tests.test_sanji_engine_bazi_four_pillars tests.test_bazi_yijing_mechanical_trust_cross_platform tests.test_sanji_engine_bazi_traditional_structure_cross_platform tests.test_sanji_engine_ziwei tests.test_ziwei_mechanical_trust_cross_platform tests.test_sanji_engine_liuxiang_v1 tests.test_sanji_engine_liuxiang_evidence_v1 tests.test_sanji_engine_topics_v1 tests.test_sanji_engine_life_trend_v1 -v
       - name: Signals inference 30-case equivalence
         run: python scripts/capture_signals_inference_baseline.py
+      - name: Cross-platform pinned upstream conformance
+        env:
+          SANJI_IZTRO_RUNTIME_DIR: packages/oracle-adapters/src/oracle_adapters/ziwei/iztro
+        run: python scripts/validate_upstream_traditional_engines.py
+      - name: Traditional algorithms complete V1 determinism
+        env:
+          SANJI_IZTRO_RUNTIME_DIR: packages/oracle-adapters/src/oracle_adapters/ziwei/iztro
+        run: python scripts/validate_traditional_algorithms_complete_v1.py
       - name: Engine boundary and activation gates
         run: |
           python scripts/validate_sanji_engine.py
@@ -134,7 +151,7 @@ jobs:
       - name: Install API test dependencies
         run: |
           python -m pip install -r apps/api/requirements.txt
-          python -m pip install packages/oracle-adapters lunar-python==1.4.8 tyme4py==1.5.0 sxtwl==2.0.7
+          python -m pip install packages/oracle-adapters packages/upstream-adapters lunar-python==1.4.8 tyme4py==1.5.0 sxtwl==2.0.7 najia==2.0.1
       - name: Apply migrations twice and detect drift
         run: |
           python scripts/migrate.py
@@ -166,6 +183,8 @@ jobs:
           python scripts/export_sprint2_openapi.py
           python scripts/export_bazi_four_pillars_openapi.py
           python scripts/export_ziwei_openapi.py
+          python scripts/export_upstream_traditional_openapi.py
+          python scripts/export_traditional_complete_openapi.py --check
           python scripts/export_liuxiang_openapi.py --check
           python scripts/export_liuxiang_archive_openapi.py --check
           python scripts/export_topic_openapi.py --check
@@ -209,6 +228,14 @@ jobs:
         env:
           SANJI_IZTRO_RUNTIME_DIR: packages/oracle-adapters/src/oracle_adapters/ziwei/iztro
         run: python -m unittest tests.test_oracle_adapters -v
+      - name: Execute pinned upstream traditional conformance
+        env:
+          SANJI_IZTRO_RUNTIME_DIR: packages/oracle-adapters/src/oracle_adapters/ziwei/iztro
+        run: python scripts/validate_upstream_traditional_engines.py
+      - name: Execute traditional algorithms complete V1 conformance
+        env:
+          SANJI_IZTRO_RUNTIME_DIR: packages/oracle-adapters/src/oracle_adapters/ziwei/iztro
+        run: python scripts/validate_traditional_algorithms_complete_v1.py
       - name: Storybook build and accessibility stories
         working-directory: packages/sanji-ui
         env:

@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sanjiguan.local/schemas/upstream-composite-result/1.0.0",
+  "title":"Pinned upstream composite result",
+  "type":"object",
+  "required":["tradition_scope","activation","review_status","production_activatable","ruleset_version","adapter_results","evidence_graph","deduplication","disputes","strength_bp","confidence_bp","status","status_reason","result_hash"],
+  "properties":{
+    "tradition_scope":{"const":"pinned_upstream_research"},"activation":{"const":"research_active"},
+    "review_status":{"const":"UNCONFIRMED"},"production_activatable":{"const":false},
+    "ruleset_version":{"const":"sanji-upstream-composite-1.0.0"},
+    "adapter_results":{"type":"array","minItems":1},"evidence_graph":{"type":"object"},
+    "deduplication":{"type":"object"},"disputes":{"type":"array"},
+    "strength_bp":{"const":0},"confidence_bp":{"const":0},"status":{"const":"insufficient"},
+    "status_reason":{"type":"string"},"result_hash":{"pattern":"^sha256:[a-f0-9]{64}$"}
+  },"additionalProperties":false
+}
