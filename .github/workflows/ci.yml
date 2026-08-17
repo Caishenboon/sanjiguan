@@ -207,6 +207,9 @@ jobs:
           python scripts/research_data.py validate
           python scripts/check_product_language.py
           python scripts/check_secrets.py
+          python scripts/check_portability.py
+          python scripts/validate_handoff.py
+          python scripts/validate_v1_rc_visual_evidence.py
           python scripts/check_doc_links.py
       - name: Sprint 3 responsive, PWA, privacy, and accessibility contracts
         run: python -m unittest tests.test_sprint3_contract -v
@@ -245,7 +248,9 @@ jobs:
           pnpm build-storybook
       - name: Lighthouse quality budgets
         working-directory: apps/web
-        run: pnpm exec lhci autorun --config=lighthouserc.json
+        run: |
+          pnpm exec lhci autorun --config=lighthouserc.json
+          pnpm exec lhci autorun --config=lighthouserc.private.json
       - name: Gitleaks full-history scan
         run: >-
           docker run --rm -v "$PWD:/repo"
@@ -265,6 +270,7 @@ jobs:
       - name: Static release, privacy, SBOM and configuration gates
         run: |
           python scripts/validate_v1_release.py
+          python scripts/validate_v1_rc_visual_evidence.py
           python -m unittest tests.test_v1_release -v
       - name: Generate ephemeral local configuration
         run: python scripts/init_env.py

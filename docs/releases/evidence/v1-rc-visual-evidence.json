@@ -1,0 +1,70 @@
+{
+  "schema_version": "sanji-visual-evidence/1.0",
+  "release": "1.0.0-rc.1",
+  "generated_at": "2026-08-17T00:00:00Z",
+  "data_class": "synthetic_only",
+  "generator": "apps/web/tests/evidence/v1-rc-evidence.spec.ts",
+  "provider_policy": "no_external_provider",
+  "screenshots": [
+    {
+      "file": "docs/releases/evidence/screenshots/v1-rc-report-desktop-1440.png",
+      "route": "/consult/life-trend",
+      "scenario": "desktop_life_trend_and_sanji_report",
+      "width": 1440,
+      "height": 2638,
+      "sha256": "d20c43332d9543b65b672577c7e0f81926e7a8bd09351b29c0afbcf911953313",
+      "provider_calls": 0,
+      "reviewed": true
+    },
+    {
+      "file": "docs/releases/evidence/screenshots/v1-rc-life-trend-tablet-768.png",
+      "route": "/consult/life-trend",
+      "scenario": "tablet_life_trend",
+      "width": 768,
+      "height": 2383,
+      "sha256": "ef119f24f66c6de54aec9f634a9bf035242e9f781aea551bfb2554eaf089e538",
+      "provider_calls": 0,
+      "reviewed": true
+    },
+    {
+      "file": "docs/releases/evidence/screenshots/v1-rc-sushe-wide-1920.png",
+      "route": "/consult/sushe",
+      "scenario": "wide_past_life_candidate_with_epistemic_state",
+      "width": 1920,
+      "height": 1422,
+      "sha256": "2d411fd8cbec4ef4ca508ab79da16f8203798386b6a86b13287f74423bf8536a",
+      "provider_calls": 0,
+      "reviewed": true
+    },
+    {
+      "file": "docs/releases/evidence/screenshots/v1-rc-onboarding-mobile-390.png",
+      "route": "/profile/new",
+      "scenario": "mobile_synthetic_subject_onboarding",
+      "width": 390,
+      "height": 1922,
+      "sha256": "a27499adea980cc5937f45b87bcafce68cc05ed3797dba70cd3f5bff174e8e0f",
+      "provider_calls": 0,
+      "reviewed": true
+    },
+    {
+      "file": "docs/releases/evidence/screenshots/v1-rc-insufficient-liuxiang-1440.png",
+      "route": "/consult/liuxiang",
+      "scenario": "insufficient_no_verdict",
+      "width": 1440,
+      "height": 2770,
+      "sha256": "ddc096549919434f1279ff1efd1b7f9e81dd7243ce3d5a788410c950b3ddbdeb",
+      "provider_calls": 0,
+      "reviewed": true
+    },
+    {
+      "file": "docs/releases/evidence/screenshots/v1-rc-deterministic-report-no-ai-1440.png",
+      "route": "/consult/life-trend",
+      "scenario": "deterministic_report_without_deepseek",
+      "width": 992,
+      "height": 916,
+      "sha256": "e4ea1acec15541d106872c1130e98265832cf76fc3242b4535f01ba5443e0767",
+      "provider_calls": 0,
+      "reviewed": true
+    }
+  ]
+}

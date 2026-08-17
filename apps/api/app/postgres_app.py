@@ -17,7 +17,7 @@ from apps.api.app.core.encryption import EnvironmentKeyProvider, TestKeyProvider
 from apps.api.app.core.ids import uuid7
 from apps.api.app.core.runtime import SESSION_COOKIE_NAME, load_runtime_config
 from apps.api.app.core.security import new_token, token_hash
-from apps.api.app.schemas.models import InvitationAccept, ProfileCreate, ProfilePatch
+from apps.api.app.schemas.models import InvitationAccept, InvitationCreate, ProfileCreate, ProfilePatch
 
 config = load_runtime_config()
 SESSION_COOKIE = SESSION_COOKIE_NAME
@@ -204,6 +204,34 @@ def accept(payload: InvitationAccept, response: Response):
     return {"user_id": str(user_id), "role": role}
 
 
+@app.post("/api/v1/auth/invitations", status_code=201)
+def create_invitation(payload: InvitationCreate, response: Response,
+                      key: str = Header(alias="Idempotency-Key"),
+                      token: str | None = Cookie(None, alias=SESSION_COOKIE)):
+    user = auth(token)
+    if user["role"] != "owner":
+        raise HTTPException(403, "owner_only_invitation_creation")
+    data = payload.model_dump(mode="json")
+    with pool.connection() as conn, conn.transaction():
+        runtime(conn, user)
+        claim = idempotency(conn, user["id"], "POST", "/api/v1/auth/invitations", key,
+                            fingerprint(data))
+        if isinstance(claim, dict):
+            response.status_code = 201
+            return claim
+        invitation_id, invitation_token = uuid7(), new_token()
+        expires_at = conn.execute(
+            "SELECT create_invitation(%s,%s,%s,%s) AS expires_at",
+            (invitation_id, token_hash(invitation_token), data["role"], data["expires_hours"]),
+        ).fetchone()["expires_at"]
+        result = {
+            "id": str(invitation_id), "token": invitation_token, "role": data["role"],
+            "expires_at": expires_at.isoformat(), "display_once": True,
+        }
+        complete(conn, claim, key, 201, result)
+        return result
+
+
 @app.post("/api/v1/auth/logout", status_code=204)
 def logout(response: Response, token: str | None = Cookie(None, alias=SESSION_COOKIE)):
     user = auth(token)
@@ -239,14 +267,16 @@ def create_profile(payload: ProfileCreate, response: Response,
         conn.execute(
             """INSERT INTO profiles(id,owner_id,display_name_ciphertext,timezone,calendar_type,
                birth_date_ciphertext,birth_time_ciphertext,birth_time_precision,
-               birth_location_ciphertext,latitude_ciphertext,longitude_ciphertext,consent_version)
-               VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+               birth_location_ciphertext,latitude_ciphertext,longitude_ciphertext,consent_version,
+               original_birth_record_ciphertext)
+               VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
             (pid, user["id"], provider.encrypt((data["display_name"] or "").encode()),
              birth["timezone_id"], birth["calendar_type"], provider.encrypt(birth["local_date"].encode()),
              provider.encrypt((birth["local_time"] or "").encode()), birth["time_precision"],
              provider.encrypt(json.dumps(birth["place"]).encode()),
              provider.encrypt(str(birth["place"]["latitude"]).encode()),
-             provider.encrypt(str(birth["place"]["longitude"]).encode()), data["consent_version"]))
+             provider.encrypt(str(birth["place"]["longitude"]).encode()), data["consent_version"],
+             provider.encrypt(json.dumps(birth, ensure_ascii=False, sort_keys=True).encode())))
         result = {"id": str(pid), "owner_id": str(user["id"]), **data}
         complete(conn, claim, key, 201, result)
         return result
@@ -256,14 +286,18 @@ def fetch_profile(profile_id: UUID, user: dict):
     with pool.connection() as conn, conn.transaction():
         runtime(conn, user)
         row = conn.execute(
-            "SELECT id,owner_id,display_name_ciphertext,consent_version,deleted_at FROM profiles WHERE id=%s",
+            """SELECT id,owner_id,display_name_ciphertext,consent_version,deleted_at,
+              original_birth_record_ciphertext FROM profiles WHERE id=%s""",
             (profile_id,),
         ).fetchone()
         if not row or row["deleted_at"]:
             raise HTTPException(404, "profile_not_found")
+        birth = (json.loads(provider.decrypt(row["original_birth_record_ciphertext"]))
+                 if row["original_birth_record_ciphertext"] else None)
         return {"id": str(row["id"]), "owner_id": str(row["owner_id"]),
                 "display_name": provider.decrypt(row["display_name_ciphertext"]).decode(),
-                "consent_version": row["consent_version"]}
+                "consent_version": row["consent_version"], "birth": birth,
+                "birth_record_status": "complete" if birth else "legacy_partial"}
 
 
 @app.get("/api/v1/profiles/{profile_id}")
@@ -279,10 +313,34 @@ def patch_profile(profile_id: UUID, payload: ProfilePatch, key: str = Header(ali
         runtime(conn, user)
         claim = idempotency(conn, user["id"], "PATCH", "/api/v1/profiles/{id}", key, fingerprint(data))
         if isinstance(claim, dict): return claim
+        assignments, values = [], []
+        if "display_name" in data:
+            assignments.append("display_name_ciphertext=%s")
+            values.append(provider.encrypt((data["display_name"] or "").encode()))
+        if "birth" in data:
+            birth = data["birth"]
+            assignments.extend([
+                "timezone=%s", "calendar_type=%s", "birth_date_ciphertext=%s",
+                "birth_time_ciphertext=%s", "birth_time_precision=%s",
+                "birth_location_ciphertext=%s", "latitude_ciphertext=%s",
+                "longitude_ciphertext=%s", "original_birth_record_ciphertext=%s",
+            ])
+            values.extend([
+                birth["timezone_id"], birth["calendar_type"],
+                provider.encrypt(birth["local_date"].encode()),
+                provider.encrypt((birth["local_time"] or "").encode()), birth["time_precision"],
+                provider.encrypt(json.dumps(birth["place"], ensure_ascii=False).encode()),
+                provider.encrypt(str(birth["place"]["latitude"]).encode()),
+                provider.encrypt(str(birth["place"]["longitude"]).encode()),
+                provider.encrypt(json.dumps(birth, ensure_ascii=False, sort_keys=True).encode()),
+            ])
+        if not assignments:
+            raise HTTPException(422, "profile_patch_empty")
+        assignments.append("updated_at=now()")
+        values.extend([profile_id, user["id"]])
         changed = conn.execute(
-            """UPDATE profiles SET display_name_ciphertext=%s,updated_at=now()
-               WHERE id=%s AND owner_id=%s AND deleted_at IS NULL""",
-            (provider.encrypt((data.get("display_name") or "").encode()), profile_id, user["id"])
+            f"UPDATE profiles SET {','.join(assignments)} WHERE id=%s AND owner_id=%s AND deleted_at IS NULL",
+            tuple(values),
         ).rowcount
         if not changed: raise HTTPException(404, "profile_not_found")
         result = {"id": str(profile_id), **data}
@@ -330,5 +388,6 @@ from apps.api.app.release_routes import router as release_router
 app.include_router(release_router)
 from apps.api.app.upstream_traditional_routes import router as upstream_traditional_router
 app.include_router(upstream_traditional_router)
-from apps.api.app.traditional_complete_routes import router as traditional_complete_router
+from apps.api.app.traditional_complete_routes import router as traditional_complete_router, user_router as traditional_complete_user_router
 app.include_router(traditional_complete_router)
+app.include_router(traditional_complete_user_router)

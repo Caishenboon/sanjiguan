@@ -7,7 +7,7 @@
     "component": {
       "type": "application",
       "name": "sanjiguan",
-      "version": "v1-candidate"
+      "version": "1.0.0-rc.1"
     }
   },
   "components": [

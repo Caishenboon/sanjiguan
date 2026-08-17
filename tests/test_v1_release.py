@@ -9,6 +9,48 @@ from apps.api.app.core.runtime import load_runtime_config, session_cookie_name
 
 
 class RuntimeConfigTests(unittest.TestCase):
+    def test_product_inputs_never_fabricate_birth_coordinates_or_coin_tosses(self):
+        root = Path(__file__).resolve().parents[1]
+        subject = (root / "apps/web/components/SubjectSetup.tsx").read_text(encoding="utf-8")
+        coins = (root / "apps/web/components/ThreeCoinJourney.tsx").read_text(encoding="utf-8")
+        self.assertNotIn('latitude: 0, longitude: 0', subject)
+        self.assertIn('coordinate_source: "user_confirmed"', subject)
+        self.assertIn('useState<FaceSelection[][]>(Array.from({length:6},()=>["","",""]))', coins)
+        self.assertIn('<option value="">请选择</option>', coins)
+
+    def test_profile_patch_preserves_display_name_and_complete_birth_record(self):
+        root = Path(__file__).resolve().parents[1]
+        source = (root / "apps/api/app/postgres_app.py").read_text(encoding="utf-8")
+        migration = (root / "infra/migrations/0022_v1_rc_original_birth_record.sql").read_text(encoding="utf-8")
+        self.assertIn('if "display_name" in data:', source)
+        self.assertIn('if "birth" in data:', source)
+        self.assertIn("original_birth_record_ciphertext", source)
+        self.assertIn("ADD COLUMN IF NOT EXISTS original_birth_record_ciphertext", migration)
+
+    def test_member_traditional_run_policy_keeps_identity_isolation(self):
+        root = Path(__file__).resolve().parents[1]
+        sql = (root / "infra/migrations/0023_v1_rc_traditional_member_rls.sql").read_text(encoding="utf-8")
+        self.assertIn("owner_id = app_current_user_id()", sql)
+        self.assertIn("app_current_user_role() IN ('owner', 'member')", sql)
+        self.assertNotIn("viewer", sql)
+
+    def test_restore_requires_hashes_only_for_derived_archive_entries(self):
+        root = Path(__file__).resolve().parents[1]
+        source = (root / "scripts/restore.py").read_text(encoding="utf-8")
+        self.assertIn("entry_type <> 'record'", source)
+        self.assertIn("entry_type = 'record' AND output_hash IS NULL", source)
+
+    def test_invitation_ui_and_hash_only_issuance_are_present(self):
+        root = Path(__file__).resolve().parents[1]
+        start = (root / "apps/web/components/OwnerBootstrap.tsx").read_text(encoding="utf-8")
+        settings = (root / "apps/web/components/MeSettings.tsx").read_text(encoding="utf-8")
+        migration = (root / "infra/migrations/0024_v1_rc_invitation_issuance.sql").read_text(encoding="utf-8")
+        self.assertIn("使用邀请进入", start)
+        self.assertIn("/api/v1/auth/invitations/accept", start)
+        self.assertIn("签发一次性邀请", settings)
+        self.assertIn("p_token_hash", migration)
+        self.assertNotIn("p_token text", migration)
+
     def test_web_proxy_preserves_runtime_issued_session_cookie_name(self):
         route = (
             Path(__file__).resolve().parents[1]

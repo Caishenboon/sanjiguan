@@ -51,5 +51,63 @@ export default function ProductHome() {
       <article><small>需要补充</small><h3>{session.subject?.timePrecision === "unknown" ? "出生时刻仍未知" : session.subject ? "可继续记录长期事实" : "主体基本资料"}</h3><p>未知值保持未知，不会自动填成中午、午夜或随机时辰。</p><Link href={session.subject ? "/records" : "/onboarding"}>去补充</Link></article>
     </section>
     {session.pendingTask && <section className="continue-task"><div><small>未完成任务</small><h2>{session.pendingTask.label}</h2></div><Link className="product-button" href={session.pendingTask.href}>继续上次任务</Link></section>}
+
+    <section className="public-overview" aria-labelledby="public-overview-title">
+      <header className="public-overview__hero">
+        <p className="eyebrow">三际观 · 1.0.0-rc.1</p>
+        <p>三际观——宿世因缘与命势推演系统</p>
+        <h2 id="public-overview-title">观因于往际，察缘于当下，见势于未来。</h2>
+        <p className="public-positioning">三际观，是一套融合传统术数、宿世因缘结构与生命轨迹观照的确定性推演系统。</p>
+        <p><strong>三际枢负责计算、证据融合与成断；DeepSeek仅将既定结果写成象辞。</strong></p>
+        <div className="public-overview__actions"><Link className="product-button" href="/start">进入私人空间</Link><Link className="secondary-button" href="/about">了解方法边界</Link></div>
+        <p className="research-disclaimer">工程 RC · 规则研究态 · 仓库 Private · 尚未获得公开发布授权</p>
+      </header>
+
+      <section aria-labelledby="capabilities-title"><h2 id="capabilities-title">它能看什么</h2>
+        <div className="public-capability-grid">
+          {[
+            ["八字结构","多 Profile 的机械与传统结构研究"],["紫微命盘","受限三合机械研究 Profile"],
+            ["实物三钱与六爻","2/3 规范输入与版本化纳甲结构"],["六象合参","三际原创证据融合"],
+            ["宿世星图","带认识状态的候选结构"],["中阴之门","人生与离世过渡双模式"],
+            ["命势长图","可追溯的时序与人生 K 线"],["缘契图","遵守单方与双方同意边界"],
+            ["三际断章","确定性报告与可选受控成文"],["Replay","按原输入、规则和版本重放"],
+          ].map(([name,detail])=><article key={name}><h3>{name}</h3><p>{detail}</p></article>)}
+        </div>
+      </section>
+
+      <section aria-labelledby="workflow-title"><h2 id="workflow-title">它如何工作</h2>
+        <ol className="public-workflow">
+          <li><b>立卷</b><span>保存用户确认的原始资料与精度</span></li><li><b>排盘</b><span>按明确 Profile 生成机械结构</span></li>
+          <li><b>取证</b><span>引用记录、来源、正证、逆证与缺失</span></li><li><b>合参</b><span>同源去重并区分 Strength 与 Confidence</span></li>
+          <li><b>成断</b><span>规则引擎形成版本化结构结论</span></li><li><b>观照</b><span>保存三际录并支持 Replay 与 Reanalysis</span></li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="not-ai-title"><h2 id="not-ai-title">为什么 AI 不能代替术数计算</h2>
+        <p>相同输入、Engine、Ruleset、Profile 和数据版本产生相同结果与 Hash。每项判断保留证契、逆证、冲突、缺失和 Trace；AI 无权修改排盘、分数、排名、吉凶、应期或认识状态。</p>
+      </section>
+
+      <section aria-labelledby="boundary-title"><h2 id="boundary-title">传统与原创边界</h2>
+        <dl className="public-boundary-list"><div><dt>传统机械规则</dt><dd>排盘与可复现结构，来源和 Profile 可追溯。</dd></div><div><dt>流派特定解释</dt><dd>必须单独标注；争议规则不冒充唯一正统。</dd></div><div><dt>三际原创融合</dt><dd>六象、专题与命势合参属于原创研究，不伪称经典既有算法。</dd></div><div><dt>DeepSeek 成文</dt><dd>只润色白名单文本；越权即拒绝并回退确定性模板。</dd></div></dl>
+        <p>当前相关规则均为 <code>research_active / UNCONFIRMED / production_activatable=false</code>。</p>
+      </section>
+
+      <section aria-labelledby="privacy-title"><h2 id="privacy-title">隐私与数据主权</h2>
+        <p>系统采用邀请制、私人档案、字段加密、PostgreSQL FORCE RLS、可验证导出和明确删除语义。出生、关系、梦境与修行资料不会进入公开数据或模型训练材料；robots.txt 不是权限控制，私人页面同时依赖鉴权、no-store 与 noindex。</p>
+      </section>
+
+      <section aria-labelledby="open-source-title"><h2 id="open-source-title">开源状态</h2>
+        <p>当前是工程 RC，仓库仍为 Private。代码许可证候选为 AGPL-3.0-or-later，原创规则与方法资产候选为 CC BY-SA 4.0；两者均未获最终书面批准，不代表已经开源。</p>
+      </section>
+
+      <section aria-labelledby="summary-title"><h2 id="summary-title">中文与 English summary</h2>
+        <p>三际观以确定性核心、版本化规则和私人档案连接传统结构与原创研究。</p>
+        <p lang="en">SanjiGuan is a private, deterministic research system. Its versioned engine computes structured results; optional AI may only render approved prose.</p>
+      </section>
+
+      <section aria-labelledby="glossary-title"><h2 id="glossary-title">术语与常见问题</h2>
+        <dl className="public-boundary-list"><div><dt>三际枢</dt><dd>独立运行的确定性算法核心。</dd></div><div><dt>Profile</dt><dd>明确边界与流派差异的方法配置。</dd></div><div><dt>Ruleset</dt><dd>版本化、可哈希、可审查的规则集合。</dd></div><div><dt>Replay</dt><dd>按原版本重放，不使用当前可变规则。</dd></div><div><dt>研究态是否等于传统共识？</dt><dd>不等于；研究态只表示可在受限研究环境运行。</dd></div><div><dt>没有 DeepSeek 能否使用？</dt><dd>可以；完整结构和确定性报告不依赖 AI 密钥。</dd></div></dl>
+      </section>
+    </section>
   </ProductShell>;
 }

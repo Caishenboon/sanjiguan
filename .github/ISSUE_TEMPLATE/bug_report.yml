@@ -1,0 +1,25 @@
+name: Bug report
+description: Report a reproducible defect without private data
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: "Do not attach birth data, dream or relationship prose, backups, tokens, keys, or restricted knowledge."
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Observed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction with synthetic data
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Commit or version
+    validations:
+      required: true

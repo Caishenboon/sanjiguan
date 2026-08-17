@@ -1,0 +1,6 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+
+Candidate license for project-owned rule data, method documentation, and
+non-software knowledge structures only; not activated until written
+product-owner approval. Canonical legal code:
+https://creativecommons.org/licenses/by-sa/4.0/legalcode

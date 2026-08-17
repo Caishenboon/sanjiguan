@@ -10,7 +10,9 @@ errors = []
 external = set()
 checked_local = 0
 
-for document in (ROOT / "docs").rglob("*.md"):
+documents = list((ROOT / "docs").rglob("*.md"))
+documents.extend(path for path in (ROOT / "README.md", ROOT / "README.zh-CN.md", ROOT / "AGENTS.md") if path.exists())
+for document in documents:
     text = document.read_text(encoding="utf-8")
     for raw_target in LINK_RE.findall(text):
         target = raw_target.strip().split(maxsplit=1)[0].strip("<>")

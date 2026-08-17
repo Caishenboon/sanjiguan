@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanjiguan.invalid/schemas/project-handoff-manifest-1.0.0.json",
+  "title": "SanjiGuan project handoff manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "product", "engine", "release", "repository", "packages",
+    "entrypoints", "paths", "protected_hashes", "rule_state", "open_source",
+    "critical_documents", "prohibitions"
+  ],
+  "properties": {
+    "$schema": {"const": "project-manifest.schema.json"},
+    "schema_version": {"const": "project-handoff/1.0.0"},
+    "product": {"const": "三际观"},
+    "engine": {"const": "三际枢"},
+    "release": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+-rc\\.[0-9]+$"},
+    "repository": {
+      "type": "object", "additionalProperties": false,
+      "required": ["url", "default_branch", "visibility", "release_candidate_pr"],
+      "properties": {
+        "url": {"type": "string", "pattern": "^https://github\\.com/[^/]+/[^/]+$"},
+        "default_branch": {"const": "main"},
+        "visibility": {"const": "private"},
+        "release_candidate_pr": {"type": "integer", "minimum": 1}
+      }
+    },
+    "packages": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string"}},
+    "entrypoints": {"type": "object", "minProperties": 3, "additionalProperties": {"type": "string"}},
+    "paths": {"type": "object", "minProperties": 8, "additionalProperties": {"type": "string"}},
+    "environment_documentation": {"type": "array", "items": {"type": "string"}},
+    "protected_hashes": {
+      "type": "array", "minItems": 10, "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+    },
+    "rule_state": {
+      "type": "object", "additionalProperties": false,
+      "required": ["activation", "review_status", "production_activatable", "llm_in_core"],
+      "properties": {
+        "activation": {"const": "research_active"},
+        "review_status": {"const": "UNCONFIRMED"},
+        "production_activatable": {"const": false},
+        "llm_in_core": {"const": false}
+      }
+    },
+    "open_source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["ready", "public_release_authorized", "license_decided"],
+      "properties": {
+        "ready": {"const": false},
+        "public_release_authorized": {"const": false},
+        "license_decided": {"const": false}
+      }
+    },
+    "critical_documents": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string"}},
+    "prohibitions": {"type": "array", "minItems": 6, "uniqueItems": true, "items": {"type": "string"}}
+  }
+}

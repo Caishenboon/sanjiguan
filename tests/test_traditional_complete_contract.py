@@ -34,6 +34,10 @@ class TraditionalCompleteContractTests(unittest.TestCase):
     self.assertIn("/api/v1/admin/research/traditional-complete/{run_id}/replay",paths)
     self.assertIn("/api/v1/admin/research/traditional-complete/{run_id}/reanalyze",paths)
     self.assertIn("/api/v1/admin/research/traditional-complete/{left_run_id}/compare/{right_run_id}",paths)
+    self.assertIn("/api/v1/traditional-complete/execute",paths)
+    self.assertIn("/api/v1/traditional-complete/{run_id}/replay",paths)
+    self.assertIn("/api/v1/traditional-complete/{run_id}/reanalyze",paths)
+    self.assertIn("/api/v1/traditional-complete/{left_run_id}/compare/{right_run_id}",paths)
 
 
 if __name__=="__main__": unittest.main()

@@ -8,12 +8,14 @@ class Sprint3ContractTests(unittest.TestCase):
         sw=(ROOT/"apps/web/public/sw.js").read_text("utf-8")
         self.assertIn('url.pathname.startsWith("/api/")',sw)
         self.assertIn('url.pathname.startsWith("/profile/")',sw)
+        for private_prefix in ("/chronicle","/records","/consult","/me"):
+            self.assertIn(f'url.pathname.startsWith("{private_prefix}")',sw)
         self.assertNotIn('caches.open(CACHE).then(cache=>cache.addAll(["/profile/',sw)
 
     def test_manifest_and_icons(self):
         manifest=json.loads((ROOT/"apps/web/public/manifest.webmanifest").read_text("utf-8"))
         self.assertEqual("standalone",manifest["display"])
-        self.assertEqual("/profile/demo",manifest["start_url"])
+        self.assertEqual("/start",manifest["start_url"])
         self.assertEqual({"192x192","512x512"},{icon["sizes"] for icon in manifest["icons"]})
         layout=(ROOT/"apps/web/app/layout.tsx").read_text("utf-8")
         registration=(ROOT/"apps/web/components/ServiceWorkerRegistration.tsx").read_text("utf-8")

@@ -12,6 +12,14 @@ const NAV = [
   { label: "我的", subtitle: "主体与设置", href: "/me" },
 ] as const;
 
+const DESKTOP_FEATURES = [
+  ["六象合参", "/consult/liuxiang"], ["三际断章", "/consult/life-trend"],
+  ["宿世星图", "/consult/sushe"], ["中阴之门", "/consult/zhongyin"],
+  ["命势长图", "/consult/life-trend"], ["缘契图", "/consult/yuanqi"],
+  ["观照录", "/records"], ["历次命卷", "/chronicle"],
+  ["设置与数据管理", "/me/data"],
+] as const;
+
 export default function ProductShell({
   title,
   eyebrow,
@@ -35,6 +43,9 @@ export default function ProductShell({
               <b>{item.label}</b><small>{item.subtitle}</small>
             </Link>;
           })}
+        </nav>
+        <nav className="product-feature-nav" aria-label="桌面专题导航">
+          {DESKTOP_FEATURES.map(([label,href])=><Link key={label} href={href}>{label}</Link>)}
         </nav>
         <p className="product-boundary">机械排盘与研究状态会如实标注。未审校规则不会生成术数结论。</p>
       </aside>

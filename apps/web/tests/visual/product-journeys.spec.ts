@@ -26,6 +26,8 @@ test("journey A: first use creates a subject without inventing an unknown birth 
   await page.getByLabel("出生日期").fill("1990-01-01");
   await page.getByLabel("出生时刻未知").check();
   await page.getByLabel("出生地点原文").fill("虚构城市");
+  await page.getByLabel("经度").fill("121.473700");
+  await page.getByLabel("纬度").fill("31.230400");
   await page.getByLabel("我确认以上是原始输入").check();
   await page.getByRole("button", { name: "保存资料" }).click();
   await expect(page.getByRole("heading", { name: "欢迎回来，虚构测试主体" })).toBeVisible();
@@ -84,9 +86,26 @@ test("journey C: execute physical three-coin and read progressive result details
   await page.route(`**/api/v1/divinations/${divinationId}`, async (route) => {
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(divinationPayload) });
   });
+  await page.route("**/api/v1/traditional-complete/execute", async (route) => {
+    await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ id: "traditional-journey-c" }) });
+  });
   await page.goto("/consult");
   await page.getByRole("article").filter({ hasText: "易经三钱" }).getByRole("link", { name: "开始" }).click();
   await page.getByLabel("这次正式占问什么").fill("虚构问题：接下来如何安排学习？");
+  const tosses = [
+    ["tails", "heads", "heads"],
+    ["tails", "tails", "heads"],
+    ["heads", "heads", "heads"],
+    ["tails", "heads", "heads"],
+    ["tails", "tails", "heads"],
+    ["tails", "tails", "tails"],
+  ];
+  const lineNames = ["初爻", "二爻", "三爻", "四爻", "五爻", "上爻"];
+  for (const [lineIndex, row] of tosses.entries()) {
+    for (const [coinIndex, face] of row.entries()) {
+      await page.getByLabel(`${lineNames[lineIndex]}第${coinIndex + 1}枚`).selectOption(face);
+    }
+  }
   await page.getByLabel("我确认这是一次正式实物投掷").check();
   await page.getByRole("button", { name: "形成机械结构" }).click();
   await expect(page.getByRole("heading", { name: "易经三钱机械结果" })).toBeVisible();
@@ -135,7 +154,8 @@ test("network failure is explained and can be retried", async ({ page }) => {
   await page.getByRole("button", { name: "保存到三际录" }).click();
   await expect(page.getByRole("heading", { name: "网络失败，可以重试" })).toBeVisible();
   await page.getByRole("button", { name: "保存到三际录" }).click();
-  await expect(page.getByText("虚构重试记录")).toBeVisible();
+  await expect(page).toHaveURL(/\/chronicle\?created=retry-archive$/, { timeout: 15_000 });
+  await expect(page.getByText("虚构重试记录")).toBeVisible({ timeout: 15_000 });
 });
 
 test("legacy profile routes redirect to the product spine", async ({ page }) => {
