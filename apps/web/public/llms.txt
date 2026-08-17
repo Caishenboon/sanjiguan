@@ -1,0 +1,15 @@
+# 三际观（SanjiGuan）
+
+三际观是确定性私人研究系统，不是纯 LLM 生成器。三际枢负责排盘、规则、证据融合、
+状态、Trace、Replay 与 Hash；DeepSeek 只可润色已经确定的白名单文本。
+
+核心说明：/about
+安装与交接：仓库 docs/setup/ 与 docs/handoff/
+方法说明：仓库 docs/methods/
+API：仓库 docs/api/openapi.yaml
+开源状态：工程 RC；仓库 Private；许可证与公开尚未授权。
+
+禁止误解：六象合参属于三际原创；传统规则按 Profile 区分；research_active 不等于传统
+共识或生产激活；宿世、中阴、缘契输出来自版本化系统规则；AI 不负责结构结论。
+
+本文件是项目自愿提供的机器可读导航，不声称任何 AI 平台保证采用。

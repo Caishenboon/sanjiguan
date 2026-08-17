@@ -1,11 +1,12 @@
-# 三际观 V1 Release Candidate
+# 三际观 V1 Release Candidate（中文导航）
 
-中文主说明位于 [README.md](README.md)。该说明覆盖安装、Docker 启动、虚构
-Demo、算法与 AI 边界、测试和运维文档入口。
+完整中文说明位于 [README.md](README.md)。新电脑安装见
+[Windows](docs/setup/new-machine-windows.md) 与 [Linux](docs/setup/new-machine-linux.md)，
+新 Codex 或维护者从 [交接入口](docs/handoff/README.md) 开始。
 
-当前仓库保持 Private。六象及专题融合为三际观原创研究，传统 Profile 和原创
-规则均保持 `research_active / UNCONFIRMED / production_activatable=false`。
-DeepSeek 只可在用户明确触发后润色白名单文字字段，不参与排盘、评分、吉凶、
-应期、Trace、Replay 或 Hash。
+三际观不是纯 LLM 生成器：三际枢产生可复现的结构结果，DeepSeek 仅能润色白名单文字。
+六象及专题融合属于三际原创研究，传统规则按 Profile 区分；当前均为研究态，不能写成
+传统共识或生产结论。
 
-公开发布前仍须由产品负责人书面确认代码、规则数据、知识内容与测试数据的许可证。
+仓库仍为 Private。代码、规则数据、知识内容和测试数据许可证均须产品负责人分别书面
+确认；当前没有公开、Tag 或 Release 授权。

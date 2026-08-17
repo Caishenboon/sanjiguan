@@ -16,7 +16,7 @@ for current, dirs, files in os.walk(root):
 text_suffixes = {".py", ".md", ".json", ".yml", ".yaml", ".sql", ".tsx", ".ts", ".txt", ".toml"}
 absolute = re.compile(r"(?:[A-Za-z]:[\\/](?:Users|Documents)[\\/]|/Users/[^/\s]+/|/home/[^/\s]+/)")
 for path in tracked_candidates:
-    if path == Path(__file__).resolve():
+    if path in {Path(__file__).resolve(), (root / "scripts/check_portability.py").resolve()}:
         continue
     if path.suffix.lower() not in text_suffixes and path.name not in {"Dockerfile", "Caddyfile"}:
         continue
@@ -65,6 +65,14 @@ for relative in (
     "docs/open-source/knowledge-boundary-v1-rc.md",
     "docs/releases/v1-rc-delivery.md",
     "docs/releases/v1-rc-security-audit.md",
+    "AGENTS.md",
+    "docs/handoff/project-manifest.json",
+    "docs/handoff/project-manifest.schema.json",
+    "docs/handoff/current-state.md",
+    "docs/setup/new-machine-windows.md",
+    "docs/setup/new-machine-linux.md",
+    "apps/web/public/llms.txt",
+    "apps/web/public/llms-full.txt",
     "docs/releases/evidence/v1-rc-cold-start.redacted.txt",
     "docs/releases/evidence/v1-rc-backup-restore.redacted.txt",
     "docs/releases/evidence/v1-rc-test-summary.json",
@@ -95,6 +103,12 @@ assert 'latitude: 0, longitude: 0' not in subject_setup
 assert 'coordinate_source: "user_confirmed"' in subject_setup
 assert 'Array.from({length:6},()=>["","",""])' in coin_journey
 assert '<option value="">请选择</option>' in coin_journey
+handoff_manifest = json.loads((root / "docs/handoff/project-manifest.json").read_text(encoding="utf-8"))
+assert handoff_manifest["release"] == "1.0.0-rc.1"
+assert handoff_manifest["repository"]["visibility"] == "private"
+assert handoff_manifest["open_source"]["public_release_authorized"] is False
+assert handoff_manifest["rule_state"]["production_activatable"] is False
+assert len(handoff_manifest["protected_hashes"]) >= 10
 assert (root / "infra/migrations/0022_v1_rc_original_birth_record.sql").exists()
 assert (root / "infra/migrations/0023_v1_rc_traditional_member_rls.sql").exists()
 assert (root / "infra/migrations/0024_v1_rc_invitation_issuance.sql").exists()

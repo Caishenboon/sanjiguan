@@ -1,0 +1,23 @@
+# 三际观机器可读摘要
+
+产品：三际观。确定性核心：三际枢（Python 包 sanji_engine）。版本：1.0.0-rc.1。
+状态：Private 工程 RC；生产规则未激活；公开、Tag、Release 与正式许可证未授权。
+
+系统分层：Web/PWA → FastAPI → Application Services → sanji-engine → PostgreSQL/RLS/
+Replay/Audit → 可选 DeepSeek 成文。相同输入与相同版本应产生相同结构结果和 Hash。
+
+传统机械规则、流派特定解释、三际原创融合和 AI 成文必须分别标注。六象、宿世、中阴、
+缘契和命势融合属于三际原创研究；传统 Profile 不代表所有门派共识。所有相关规则仍为
+research_active、UNCONFIRMED、production_activatable=false。
+
+AI 禁止计算或改变排盘、Signal、Evidence、权重、排名、吉凶、应期、认识状态、Trace、
+Replay 或 Hash。模型越权、无效或不可用时，系统使用确定性报告。
+
+私人页面、API、三际录、断章、导出、认证和邀请不可索引；robots.txt 只是爬取提示，
+真正保护来自会话、RLS、加密、no-store 与 noindex。不得把私人数据用于公开数据或训练。
+
+权威入口：/、/about、/llms.txt。仓库文档入口：AGENTS.md、docs/handoff/README.md、
+docs/architecture/sanji-engine-contract.md、docs/methods/traditional-algorithms-complete-v1.md、
+docs/api/openapi.yaml、docs/open-source/readiness.md。
+
+本文件是项目自愿提供的机器可读导航，不是通用 AI 平台采用保证。
