@@ -8,43 +8,43 @@ export type ProductTerm = {
 
 export const PRODUCT_TERMS: Record<string, ProductTerm> = {
   strength: {
-    label: "象势强度",
+    label: "象势",
     explanation: "现有有效资料对某一方向的支持力度，不代表资料一定完整。",
     technicalValue: "strength",
-    pages: ["六象研究详情", "候选比较"],
+    pages: ["六象合参", "候选比较", "专题推演"],
     researchOnly: false,
   },
   confidence: {
-    label: "证据可信度",
-    explanation: "综合来源、完整度、独立性、分歧与边界稳定性后的可信程度。",
+    label: "证契完备度",
+    explanation: "表示当前判断有多少独立资料支撑，综合完整度、分歧与边界稳定性；不等同于象势强弱。",
     technicalValue: "confidence",
     pages: ["六象研究详情", "候选比较"],
     researchOnly: false,
   },
   decisive: {
-    label: "象意较明",
+    label: "象成，可断",
     explanation: "领先、资料完整度与证据可信度同时达到研究规则门槛。",
     technicalValue: "decisive",
     pages: ["结果", "三际录"],
     researchOnly: false,
   },
   provisional: {
-    label: "初见其象",
+    label: "象初成，仍待补证",
     explanation: "已有较明显方向，但关键资料或独立证据仍需补充。",
     technicalValue: "provisional",
     pages: ["结果", "三际录"],
     researchOnly: false,
   },
   contested: {
-    label: "诸象相争",
+    label: "两象相争",
     explanation: "多个方向接近，或正证、逆证之间仍有明显冲突。",
     technicalValue: "contested",
     pages: ["结果", "三际录"],
     researchOnly: false,
   },
   insufficient: {
-    label: "资料不足，暂不成断",
-    explanation: "现有资料不足以形成负责任的研究判断。",
+    label: "证契未足，不成断",
+    explanation: "现有独立资料不足以形成负责任的研究判断；补足缺口后可以重新起卷。",
     technicalValue: "insufficient",
     pages: ["结果", "合参"],
     researchOnly: false,
@@ -78,14 +78,14 @@ export const PRODUCT_TERMS: Record<string, ProductTerm> = {
     researchOnly: false,
   },
   replay: {
-    label: "按原版本重放",
+    label: "复演",
     explanation: "使用当时保存的输入、引擎与规则版本复现原结果。",
     technicalValue: "replay",
     pages: ["三际录详情", "研究详情"],
     researchOnly: false,
   },
   reanalyze: {
-    label: "用当前版本重新分析",
+    label: "重观",
     explanation: "保留旧结果，另建一次使用当前版本的新执行。",
     technicalValue: "reanalyze",
     pages: ["三际录详情"],
@@ -95,6 +95,22 @@ export const PRODUCT_TERMS: Record<string, ProductTerm> = {
 
 export function productStatus(value: string) {
   return PRODUCT_TERMS[value]?.label ?? value;
+}
+
+export const PRODUCT_ACTION_TERMS = {
+  createSubject: "立卷",
+  analysisRun: "起一卷",
+  compare: "两卷参照",
+  verdict: "断语",
+  evidence: "证契",
+  counterevidence: "逆证",
+  manifestationPeriod: "应期",
+  delete: "撤卷",
+  hardDelete: "彻底销卷",
+} as const;
+
+export function percentFromBasisPoints(value: number) {
+  return `${Math.max(0, Math.min(100, value / 100))}%`;
 }
 
 export const EPISTEMIC_SUFFIX: Record<string, string> = {

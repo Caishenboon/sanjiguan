@@ -10,11 +10,12 @@ export default defineConfig({
     colorScheme: "dark",
     locale: "zh-CN",
     timezoneId: "UTC",
+    serviceWorkers: "block",
   },
   webServer: {
     command: "pnpm start",
     url: "http://127.0.0.1:3000",
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
     timeout: 120000,
     env: { ...process.env, SANJI_RESEARCH_UI_TEST_MODE: "1" },
   },

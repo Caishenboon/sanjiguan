@@ -51,7 +51,7 @@ async function seed(page) {
 const desktop = await browser.newPage({ viewport: { width: 1440, height: 1050 }, colorScheme: "dark" });
 await seed(desktop);
 await desktop.goto("http://127.0.0.1:3000/consult/liuxiang");
-await desktop.getByRole("button", { name: "执行六象研究" }).click();
+await desktop.getByRole("button", { name: "起一卷六象合参" }).click();
 await desktop.screenshot({ path: resolve(out, "sprint16-liuxiang-desktop.png"), fullPage: true });
 
 const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, colorScheme: "dark" });
