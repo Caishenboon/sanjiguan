@@ -154,7 +154,8 @@ test("network failure is explained and can be retried", async ({ page }) => {
   await page.getByRole("button", { name: "保存到三际录" }).click();
   await expect(page.getByRole("heading", { name: "网络失败，可以重试" })).toBeVisible();
   await page.getByRole("button", { name: "保存到三际录" }).click();
-  await expect(page.getByText("虚构重试记录")).toBeVisible();
+  await expect(page).toHaveURL(/\/chronicle\?created=retry-archive$/, { timeout: 15_000 });
+  await expect(page.getByText("虚构重试记录")).toBeVisible({ timeout: 15_000 });
 });
 
 test("legacy profile routes redirect to the product spine", async ({ page }) => {
