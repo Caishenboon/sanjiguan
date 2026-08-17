@@ -65,7 +65,53 @@ PostgreSQL 不发布主机端口；Web 只绑定 `127.0.0.1:3000`。本地原生
 - 冷启动记录：`docs/releases/evidence/v1-rc-cold-start.redacted.txt`
 - 恢复记录：`docs/releases/evidence/v1-rc-backup-restore.redacted.txt`
 - 测试统计：`docs/releases/evidence/v1-rc-test-summary.json`
+- 视觉证据：`docs/releases/evidence/v1-rc-visual-evidence.json`
+- 红蓝审查：`docs/releases/v1-rc-final-red-blue-review.md`
 - 安全审计：`docs/releases/v1-rc-security-audit.md`
 - 响应式截图：`docs/releases/evidence/screenshots/`
 
-远程 PR、CI Run、最终提交和跨平台结果在 PR 验收完成后补入本文件；PR 保持 Open。
+### 已核验远程状态
+
+- 仓库：`Caishenboon/sanjiguan`，Private。
+- PR：[#26](https://github.com/Caishenboon/sanjiguan/pull/26)，Open、Ready to merge。
+- 已核验产品提交：`96b89d5f2e784bf414e9f97b7f02f81794285c45`。
+- CI：[Run 31998530992](https://github.com/Caishenboon/sanjiguan/actions/runs/31998530992)，
+  6/6 成功，0 failed，0 skipped，无软失败。
+- Jobs：`baseline`、`sanji-engine-determinism (ubuntu-latest)`、
+  `sanji-engine-determinism (windows-latest)`、
+  `web-visual-determinism (ubuntu-24.04, linux)`、
+  `web-visual-determinism (windows-2025, win32)`、`v1-release-gates`。
+- Tag / GitHub Release：`0 / 0`。
+
+本次后续提交仅补齐封卷证据。Git 提交不能在其自身内容中保存自己的最终 SHA，因此上面的
+SHA明确称为“已核验产品提交”；证据封卷后的 PR Head 和最终 CI 由 PR #26 的不可变远程记录
+给出。本说明不得被理解为授权合并、公开、Tag 或 Release。
+
+### 两次保留的历史失败
+
+1. [Run 31997523543](https://github.com/Caishenboon/sanjiguan/actions/runs/31997523543)：
+   `baseline` 的 Contract/static gates 失败。原因是交接 Manifest 引用了本机存在但未被 Git
+   跟踪的空目录 `packages/prompts`；干净 runner 中路径不存在。修复为指向已跟踪的
+   `prompts/`，并要求校验器验证路径确实被 Git 跟踪。
+2. [Run 31997820809](https://github.com/Caishenboon/sanjiguan/actions/runs/31997820809)：
+   `baseline` 的 Lighthouse quality budgets 失败。原因是有意 `noindex` 的私人
+   `/records`、`/consult` 页面被错误套用公共页面 SEO 门槛。修复保留公共 SEO 门槛 0.85 和
+   其他原门槛；私人页面继续各运行三次 performance/accessibility/best-practices，并由独立
+   门禁验证 `noindex` 与 `no-store`。未降低质量阈值，也未用 skip 或软失败制造绿色。
+
+### 视觉证据结论
+
+使用完全虚构数据生成并人工查看了六项新增证据：1440 桌面三际断章、768 平板命势长图、
+1920 宽屏宿世候选、390 手机立卷、六象资料不足/不成断、DeepSeek 调用数为 0 的确定性
+模板报告。实际尺寸与 SHA-256 见
+[`v1-rc-visual-evidence.json`](evidence/v1-rc-visual-evidence.json)。这些是封卷证据，不是
+视觉 Golden；没有更新 Snapshot 或业务输出。
+
+```text
+ENGINEERING_RC_READY=true
+AI_HANDOFF_READY=true
+NEW_MACHINE_HANDOFF_READY=true
+MERGE_READY=true
+OPEN_SOURCE_READY=false
+PUBLIC_RELEASE_AUTHORIZED=false
+```

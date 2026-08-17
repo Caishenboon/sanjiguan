@@ -65,6 +65,7 @@ for relative in (
     "docs/open-source/knowledge-boundary-v1-rc.md",
     "docs/releases/v1-rc-delivery.md",
     "docs/releases/v1-rc-security-audit.md",
+    "docs/releases/v1-rc-final-red-blue-review.md",
     "AGENTS.md",
     "docs/handoff/project-manifest.json",
     "docs/handoff/project-manifest.schema.json",
@@ -76,12 +77,43 @@ for relative in (
     "docs/releases/evidence/v1-rc-cold-start.redacted.txt",
     "docs/releases/evidence/v1-rc-backup-restore.redacted.txt",
     "docs/releases/evidence/v1-rc-test-summary.json",
+    "docs/releases/evidence/v1-rc-visual-evidence.json",
+    "docs/releases/evidence/screenshots/README.md",
     ".github/ISSUE_TEMPLATE/bug_report.yml",
     ".github/pull_request_template.md",
     "sbom.cdx.json",
 ):
     if not (root / relative).exists():
         raise SystemExit(f"missing release artifact: {relative}")
+
+release_delivery = (root / "docs/releases/v1-rc-delivery.md").read_text(encoding="utf-8")
+test_summary = json.loads((root / "docs/releases/evidence/v1-rc-test-summary.json").read_text(encoding="utf-8"))
+for stale in ("remote_ci=pending", "run_url=null", "完成后补入"):
+    if stale in release_delivery:
+        raise SystemExit(f"stale release evidence marker: {stale}")
+assert test_summary["remote_ci"]["status"] == "success"
+assert test_summary["remote_ci"]["run_id"] == 31998530992
+assert test_summary["remote_ci"]["jobs_passed"] == 6
+assert test_summary["remote_ci"]["jobs_failed"] == 0
+assert test_summary["remote_ci"]["jobs_skipped"] == 0
+assert test_summary["remote_ci"]["soft_failures"] == 0
+assert len(test_summary["historical_failed_runs"]) == 2
+assert test_summary["repository_state"] == {
+    "visibility": "private",
+    "pull_request": 26,
+    "pull_request_state": "open",
+    "mergeable_state": "ready_to_merge",
+    "tags": 0,
+    "releases": 0,
+}
+assert test_summary["release_decisions"] == {
+    "ENGINEERING_RC_READY": True,
+    "AI_HANDOFF_READY": True,
+    "NEW_MACHINE_HANDOFF_READY": True,
+    "MERGE_READY": True,
+    "OPEN_SOURCE_READY": False,
+    "PUBLIC_RELEASE_AUTHORIZED": False,
+}
 
 sbom = json.loads((root / "sbom.cdx.json").read_text(encoding="utf-8"))
 assert sbom["bomFormat"] == "CycloneDX"

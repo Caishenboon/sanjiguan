@@ -1,7 +1,7 @@
 {
-  "schema_version": "sanji-test-summary/1.0",
+  "schema_version": "sanji-test-summary/1.1",
   "release": "1.0.0-rc.1",
-  "generated_at": "2026-08-17T03:30:00Z",
+  "generated_at": "2026-08-17T00:00:00Z",
   "data_class": "synthetic_only",
   "local": {
     "python_unit_files_passed": 37,
@@ -11,19 +11,70 @@
     "postgres_http_e2e_passed": 13,
     "v1_release_tests_passed": 10,
     "playwright_local_passed": 54,
+    "v1_rc_visual_evidence_passed": 6,
     "web_production_build": "passed",
     "migration_count": 24,
     "backup_restore": "passed",
     "deepseek_real_call": "not_run"
   },
   "remote_ci": {
-    "status": "pending",
-    "run_url": null
+    "status": "success",
+    "pull_request": 26,
+    "verified_product_commit": "96b89d5f2e784bf414e9f97b7f02f81794285c45",
+    "run_id": 31998530992,
+    "run_url": "https://github.com/Caishenboon/sanjiguan/actions/runs/31998530992",
+    "jobs_total": 6,
+    "jobs_passed": 6,
+    "jobs_failed": 0,
+    "jobs_skipped": 0,
+    "soft_failures": 0,
+    "jobs": [
+      {"name": "baseline", "status": "success"},
+      {"name": "sanji-engine-determinism (ubuntu-latest)", "status": "success"},
+      {"name": "sanji-engine-determinism (windows-latest)", "status": "success"},
+      {"name": "web-visual-determinism (ubuntu-24.04, linux)", "status": "success"},
+      {"name": "web-visual-determinism (windows-2025, win32)", "status": "success"},
+      {"name": "v1-release-gates", "status": "success"}
+    ]
+  },
+  "historical_failed_runs": [
+    {
+      "run_id": 31997523543,
+      "run_url": "https://github.com/Caishenboon/sanjiguan/actions/runs/31997523543",
+      "job": "baseline",
+      "step": "Contract and static gates",
+      "cause": "The handoff manifest referenced packages/prompts, an empty local directory not tracked by Git and therefore absent on a clean runner.",
+      "resolution": "Pointed the manifest to tracked prompts/ and made the validator require the path to be tracked."
+    },
+    {
+      "run_id": 31997820809,
+      "run_url": "https://github.com/Caishenboon/sanjiguan/actions/runs/31997820809",
+      "job": "baseline",
+      "step": "Lighthouse quality budgets",
+      "cause": "Intentionally noindex private routes /records and /consult were incorrectly evaluated against the public-page SEO budget.",
+      "resolution": "Kept the public SEO threshold at 0.85 and all other thresholds; private pages still run three performance/accessibility/best-practices collections and noindex/no-store are enforced separately."
+    }
+  ],
+  "repository_state": {
+    "visibility": "private",
+    "pull_request": 26,
+    "pull_request_state": "open",
+    "mergeable_state": "ready_to_merge",
+    "tags": 0,
+    "releases": 0
+  },
+  "release_decisions": {
+    "ENGINEERING_RC_READY": true,
+    "AI_HANDOFF_READY": true,
+    "NEW_MACHINE_HANDOFF_READY": true,
+    "MERGE_READY": true,
+    "OPEN_SOURCE_READY": false,
+    "PUBLIC_RELEASE_AUTHORIZED": false
   },
   "notes": [
-    "One Linux-only comparison is not applicable on local Windows; required platform jobs run remotely.",
     "A deliberately preserved contaminated-database attempt exposed fixed-fixture uniqueness collisions; the CI-order rerun on a fresh database passed PostgreSQL integration 14/14 and HTTP E2E 13/13.",
-    "Local Lighthouse collection was inconclusive because Chrome 132 on Windows could not remove its own temporary profile (EPERM); the unchanged Ubuntu CI budget remains authoritative.",
-    "No paid provider call was made during local validation."
+    "No paid provider call was made during local validation or visual evidence capture.",
+    "The six committed evidence screenshots use synthetic data and are separate from visual regression Golden assets.",
+    "Git commits cannot contain their own final SHA; verified_product_commit identifies the product commit validated by Run 31998530992, while the evidence-only PR head is verified by the current PR run."
   ]
 }

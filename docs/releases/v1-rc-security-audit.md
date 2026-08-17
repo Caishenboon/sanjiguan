@@ -11,6 +11,11 @@
 - 日志只记录关联ID、方法、路由、状态和耗时，不记录请求正文、梦境、关系或出生资料。
 - DeepSeek 密钥只允许环境变量；核心、Hash和测试不依赖 Provider。
 - 导出不含密钥、Session、加密材料或其他用户数据；彻底删除会明确使部分 Replay 不可用。
+- [Run 31998530992](https://github.com/Caishenboon/sanjiguan/actions/runs/31998530992)
+  的 `baseline` 完成 Gitleaks 全历史扫描、Secret Scan、绝对路径检查与文档链接检查；六个
+  必需 Job 全部成功，0 failed、0 skipped，未使用软失败。
+- 新增六张视觉封卷证据均来自虚构响应；机器清单验证文件 Hash、尺寸、`synthetic_only`
+  和 `provider_calls=0`，人工复核未见私人正文、密钥、本机路径或受限内容。
 
 ## 本轮发现并修复
 
@@ -27,3 +32,11 @@
 - 生产 KMS、备份外部加密、保留期限、数据地区和删除 SLA 仍需部署环境确认。
 - Viewer 资源级授权生命周期沿用既有表与门禁；上线前应以实际运营角色做一次人工撤权演练。
 - 真实 DeepSeek Smoke 不是普通 CI 门禁；仅在产品负责人明确触发时执行虚构输入调用。
+
+## 远程与发布边界
+
+- PR #26 当前保持 Open、Ready to merge；仓库仍为 Private。
+- 当前 Tag / GitHub Release 为 `0 / 0`。
+- 本次安全结论只支持工程 RC 合并审查，不代表开源或公开发布授权。
+- 爬虫入口只允许公开介绍和机器可读说明；登录后页面、私人 API、三际录、记录、合参和
+  设置保持 `noindex`、`no-store`，且不进入 PWA 私人缓存。

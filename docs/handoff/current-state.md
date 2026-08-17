@@ -7,6 +7,9 @@ release: 1.0.0-rc.1
 default_branch: main
 release_candidate_pr: 26
 engineering_rc_ready: true
+ai_handoff_ready: true
+new_machine_handoff_ready: true
+merge_ready: true
 open_source_ready: false
 public_release_authorized: false
 repository_visibility: private
@@ -38,6 +41,12 @@ Replay、Reanalysis、比较、Docker 冷启动和虚构恢复演练已经接到
 当前 CI 门禁包括双平台引擎确定性、双平台视觉、PostgreSQL 16 migration/RLS/E2E、
 Python/API、Web、Storybook、Lighthouse、Gitleaks、Schema/OpenAPI、许可证、V1 冷启动和
 恢复演练。
+
+PR #26 的已核验产品提交为 `96b89d5f2e784bf414e9f97b7f02f81794285c45`；
+[Run 31998530992](https://github.com/Caishenboon/sanjiguan/actions/runs/31998530992) 六项全部
+成功，0 failed、0 skipped。证据封卷后的最终 PR Head 由 PR 远程记录给出。六项新增响应式
+与状态截图采用完全虚构数据，详见
+[`v1-rc-visual-evidence.json`](../releases/evidence/v1-rc-visual-evidence.json)。
 
 下一步只能做经负责人批准的 RC 修复、文档/安全收口或明确的新 Sprint；不能自动合并
 PR #26、激活生产规则、公开仓库、创建 Tag/Release、决定许可证或启动新术数体系。
