@@ -247,7 +247,9 @@ jobs:
           pnpm build-storybook
       - name: Lighthouse quality budgets
         working-directory: apps/web
-        run: pnpm exec lhci autorun --config=lighthouserc.json
+        run: |
+          pnpm exec lhci autorun --config=lighthouserc.json
+          pnpm exec lhci autorun --config=lighthouserc.private.json
       - name: Gitleaks full-history scan
         run: >-
           docker run --rm -v "$PWD:/repo"

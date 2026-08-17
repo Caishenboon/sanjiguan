@@ -40,6 +40,26 @@ class HandoffAndPublicIndexTests(unittest.TestCase):
             self.assertIn("Private", text)
             self.assertIn("三际枢", text)
 
+    def test_lighthouse_keeps_public_seo_and_private_quality_budgets_separate(self):
+        public = json.loads((ROOT / "apps/web/lighthouserc.json").read_text(encoding="utf-8"))
+        private = json.loads((ROOT / "apps/web/lighthouserc.private.json").read_text(encoding="utf-8"))
+        public_urls = public["ci"]["collect"]["url"]
+        private_urls = private["ci"]["collect"]["url"]
+        self.assertEqual(["http://127.0.0.1:3000/"], public_urls)
+        self.assertEqual(
+            ["http://127.0.0.1:3000/records", "http://127.0.0.1:3000/consult"],
+            private_urls,
+        )
+        self.assertEqual(3, public["ci"]["collect"]["numberOfRuns"])
+        self.assertEqual(3, private["ci"]["collect"]["numberOfRuns"])
+        self.assertIn("categories:seo", public["ci"]["assert"]["assertions"])
+        self.assertNotIn("categories:seo", private["ci"]["assert"]["assertions"])
+        for category in ("categories:performance", "categories:accessibility", "categories:best-practices"):
+            self.assertEqual(
+                public["ci"]["assert"]["assertions"][category],
+                private["ci"]["assert"]["assertions"][category],
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
