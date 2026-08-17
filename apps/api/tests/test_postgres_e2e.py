@@ -108,6 +108,36 @@ class PostgreSQLHttpE2E(unittest.TestCase):
         )
         self.assertGreaterEqual(second.status_code, 400)
 
+    def test_owner_can_issue_hashed_single_use_invitation(self):
+        bootstrap = self.client.post(
+            "/api/v1/auth/bootstrap-owner",
+            json={"bootstrap_token": "test-bootstrap-token-" + "x" * 32,
+                  "email": "synthetic-owner@invalid.example"},
+        )
+        self.assertEqual(201, bootstrap.status_code, bootstrap.text)
+        issued = self.client.post(
+            "/api/v1/auth/invitations",
+            json={"role": "viewer", "expires_hours": 24},
+            headers={"Idempotency-Key": "issue-viewer-invitation-0001"},
+        )
+        self.assertEqual(201, issued.status_code, issued.text)
+        invitation = issued.json()
+        stored = self.admin.execute(
+            "SELECT token_hash FROM invitations WHERE id=%s", (invitation["id"],)
+        ).fetchone()[0]
+        self.assertNotEqual(invitation["token"], stored)
+        self.assertEqual(token_hash(invitation["token"]), stored)
+        invited = TestClient(self.app_module.app, base_url="https://testserver")
+        accepted = invited.post(
+            "/api/v1/auth/invitations/accept", json={"token": invitation["token"]}
+        )
+        self.assertEqual(200, accepted.status_code, accepted.text)
+        self.assertEqual("viewer", accepted.json()["role"])
+        reused = TestClient(self.app_module.app, base_url="https://testserver").post(
+            "/api/v1/auth/invitations/accept", json={"token": invitation["token"]}
+        )
+        self.assertEqual(422, reused.status_code, reused.text)
+
     def test_v1_export_record_deletion_and_account_purge(self):
         self.login()
         created = self.client.post(
@@ -523,6 +553,43 @@ class PostgreSQLHttpE2E(unittest.TestCase):
         )
         self.assertEqual(200, comparison.status_code, comparison.text)
         self.assertEqual(3, len(comparison.json()["results"]))
+
+    def test_member_traditional_complete_uses_subject_scoped_route(self):
+        self.login()
+        profile = self.client.post(
+            "/api/v1/profiles", json=self.payload("Synthetic traditional subject"),
+            headers={"Idempotency-Key": "member-traditional-profile-0001"},
+        )
+        self.assertEqual(201, profile.status_code, profile.text)
+        payload = {
+            "profile_record_id": profile.json()["id"],
+            "bazi": {
+                "local_date": "1990-01-15", "local_time": "08:30:00",
+                "calendar_type": "gregorian", "timezone_id": "Asia/Shanghai",
+                "longitude": "121.47", "traditional_sex": "male",
+                "yun_sect": 1, "cycle_count": 2,
+                "method_profile": {
+                    "profile_id": "bazi-ziping-complete-v1", "version": "1.0.0",
+                    "sect": 1, "wall_time_policy": "supplied_local_wall_time",
+                },
+            },
+        }
+        blocked = self.client.post(
+            "/api/v1/admin/research/traditional-complete/execute", json=payload,
+            headers={"Idempotency-Key": "member-traditional-admin-0001"},
+        )
+        self.assertEqual(403, blocked.status_code, blocked.text)
+        created = self.client.post(
+            "/api/v1/traditional-complete/execute", json=payload,
+            headers={"Idempotency-Key": "member-traditional-user-0001"},
+        )
+        self.assertEqual(201, created.status_code, created.text)
+        body = created.json()
+        self.assertIn("bazi", body["mechanical_results"])
+        self.assertEqual("UNCONFIRMED", body["research_status"])
+        fetched = self.client.get(f"/api/v1/traditional-complete/{body['id']}")
+        self.assertEqual(200, fetched.status_code, fetched.text)
+        self.assertEqual(body["result"]["output_hash"], fetched.json()["result"]["output_hash"])
 
     def test_owner_ziwei_research_is_engine_backed_encrypted_and_idempotent(self):
         self.login()

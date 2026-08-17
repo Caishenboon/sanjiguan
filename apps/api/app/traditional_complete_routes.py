@@ -1,11 +1,16 @@
-"""Thin owner-only API for deterministic traditional V1 profiles."""
+"""Thin APIs for deterministic traditional V1 profiles.
+
+The owner-only research URL is retained for compatibility. Ordinary members use
+the subject-scoped URL; PostgreSQL RLS and the explicit profile ownership check
+remain authoritative in both cases.
+"""
 from __future__ import annotations
 
 import json
 from copy import deepcopy
 from uuid import UUID
 
-from fastapi import APIRouter, Body, Cookie, Header, HTTPException
+from fastapi import APIRouter, Body, Cookie, Header, HTTPException, Request
 from pydantic import BaseModel, ConfigDict
 from sanji_engine import execute, replay
 from upstream_adapters import BaziUpstreamAdapter, LiuyaoUpstreamAdapter, ZiweiUpstreamAdapter
@@ -14,6 +19,7 @@ from apps.api.app.core.ids import uuid7
 from apps.api.app.core.runtime import SESSION_COOKIE_NAME
 
 router = APIRouter(prefix="/api/v1/admin/research/traditional-complete")
+user_router = APIRouter(prefix="/api/v1/traditional-complete")
 RULESET_ID = "sanji-traditional-composite-1.0.0"
 DATA_VERSIONS = {"tzdb":"2025.2","ephemeris":"astronomy-engine/2.1.19","calendar_dataset":"traditional-v1-upstream-lock/1.0.0"}
 
@@ -31,11 +37,16 @@ def _pg():
     return postgres_app
 
 
-def _owner(token):
+def _actor(token, owner_only: bool):
     user = _pg().auth(token)
-    if user["role"] != "owner":
-        raise HTTPException(403, "owner_only_traditional_complete_research")
+    allowed = {"owner"} if owner_only else {"owner", "member"}
+    if user["role"] not in allowed:
+        raise HTTPException(403, "owner_only_traditional_complete_research" if owner_only else "traditional_research_requires_owned_profile")
     return user
+
+
+def _request_actor(request: Request, token):
+    return _actor(token, request.url.path.startswith("/api/v1/admin/"))
 
 
 def _adapters(payload):
@@ -56,6 +67,12 @@ def _request(results, run_id, mode="research_preview"):
       "deterministic_context":{"as_of":"2000-01-01T00:00:00Z","random_method":"none","random_seed":None}}
 
 
+def _mechanical_projection(results):
+    system_by_source = {"6tail/lunar-python": "bazi", "SylarLong/iztro": "ziwei",
+                        "yaomancy/liuyao-engine": "liuyao"}
+    return {system_by_source[item["upstream_name"]]: item["output"] for item in results}
+
+
 def _persist(conn,module,user,run_id,profile_id,request,result,parent=None):
     if profile_id is not None and not conn.execute("SELECT 1 FROM profiles WHERE id=%s AND owner_id=%s AND deleted_at IS NULL",(profile_id,user["id"])).fetchone():
         raise HTTPException(404,"profile_not_found")
@@ -65,52 +82,60 @@ def _persist(conn,module,user,run_id,profile_id,request,result,parent=None):
 
 
 @router.post("/execute",status_code=201)
-def create(payload_model:Payload=Body(...),key:str=Header(alias="Idempotency-Key"),token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
-    module,user=_pg(),_owner(token); payload=payload_model.model_dump(mode="json"); run_id=uuid7()
-    request=_request(_adapters(payload),str(run_id)); result=execute(request)
+@user_router.post("/execute",status_code=201)
+def create(request:Request,payload_model:Payload=Body(...),key:str=Header(alias="Idempotency-Key"),token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
+    module,user=_pg(),_request_actor(request,token); payload=payload_model.model_dump(mode="json"); run_id=uuid7()
+    adapter_results=_adapters(payload); engine_request=_request(adapter_results,str(run_id)); result=execute(engine_request)
     with module.pool.connection() as conn,conn.transaction():
-        module.runtime(conn,user); claim=module.idempotency(conn,user["id"],"POST",router.prefix+"/execute",key,module.fingerprint(payload))
+        module.runtime(conn,user); claim=module.idempotency(conn,user["id"],"POST",request.url.path,key,module.fingerprint(payload))
         if isinstance(claim,dict): return claim
-        _persist(conn,module,user,run_id,payload.get("profile_record_id"),request,result)
-        response={"id":str(run_id),"research_status":"UNCONFIRMED","result":result}; module.complete(conn,claim,key,201,response); return response
+        _persist(conn,module,user,run_id,payload.get("profile_record_id"),engine_request,result)
+        response={"id":str(run_id),"research_status":"UNCONFIRMED","result":result,
+                  "mechanical_results":_mechanical_projection(adapter_results)}; module.complete(conn,claim,key,201,response); return response
 
 
 @router.get("/{run_id}")
-def get(run_id:UUID,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
-    module,user=_pg(),_owner(token)
+@user_router.get("/{run_id}")
+def get(request:Request,run_id:UUID,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
+    module,user=_pg(),_request_actor(request,token)
     with module.pool.connection() as conn:
-        module.runtime(conn,user); row=conn.execute("SELECT result_encrypted FROM traditional_complete_runs WHERE id=%s AND deleted_at IS NULL",(run_id,)).fetchone()
+        module.runtime(conn,user); row=conn.execute("SELECT input_snapshot_encrypted,result_encrypted FROM traditional_complete_runs WHERE id=%s AND deleted_at IS NULL",(run_id,)).fetchone()
         if not row: raise HTTPException(404,"traditional_complete_run_not_found")
-        return json.loads(module.provider.decrypt(row["result_encrypted"]))
+        engine_request=json.loads(module.provider.decrypt(row["input_snapshot_encrypted"])); result=json.loads(module.provider.decrypt(row["result_encrypted"]))
+        return {"id":str(run_id),"research_status":"UNCONFIRMED","result":result,
+                "mechanical_results":_mechanical_projection(engine_request["input_snapshot"]["adapter_results"])}
 
 
 @router.post("/{run_id}/replay")
-def replay_run(run_id:UUID,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
-    module,user=_pg(),_owner(token)
+@user_router.post("/{run_id}/replay")
+def replay_run(request:Request,run_id:UUID,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
+    module,user=_pg(),_request_actor(request,token)
     with module.pool.connection() as conn:
         module.runtime(conn,user); row=conn.execute("SELECT input_snapshot_encrypted,replay_manifest,output_hash FROM traditional_complete_runs WHERE id=%s AND deleted_at IS NULL",(run_id,)).fetchone()
         if not row: raise HTTPException(404,"traditional_complete_run_not_found")
-        request=json.loads(module.provider.decrypt(row["input_snapshot_encrypted"])); request["run_id"]=str(uuid7()); request["run_mode"]="replay"
-        result=replay(row["replay_manifest"],request); return {"replay_status":"matched","output_hash":result["output_hash"],"expected_output_hash":row["output_hash"]}
+        engine_request=json.loads(module.provider.decrypt(row["input_snapshot_encrypted"])); engine_request["run_id"]=str(uuid7()); engine_request["run_mode"]="replay"
+        result=replay(row["replay_manifest"],engine_request); return {"replay_status":"matched","output_hash":result["output_hash"],"expected_output_hash":row["output_hash"]}
 
 
 @router.post("/{run_id}/reanalyze",status_code=201)
-def reanalyze(run_id:UUID,payload_model:Payload|None=Body(None),key:str=Header(alias="Idempotency-Key"),token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
-    module,user=_pg(),_owner(token)
+@user_router.post("/{run_id}/reanalyze",status_code=201)
+def reanalyze(request:Request,run_id:UUID,payload_model:Payload|None=Body(None),key:str=Header(alias="Idempotency-Key"),token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
+    module,user=_pg(),_request_actor(request,token)
     with module.pool.connection() as conn,conn.transaction():
         module.runtime(conn,user); row=conn.execute("SELECT profile_record_id,input_snapshot_encrypted FROM traditional_complete_runs WHERE id=%s AND deleted_at IS NULL",(run_id,)).fetchone()
         if not row: raise HTTPException(404,"traditional_complete_run_not_found")
         original=json.loads(module.provider.decrypt(row["input_snapshot_encrypted"])); payload=payload_model.model_dump(mode="json") if payload_model else None
-        results=_adapters(payload) if payload else original["input_snapshot"]["adapter_results"]; new_id=uuid7(); request=_request(results,str(new_id)); result=execute(request)
-        claim=module.idempotency(conn,user["id"],"POST",router.prefix+"/{run_id}/reanalyze",key,module.fingerprint({"run_id":str(run_id),"payload":payload}))
+        results=_adapters(payload) if payload else original["input_snapshot"]["adapter_results"]; new_id=uuid7(); engine_request=_request(results,str(new_id)); result=execute(engine_request)
+        claim=module.idempotency(conn,user["id"],"POST",request.url.path,key,module.fingerprint({"run_id":str(run_id),"payload":payload}))
         if isinstance(claim,dict): return claim
-        _persist(conn,module,user,new_id,payload.get("profile_record_id") if payload else row["profile_record_id"],request,result,run_id)
+        _persist(conn,module,user,new_id,payload.get("profile_record_id") if payload else row["profile_record_id"],engine_request,result,run_id)
         response={"id":str(new_id),"parent_run_id":str(run_id),"result":result}; module.complete(conn,claim,key,201,response); return response
 
 
 @router.get("/{left_run_id}/compare/{right_run_id}")
-def compare(left_run_id:UUID,right_run_id:UUID,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
-    module,user=_pg(),_owner(token)
+@user_router.get("/{left_run_id}/compare/{right_run_id}")
+def compare(request:Request,left_run_id:UUID,right_run_id:UUID,token:str|None=Cookie(None,alias=SESSION_COOKIE_NAME)):
+    module,user=_pg(),_request_actor(request,token)
     with module.pool.connection() as conn:
         module.runtime(conn,user); rows=conn.execute("SELECT id,input_hash,output_hash,trace_hash,evidence_graph_hash FROM traditional_complete_runs WHERE id=ANY(%s) AND deleted_at IS NULL",([left_run_id,right_run_id],)).fetchall()
         if len(rows)!=2: raise HTTPException(404,"traditional_complete_run_not_found")

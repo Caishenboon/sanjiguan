@@ -1,0 +1,20 @@
+三际观 V1 RC 冷启动证据（脱敏）
+日期：2026-08-17
+平台：Windows 11 / x64
+应用版本：1.0.0-rc.1
+Python：3.11 bundled runtime
+Node.js：bundled workspace runtime
+PostgreSQL：16.14
+
+1. 在独立临时 PostgreSQL data directory 初始化新实例，绑定 127.0.0.1 测试端口。
+2. 创建全新 sanjiguan_rc 数据库。
+3. 从 0001 到 0024 顺序执行 migration；重复执行结果为无新增 migration。
+4. /health 和 /ready 返回正常，storage=postgres，Provider=deterministic_fallback。
+5. 创建完全虚构 Owner、主体、六类记录和实物三钱记录。
+6. 执行六象、宿世观、中阴观、缘契观、命势与确定性三际断章。
+7. 六象与命势 Replay matched=true；Reanalysis 生成独立新执行。
+8. 无 DEEPSEEK_API_KEY；narrative_source=deterministic_template。
+9. PostgreSQL HTTP E2E：13/13 passed（包含 Member 传统完整流程与 Owner 单次邀请签发）。
+
+日志不包含口令、Session、连接密码、私人正文、本机用户名或绝对路径。
+Docker 干净克隆验收由 GitHub Actions v1-release-gates 的全新 Ubuntu runner 提供。

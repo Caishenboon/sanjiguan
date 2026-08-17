@@ -1,0 +1,17 @@
+License decision pending
+
+This repository remains private. No license is granted for the project-owned
+code, rules, data, documentation, or knowledge assets until the product owner
+gives written approval.
+
+The prepared public-release candidates are:
+
+- project-owned software: AGPL-3.0-or-later;
+- project-owned rule data, method documentation, and non-software knowledge
+  structures: CC BY-SA 4.0;
+- third-party material: its original license and notice.
+
+Candidate license references are stored in LICENSES/. Their presence is not an
+authorization to publish this repository. Restricted, sealed, confidential,
+personal, or redistribution-unclear material is excluded from any candidate
+public release.

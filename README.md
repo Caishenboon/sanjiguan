@@ -9,8 +9,9 @@
 `packages/sanji-engine` 决定；DeepSeek 可以造景，不能造术。没有 AI 密钥时，
 完整确定性报告仍可使用。
 
-仓库目前保持 Private。代码许可证、规则数据许可证、知识内容权利和测试数据许可
-仍需项目所有者分别书面决定；当前没有默认开源许可证。
+仓库目前保持 Private。已准备但尚未激活的候选方案是：原创代码
+`AGPL-3.0-or-later`，原创规则数据、方法文档和非软件知识结构 `CC BY-SA 4.0`；
+第三方资产保留原许可证。公开、Tag、Release 与正式许可仍须项目所有者书面批准。
 
 ## 快速开始
 
@@ -70,6 +71,8 @@ DeepSeek 或外部完整数据集。
 - [安全说明](SECURITY.md)
 - [贡献指南](CONTRIBUTING.md)
 - [开源准备状态](docs/open-source/readiness.md)
+- [许可证审计](docs/open-source/license-audit-v1-rc.md)
+- [知识库公开边界](docs/open-source/knowledge-boundary-v1-rc.md)
 - [API 契约](docs/api/openapi.yaml)
 
 ## 开发验证

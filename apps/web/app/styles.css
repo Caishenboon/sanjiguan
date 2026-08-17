@@ -92,10 +92,11 @@ table { width: 100%; border-collapse: collapse; }th,td { text-align: left; paddi
 
 /* Product spine v1 — ordinary-user surfaces. Research pages keep the Sanji UI package styles. */
 .product-shell{min-height:100vh;display:grid;grid-template-columns:232px minmax(0,1fr);color:var(--lotus);color-scheme:dark;background:radial-gradient(circle at 85% -10%,rgba(59,77,120,.28),transparent 38%),#080b12}
-.product-sidebar{position:sticky;top:0;height:100vh;padding:30px 20px;border-right:1px solid var(--line);background:rgba(6,9,15,.92);display:flex;flex-direction:column}
+.product-sidebar{position:sticky;top:0;height:100vh;padding:30px 20px;border-right:1px solid var(--line);background:rgba(6,9,15,.92);display:flex;flex-direction:column;overflow-y:auto}
 .product-brand{display:grid;gap:5px;padding:0 10px 25px;text-decoration:none;border-bottom:1px solid var(--line)}
 .product-brand strong{font-size:1.65rem;letter-spacing:.14em;color:var(--gold);font-weight:500}.product-brand span{font-size:.72rem;color:var(--bluegray)}
 .product-sidebar nav{display:grid;gap:5px;margin-top:25px}.product-sidebar nav a{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:12px;text-decoration:none;border-left:2px solid transparent;color:#c3cad3}
+.product-sidebar .product-feature-nav{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);gap:1px}.product-sidebar .product-feature-nav a{display:block;padding:7px 12px;font-size:.74rem;color:var(--bluegray)}
 .product-sidebar nav a small{color:var(--bluegray);font-size:.68rem}.product-sidebar nav a:hover,.product-sidebar nav a[aria-current=page]{color:var(--lotus);border-color:var(--gold);background:rgba(189,155,97,.09)}
 .product-boundary{margin:auto 6px 0;color:var(--bluegray);font-size:.72rem;line-height:1.7}.product-main{min-width:0}.product-topbar{min-height:108px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px clamp(24px,4vw,60px);border-bottom:1px solid var(--line)}
 .product-topbar h1{margin:0;font-size:clamp(1.8rem,3vw,2.7rem);line-height:1.15}.product-topbar .eyebrow{margin:0 0 7px;font-size:.7rem}.product-content{width:min(1200px,calc(100% - clamp(32px,7vw,88px)));margin:auto;padding:34px 0 90px}.product-mobile-nav{display:none}

@@ -32,10 +32,21 @@ subprocess.run(
 with psycopg.connect(dsn) as conn:
     migrations = conn.execute("SELECT count(*) FROM schema_migrations").fetchone()[0]
     archives = conn.execute("SELECT count(*) FROM sanji_archive_entries").fetchone()[0]
+    hash_required = conn.execute(
+        "SELECT count(*) FROM sanji_archive_entries WHERE entry_type <> 'record'"
+    ).fetchone()[0]
     hashes = conn.execute(
         """SELECT count(*) FROM sanji_archive_entries
-           WHERE output_hash ~ '^sha256:[a-f0-9]{64}$'"""
+           WHERE entry_type <> 'record'
+             AND output_hash ~ '^sha256:[a-f0-9]{64}$'"""
     ).fetchone()[0]
-    if migrations < 19 or archives != hashes:
+    unhashed_records = conn.execute(
+        """SELECT count(*) FROM sanji_archive_entries
+           WHERE entry_type = 'record' AND output_hash IS NULL"""
+    ).fetchone()[0]
+    if migrations < 19 or hash_required != hashes:
         raise SystemExit("restored database invariant failed")
-print(json.dumps({"status": "restored", "migrations": migrations, "archive_hashes": hashes}))
+print(json.dumps({
+    "status": "restored", "migrations": migrations, "archives": archives,
+    "derived_archive_hashes": hashes, "unhashed_source_records": unhashed_records,
+}))

@@ -48,6 +48,11 @@ assert "OWNER_BOOTSTRAP_TOKEN=<" in env
 
 for relative in (
     "README.md",
+    "README.zh-CN.md",
+    "LICENSE",
+    "NOTICE",
+    "CODE_OF_CONDUCT.md",
+    "SUPPORT.md",
     "SECURITY.md",
     "CONTRIBUTING.md",
     "CHANGELOG.md",
@@ -56,6 +61,15 @@ for relative in (
     "docs/operations/move-computer.md",
     "docs/privacy/data-export-delete.md",
     "docs/releases/v1-checklist.md",
+    "docs/open-source/license-audit-v1-rc.md",
+    "docs/open-source/knowledge-boundary-v1-rc.md",
+    "docs/releases/v1-rc-delivery.md",
+    "docs/releases/v1-rc-security-audit.md",
+    "docs/releases/evidence/v1-rc-cold-start.redacted.txt",
+    "docs/releases/evidence/v1-rc-backup-restore.redacted.txt",
+    "docs/releases/evidence/v1-rc-test-summary.json",
+    ".github/ISSUE_TEMPLATE/bug_report.yml",
+    ".github/pull_request_template.md",
     "sbom.cdx.json",
 ):
     if not (root / relative).exists():
@@ -64,9 +78,29 @@ for relative in (
 sbom = json.loads((root / "sbom.cdx.json").read_text(encoding="utf-8"))
 assert sbom["bomFormat"] == "CycloneDX"
 assert sbom["specVersion"] == "1.6"
+assert sbom["metadata"]["component"]["version"] == "1.0.0-rc.1"
+
+license_notice = (root / "LICENSE").read_text(encoding="utf-8")
+assert "No license is granted" in license_notice
+assert "AGPL-3.0-or-later" in license_notice and "CC BY-SA 4.0" in license_notice
 
 workflow = (root / ".github/workflows/ci.yml").read_text(encoding="utf-8")
 assert "v1-release-gates" in workflow
 assert "continue-on-error" in workflow  # visual evidence collection pattern
 assert "Enforce visual regression result" in workflow
+
+subject_setup = (root / "apps/web/components/SubjectSetup.tsx").read_text(encoding="utf-8")
+coin_journey = (root / "apps/web/components/ThreeCoinJourney.tsx").read_text(encoding="utf-8")
+assert 'latitude: 0, longitude: 0' not in subject_setup
+assert 'coordinate_source: "user_confirmed"' in subject_setup
+assert 'Array.from({length:6},()=>["","",""])' in coin_journey
+assert '<option value="">请选择</option>' in coin_journey
+assert (root / "infra/migrations/0022_v1_rc_original_birth_record.sql").exists()
+assert (root / "infra/migrations/0023_v1_rc_traditional_member_rls.sql").exists()
+assert (root / "infra/migrations/0024_v1_rc_invitation_issuance.sql").exists()
+pwa_manifest = json.loads((root / "apps/web/public/manifest.webmanifest").read_text(encoding="utf-8"))
+assert pwa_manifest["start_url"] == "/start"
+service_worker = (root / "apps/web/public/sw.js").read_text(encoding="utf-8")
+for prefix in ("/api/", "/profile/", "/chronicle", "/records", "/consult", "/me"):
+    assert f'url.pathname.startsWith("{prefix}")' in service_worker
 print("V1 release static gates passed")

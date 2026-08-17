@@ -1,0 +1,16 @@
+三际观 V1 RC 备份恢复证据（脱敏）
+日期：2026-08-17
+源与目标：同一隔离 PostgreSQL 16.14 测试实例中的两个独立测试数据库
+数据：完全虚构 Demo
+
+步骤：
+1. 标准 pg_dump custom format 生成备份；Manifest 保存 SHA-256、应用版本和 migration 版本。
+2. 创建全新空目标数据库；restore.py 在恢复前确认 public schema 无表。
+3. 校验 Dump SHA-256，再用 pg_restore --no-owner --no-acl --exit-on-error 恢复。
+4. 恢复结果：migrations=24，profiles=1，journal=6，archives=14。
+5. 派生档案合法 Output Hash=8；允许无分析Hash的原始记录=6。
+6. 六象执行=2，专题执行=3，命势执行=2。
+7. 源库和恢复库的14条档案类型/Output Hash集合完全一致。
+
+结果：PASS
+备份文件位于忽略的本地临时目录，未加入Git；离机前必须使用批准工具外部加密，密钥分离保存。

@@ -4,7 +4,11 @@ import re
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
-excluded = {"work", "node_modules", ".next", ".git", "outputs", "__pycache__"}
+excluded = {
+    "work", "node_modules", ".next", ".git", ".cache", "outputs", "__pycache__",
+    "test-results", "playwright-report", ".lighthouseci", "storybook-static",
+    "dist", "build", "coverage", ".venv", "venv",
+}
 patterns = [
     re.compile(r"(?im)^(deepseek_api_key)[ \t]*=[ \t]*[^\s\"']{8,}[ \t]*$"),
     re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b"),

@@ -17,6 +17,9 @@ def main() -> None:
     nav_labels = ['label: "首页"', 'label: "记录"', 'label: "合参"', 'label: "三际录"', 'label: "我的"']
     assert all(label in shell for label in nav_labels), "five ordinary navigation labels required"
     assert shell.count("subtitle:") == 5, "ordinary primary navigation must contain exactly five entries"
+    for label in ("六象合参", "三际断章", "宿世星图", "中阴之门", "命势长图", "缘契图", "观照录", "历次命卷", "设置与数据管理"):
+        assert label in shell, f"desktop feature navigation missing: {label}"
+    assert "product-mobile-nav" in shell and "DESKTOP_FEATURES.map" in shell
 
     liuxiang = read("apps/web/components/LiuxiangReadiness.tsx")
     for required in ("资料不足，暂不成断", "真实映射规则尚未通过审校", "不显示任何合成测试结果"):

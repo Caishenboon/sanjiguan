@@ -66,6 +66,12 @@ class InvitationAccept(BaseModel):
     token: str = Field(min_length=20, max_length=512)
 
 
+class InvitationCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    role: Literal["member", "viewer"]
+    expires_hours: int = Field(default=24, ge=1, le=168)
+
+
 class SessionView(BaseModel):
     user_id: UUID
     role: Literal["owner", "member", "viewer"]

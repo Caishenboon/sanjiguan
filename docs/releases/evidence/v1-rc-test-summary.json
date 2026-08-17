@@ -1,0 +1,29 @@
+{
+  "schema_version": "sanji-test-summary/1.0",
+  "release": "1.0.0-rc.1",
+  "generated_at": "2026-08-17T03:30:00Z",
+  "data_class": "synthetic_only",
+  "local": {
+    "python_unit_files_passed": 37,
+    "python_unit_files_failed": 0,
+    "memory_api_passed": 4,
+    "postgres_integration_passed": 14,
+    "postgres_http_e2e_passed": 13,
+    "v1_release_tests_passed": 10,
+    "playwright_local_passed": 54,
+    "web_production_build": "passed",
+    "migration_count": 24,
+    "backup_restore": "passed",
+    "deepseek_real_call": "not_run"
+  },
+  "remote_ci": {
+    "status": "pending",
+    "run_url": null
+  },
+  "notes": [
+    "One Linux-only comparison is not applicable on local Windows; required platform jobs run remotely.",
+    "A deliberately preserved contaminated-database attempt exposed fixed-fixture uniqueness collisions; the CI-order rerun on a fresh database passed PostgreSQL integration 14/14 and HTTP E2E 13/13.",
+    "Local Lighthouse collection was inconclusive because Chrome 132 on Windows could not remove its own temporary profile (EPERM); the unchanged Ubuntu CI budget remains authoritative.",
+    "No paid provider call was made during local validation."
+  ]
+}
