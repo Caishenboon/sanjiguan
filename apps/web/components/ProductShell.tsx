@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { percentFromBasisPoints, productStatus } from "../lib/product-language";
 
 const NAV = [
   { label: "首页", subtitle: "观三际", href: "/" },
@@ -20,6 +21,20 @@ const DESKTOP_FEATURES = [
   ["设置与数据管理", "/me/data"],
 ] as const;
 
+const MOBILE_NAV = [
+  { label: "首页", href: "/" },
+  { label: "三际录", href: "/chronicle" },
+  { label: "合参", href: "/consult" },
+  { label: "断章", href: "/consult/life-trend" },
+  { label: "更多", href: "/me" },
+] as const;
+
+const STATUS_LABELS: Record<string, string> = {
+  "research only": "研究态 · 未经审校",
+  research_active: "研究态 · 未经审校",
+  "research_active · UNCONFIRMED": "研究态 · 未经审校",
+};
+
 export default function ProductShell({
   title,
   eyebrow,
@@ -34,6 +49,7 @@ export default function ProductShell({
   const pathname = usePathname();
   return (
     <div className="product-shell">
+      <a className="skip-link" href="#main-content">跳到主要内容</a>
       <aside className="product-sidebar">
         <Link href="/" className="product-brand"><strong>三际观</strong><span>大屏观三际，小屏录一念</span></Link>
         <nav aria-label="普通用户主导航">
@@ -52,12 +68,12 @@ export default function ProductShell({
       <div className="product-main">
         <header className="product-topbar">
           <div><p className="eyebrow">{eyebrow || "三际观"}</p><h1>{title}</h1></div>
-          <span className="status-dot">{status}</span>
+          <span className="status-dot">{STATUS_LABELS[status] ?? status}</span>
         </header>
         <main id="main-content" className="product-content">{children}</main>
       </div>
       <nav className="product-mobile-nav" aria-label="普通用户手机主导航">
-        {NAV.map((item) => <Link key={item.href} href={item.href} aria-current={(item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)) ? "page" : undefined}>{item.label}</Link>)}
+        {MOBILE_NAV.map((item) => <Link key={item.href} href={item.href} aria-current={(item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)) ? "page" : undefined}>{item.label}</Link>)}
       </nav>
     </div>
   );
@@ -82,5 +98,20 @@ export function PageState({
 }
 
 export function TechnicalDetails({ children }: { children: ReactNode }) {
-  return <details className="technical-details"><summary>研究详情</summary><p className="boundary">以下内容用于核验与回放，普通阅读无需理解。</p>{children}</details>;
+  return <details className="technical-details"><summary>方法与版本</summary><p className="boundary">以下内容用于核验、复演与两卷参照，普通阅读无需理解。</p>{children}</details>;
+}
+
+export function MetricPair({ strengthBp, confidenceBp }: { strengthBp: number; confidenceBp: number }) {
+  return <div className="metric-pair" aria-label={`象势 ${percentFromBasisPoints(strengthBp)}，证契完备度 ${percentFromBasisPoints(confidenceBp)}`}>
+    <div><span>象势</span><strong>{percentFromBasisPoints(strengthBp)}</strong><small>现有证契指向该象的力度</small></div>
+    <div><span>证契完备度</span><strong>{percentFromBasisPoints(confidenceBp)}</strong><small>独立资料的完整、稳定与少冲突程度</small></div>
+  </div>;
+}
+
+export function VerdictBanner({ status, title, children }: { status: string; title?: string; children?: ReactNode }) {
+  return <section className={`verdict-banner verdict-banner--${status}`} aria-labelledby="verdict-title">
+    <p className="eyebrow">本次断语</p>
+    <h2 id="verdict-title">{title ?? productStatus(status)}</h2>
+    {children}
+  </section>;
 }

@@ -8,6 +8,7 @@ export default defineConfig({
     baseURL: "http://127.0.0.1:3000",
     locale: "zh-CN",
     timezoneId: "UTC",
+    serviceWorkers: "block",
   },
   webServer: {
     command: "pnpm start",

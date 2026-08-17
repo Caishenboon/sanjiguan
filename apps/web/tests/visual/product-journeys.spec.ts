@@ -4,8 +4,7 @@ const profileId = "019f9f61-5dc9-79cf-8b92-000000000001";
 const divinationId = "019f9f61-5dc9-79cf-8b92-000000000002";
 
 async function seedSubject(page: Page) {
-  await page.goto("/");
-  await page.evaluate(({ id }) => {
+  await page.addInitScript(({ id }) => {
     sessionStorage.setItem("sanjiguan:product-session:v1", JSON.stringify({
       subject: { id, name: "虚构测试主体", birthDate: "1990-01-01", timePrecision: "unknown" },
       chronicles: [],
@@ -21,7 +20,7 @@ test("journey A: first use creates a subject without inventing an unknown birth 
   });
   await page.goto("/");
   await expect(page.locator("nav[aria-label='普通用户主导航'] a")).toHaveCount(5);
-  await page.getByRole("link", { name: "建立我的资料" }).click();
+  await page.getByRole("link", { name: "建立三际录" }).first().click();
   await page.getByLabel("如何称呼这个主体").fill("虚构测试主体");
   await page.getByLabel("出生日期").fill("1990-01-01");
   await page.getByLabel("出生时刻未知").check();
@@ -29,7 +28,7 @@ test("journey A: first use creates a subject without inventing an unknown birth 
   await page.getByLabel("经度").fill("121.473700");
   await page.getByLabel("纬度").fill("31.230400");
   await page.getByLabel("我确认以上是原始输入").check();
-  await page.getByRole("button", { name: "保存资料" }).click();
+  await page.getByRole("button", { name: "确认并继续立卷" }).click();
   await expect(page.getByRole("heading", { name: "欢迎回来，虚构测试主体" })).toBeVisible();
   expect(requestBody.birth.local_time).toBeNull();
   expect(requestBody.birth.time_precision).toBe("unknown");
@@ -111,7 +110,7 @@ test("journey C: execute physical three-coin and read progressive result details
   await expect(page.getByRole("heading", { name: "易经三钱机械结果" })).toBeVisible();
   await expect(page.getByText("既济 → 家人")).toBeVisible();
   await expect(page.getByText("这不是吉凶、应期或人生结论。")).toBeVisible();
-  await page.getByText("研究详情", { exact: true }).click();
+  await page.getByText("方法与版本", { exact: true }).click();
   await expect(page.getByText("sha256:fixture-only-product-journey")).toBeVisible();
 });
 
@@ -125,8 +124,8 @@ test("journey D: liuxiang uses authorized records and can honestly return insuff
   })}));
   await page.goto("/consult/liuxiang");
   await expect(page.getByText("未经审校的干支、星曜、卦象解释继续禁用")).toBeVisible();
-  await page.getByRole("button",{name:"执行六象研究"}).click();
-  await expect(page.getByText("资料不足，暂不成断").first()).toBeVisible();
+  await page.getByRole("button",{name:"起一卷六象合参"}).click();
+  await expect(page.getByText("证契未足，不成断").first()).toBeVisible();
   await expect(page.getByText("synthetic_conformance")).toHaveCount(0);
   await expect(page.getByText(/聚合哈希|a08cb815|81a43d8/)).toHaveCount(0);
 });
@@ -194,7 +193,7 @@ test("topic journey: low-confidence generated identity stays visible and qualifi
   await page.getByRole("button",{name:"开始专题推演"}).click();
   await expect(page.getByRole("heading",{name:"沈怀安【可能·资料不足】"})).toBeVisible();
   await expect(page.getByText("历史人物", {exact:false})).toHaveCount(0);
-  await page.getByText("研究详情", {exact:true}).click();
+  await page.getByText("方法与版本", {exact:true}).click();
   await expect(page.getByText("sha256:synthetic-output")).toBeVisible();
 });
 
@@ -221,11 +220,11 @@ test("life trend journey: gaps, future projection and deterministic report stay 
     })})
   );
   await page.goto("/consult/life-trend");
-  await page.getByRole("button",{name:"生成命势长图与断章"}).click();
+  await page.getByRole("button",{name:"生成命势长图与三际断章"}).click();
   await expect(page.getByRole("heading",{name:"云开有碍 · 吉中有阻"})).toBeVisible();
   const readableTimeline=page.viewportSize()!.width<=767?page.locator(".mobile-buckets"):page.locator(".table-scroll");
   await expect(readableTimeline.getByText("留白",{exact:true})).toBeVisible();
   await expect(readableTimeline.getByText("未来推演",{exact:page.viewportSize()!.width>767})).toBeVisible();
-  await expect(page.getByText("人生K线不是证券价格")).toBeVisible();
+  await expect(page.getByText("命势长图不是证券价格")).toBeVisible();
   if(page.viewportSize()!.width>767)await expect(page.getByText("命势长图文字表格回退")).toBeVisible();
 });

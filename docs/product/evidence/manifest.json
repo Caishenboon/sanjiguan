@@ -1,0 +1,185 @@
+{
+  "schema_version": "sanji-v1-ux-evidence-manifest-1.0",
+  "evidence_class": "synthetic_conformance",
+  "contains_real_user_data": false,
+  "contains_provider_output": false,
+  "screenshot_count": 16,
+  "screenshots": [
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-contested-1440.png",
+      "route": "/consult/liuxiang",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scenario": "两象相争",
+      "synthetic_data_only": true,
+      "sha256": "8812d48b43f61aa082f0581fde722736efeefeb043587158021766c4804ff8b7"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-delete-confirmation-1440.png",
+      "route": "/me/data",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scenario": "删除二次确认",
+      "synthetic_data_only": true,
+      "sha256": "1a1c0fe41eaf63a8db82b53e48115fd73d25e536e0d65e847b8eee0e10a37181"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-deterministic-report-no-ai-1440.png",
+      "route": "/consult/life-trend",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scenario": "无 AI 确定性报告",
+      "synthetic_data_only": true,
+      "sha256": "56c7a45cd0cf4fba60816e005eeff9751c475a52c7df023545b522fd6acc901d"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-forbidden-1440.png",
+      "route": "/forbidden",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scenario": "权限不足",
+      "synthetic_data_only": true,
+      "sha256": "203bb48223ca739e1c913670af5beb01f5304417c5ee8a2fa2f03d18f1e402d5"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-home-desktop-1440.png",
+      "route": "/",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scenario": "首页桌面",
+      "synthetic_data_only": true,
+      "sha256": "fcbae298b2910e1e708bdabac141442ae1a6ecfa0dee8464e3a3304aee83f673"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-home-mobile-390.png",
+      "route": "/",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "首页手机",
+      "synthetic_data_only": true,
+      "sha256": "4d0282337ebb4fb78e436d07327640f283b240607ce4da9371c2d759a1ca11b2"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-insufficient-liuxiang-1440.png",
+      "route": "/consult/liuxiang",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scenario": "证契未足",
+      "synthetic_data_only": true,
+      "sha256": "6ee894930630c7cc0fd9f125b2832f291ff8b1c259083863f212889e47eb4d38"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-life-trend-tablet-768.png",
+      "route": "/consult/life-trend",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "scenario": "命势长图",
+      "synthetic_data_only": true,
+      "sha256": "77fc2d572298b5319116ef3481070cd5a7ca111924009254dcf0b40275c1deee"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-liuxiang-desktop-1440.png",
+      "route": "/consult/liuxiang",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scenario": "六象合参",
+      "synthetic_data_only": true,
+      "sha256": "9d5c9c9eb98aa22cb0e3dedfabc7e079a49a993bd34d774300a29f06df0e27a1"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-onboarding-desktop-1440.png",
+      "route": "/onboarding",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scenario": "八步立卷桌面",
+      "synthetic_data_only": true,
+      "sha256": "2aed45bec51d7f5ee5ea3a8dda75dd6c9a8d697e40c24fcbe372577079b7b7cb"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-onboarding-mobile-390.png",
+      "route": "/onboarding",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "八步立卷",
+      "synthetic_data_only": true,
+      "sha256": "ee888584a9be6a6ceec833124716a75b199a8f643fe3e5d894bff8eafec7c12d"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-report-desktop-1440.png",
+      "route": "/consult/life-trend",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scenario": "三际断章",
+      "synthetic_data_only": true,
+      "sha256": "97f3983a2c711d372f29dfd23b0091690f50eedc6d41947479aee92a8ebf29aa"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-report-mobile-390.png",
+      "route": "/consult/life-trend",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenario": "断章手机阅读",
+      "synthetic_data_only": true,
+      "sha256": "9ce49558504187d323bcab609c53cfe0fda9b56cbc38118ad8fd2a5ac8368559"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-sushe-wide-1920.png",
+      "route": "/consult/sushe",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "scenario": "宿世星图",
+      "synthetic_data_only": true,
+      "sha256": "d854b2d8375f217a3cc969982d95c43527cf8b59b4c356f0a1db66e99044c0ac"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-yuanqi-1440.png",
+      "route": "/consult/yuanqi",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scenario": "缘契图",
+      "synthetic_data_only": true,
+      "sha256": "8572804b35ff2ebec799bbf9ee64ae9c1f79711ea7b72fc359bbaa5cbba86058"
+    },
+    {
+      "file": "docs/product/evidence/screenshots/v1-ux-zhongyin-1440.png",
+      "route": "/consult/zhongyin",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scenario": "中阴之门",
+      "synthetic_data_only": true,
+      "sha256": "6214226175453bdfb341eb1fdfc7d3ff68f4a82625ea02f20366e0bd6c8faf0e"
+    }
+  ]
+}

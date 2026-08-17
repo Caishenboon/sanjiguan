@@ -2,11 +2,10 @@ import { expect, test, type Page } from "@playwright/test";
 import path from "node:path";
 
 const profileId = "019f9f61-5dc9-79cf-8b92-0000000000e1";
-const evidenceDir = path.resolve(process.cwd(), "../../docs/releases/evidence/screenshots");
+const evidenceDir = path.resolve(process.cwd(), "../../docs/product/evidence/screenshots");
 
 async function seedSyntheticSubject(page: Page) {
-  await page.goto("/");
-  await page.evaluate(({ id }) => {
+  await page.addInitScript(({ id }) => {
     sessionStorage.setItem("sanjiguan:product-session:v1", JSON.stringify({
       subject: { id, name: "虚构体验主体", birthDate: "1990-01-01", timePrecision: "unknown" },
       chronicles: [],
@@ -41,21 +40,21 @@ async function openLifeTrend(page: Page) {
   await seedSyntheticSubject(page);
   await routeLifeTrend(page);
   await page.goto("/consult/life-trend");
-  await page.getByRole("button", {name:"生成命势长图与断章"}).click();
+  await page.getByRole("button", {name:"生成命势长图与三际断章"}).click();
   await expect(page.getByRole("heading", {name:"云开有碍 · 吉中有阻"})).toBeVisible();
-  await expect(page.getByText("这是完全虚构的确定性模板报告。")).toBeVisible();
+  await expect(page.getByText("这是完全虚构的确定性模板报告。").first()).toBeVisible();
 }
 
 test("1440 desktop three-period report", async ({ page }) => {
   await page.setViewportSize({width:1440,height:1100});
   await openLifeTrend(page);
-  await page.screenshot({path:path.join(evidenceDir,"v1-rc-report-desktop-1440.png"),fullPage:true});
+  await page.screenshot({path:path.join(evidenceDir,"v1-ux-report-desktop-1440.png"),fullPage:true});
 });
 
 test("768 tablet life trend", async ({ page }) => {
   await page.setViewportSize({width:768,height:1024});
   await openLifeTrend(page);
-  await page.screenshot({path:path.join(evidenceDir,"v1-rc-life-trend-tablet-768.png"),fullPage:true});
+  await page.screenshot({path:path.join(evidenceDir,"v1-ux-life-trend-tablet-768.png"),fullPage:true});
 });
 
 test("1920 wide past-life candidate", async ({ page }) => {
@@ -73,7 +72,7 @@ test("1920 wide past-life candidate", async ({ page }) => {
   await page.goto("/consult/sushe");
   await page.getByRole("button",{name:"开始专题推演"}).click();
   await expect(page.getByRole("heading",{name:"沈怀安【可能·资料不足】"})).toBeVisible();
-  await page.screenshot({path:path.join(evidenceDir,"v1-rc-sushe-wide-1920.png"),fullPage:true});
+  await page.screenshot({path:path.join(evidenceDir,"v1-ux-sushe-wide-1920.png"),fullPage:true});
 });
 
 test("390 mobile record creation", async ({ page }) => {
@@ -85,7 +84,7 @@ test("390 mobile record creation", async ({ page }) => {
   await page.getByLabel("出生地点原文").fill("虚构城市");
   await page.getByLabel("经度").fill("121.473700");
   await page.getByLabel("纬度").fill("31.230400");
-  await page.screenshot({path:path.join(evidenceDir,"v1-rc-onboarding-mobile-390.png"),fullPage:true});
+  await page.screenshot({path:path.join(evidenceDir,"v1-ux-onboarding-mobile-390.png"),fullPage:true});
 });
 
 test("insufficient liuxiang state", async ({ page }) => {
@@ -99,9 +98,9 @@ test("insufficient liuxiang state", async ({ page }) => {
       candidates:["lx_ming","lx_ye","lx_yuan","lx_meng","lx_yuan_relation","lx_shi"].map((dimension_id,index)=>({dimension_id,rank:index+1,strength_bp:0,confidence_bp:0,status:"insufficient",support_count:0,counterevidence_count:0,missing_facts:["minimum_independent_records"]})),
     })}));
   await page.goto("/consult/liuxiang");
-  await page.getByRole("button",{name:"执行六象研究"}).click();
-  await expect(page.getByText("资料不足，暂不成断").first()).toBeVisible();
-  await page.screenshot({path:path.join(evidenceDir,"v1-rc-insufficient-liuxiang-1440.png"),fullPage:true});
+  await page.getByRole("button",{name:"起一卷六象合参"}).click();
+  await expect(page.getByText("证契未足，不成断").first()).toBeVisible();
+  await page.screenshot({path:path.join(evidenceDir,"v1-ux-insufficient-liuxiang-1440.png"),fullPage:true});
 });
 
 test("deterministic report without provider", async ({ page }) => {
@@ -110,5 +109,27 @@ test("deterministic report without provider", async ({ page }) => {
   await page.route("**/*deepseek*", async route=>{providerCalls+=1;await route.abort("blockedbyclient")});
   await openLifeTrend(page);
   expect(providerCalls).toBe(0);
-  await page.locator(".report-reader").screenshot({path:path.join(evidenceDir,"v1-rc-deterministic-report-no-ai-1440.png")});
+  await page.locator(".report-reader").screenshot({path:path.join(evidenceDir,"v1-ux-deterministic-report-no-ai-1440.png")});
 });
+
+test("home desktop", async ({page})=>{await page.setViewportSize({width:1440,height:1100});await page.goto("/");await expect(page.getByRole("heading",{name:"从如实立卷开始"})).toBeVisible();await page.screenshot({path:path.join(evidenceDir,"v1-ux-home-desktop-1440.png"),fullPage:true});});
+test("home mobile", async ({page})=>{await page.setViewportSize({width:390,height:844});await page.goto("/");await expect(page.getByRole("navigation",{name:"普通用户手机主导航"})).toBeVisible();await page.screenshot({path:path.join(evidenceDir,"v1-ux-home-mobile-390.png"),fullPage:true});});
+test("onboarding desktop", async ({page})=>{await page.setViewportSize({width:1440,height:1100});await page.goto("/onboarding");await expect(page.getByText("第 1—3 步，共 8 步")).toBeVisible();await page.screenshot({path:path.join(evidenceDir,"v1-ux-onboarding-desktop-1440.png"),fullPage:true});});
+test("report mobile", async ({page})=>{await page.setViewportSize({width:390,height:844});await openLifeTrend(page);await page.screenshot({path:path.join(evidenceDir,"v1-ux-report-mobile-390.png"),fullPage:true});});
+
+async function routeTopic(page:Page,topic:"zhongyin_life"|"yuanqi"){
+  await page.route(`**/api/v1/profiles/${profileId}/topics/${topic}/evidence`,async route=>route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({items:[]})}));
+  const ep=(value:unknown,epistemic_status="rule_inferred",confidence_bp=4300)=>({value,epistemic_status,confidence_bp});
+  await page.route(`**/api/v1/profiles/${profileId}/topics/${topic}/executions`,async route=>route.fulfill({status:201,contentType:"application/json",body:JSON.stringify({id:`${topic}-synthetic`,archive_id:`${topic}-archive`,topic_type:topic,status:"provisional",strength_bp:5200,confidence_bp:4300,graph_hash:"sha256:synthetic-graph",output_hash:"sha256:synthetic-output",trace_hash:"sha256:synthetic-trace",research_notice:"三际观原创研究",candidates:[topic==="yuanqi"?{candidate_id:"yuanqi-1",rank:1,status:"provisional",strength_bp:5200,confidence_bp:4300,observation_scope:"unilateral_observation",relationship_stage:ep("关系维持"),future_trend:ep("关系仍需以实际行动确认"),past_life_identity_candidates:[{side:"subject",name:ep("顾清河","generated_identity")}],supporting_record_ids:["synthetic-1"],counterevidence_record_ids:["synthetic-2"],conflicts:["承诺与行动不同步"],missing_facts:["双方同意"]}:{candidate_id:"zhongyin-1",rank:1,status:"provisional",strength_bp:5200,confidence_bp:4300,transition_state:ep("新结构萌生"),old_structure:ep(["旧工作节奏"]),new_structure_clues:ep(["新的学习计划"]),unfinished_matters:ep(["交接尚未完成"]),supporting_record_ids:["synthetic-1"],counterevidence_record_ids:["synthetic-2"],conflicts:[],missing_facts:["持续行动记录"]}]})}));
+}
+test("zhongyin gate",async({page})=>{await page.setViewportSize({width:1440,height:1100});await seedSyntheticSubject(page);await routeTopic(page,"zhongyin_life");await page.goto("/consult/zhongyin");await page.getByRole("button",{name:"开始专题推演"}).click();await page.screenshot({path:path.join(evidenceDir,"v1-ux-zhongyin-1440.png"),fullPage:true});});
+test("yuanqi consent",async({page})=>{await page.setViewportSize({width:1440,height:1100});await seedSyntheticSubject(page);await routeTopic(page,"yuanqi");await page.goto("/consult/yuanqi");await page.getByRole("button",{name:"开始专题推演"}).click();await page.screenshot({path:path.join(evidenceDir,"v1-ux-yuanqi-1440.png"),fullPage:true});});
+
+async function routeLiuxiang(page:Page,status:"provisional"|"contested"){
+  await page.route(`**/api/v1/profiles/${profileId}/liuxiang/evidence`,async route=>route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({items:[]})}));
+  await page.route(`**/api/v1/profiles/${profileId}/liuxiang/executions`,async route=>route.fulfill({status:201,contentType:"application/json",body:JSON.stringify({id:`liuxiang-${status}`,archive_id:`liuxiang-${status}-archive`,status,strength_bp:status==="contested"?6100:6800,confidence_bp:status==="contested"?5200:6400,output_hash:"sha256:synthetic-liuxiang",trace_hash:"sha256:synthetic-trace",research_notice:"研究态",candidates:["lx_yuan","lx_ye","lx_shi","lx_meng","lx_ming","lx_yuan_relation"].map((dimension_id,index)=>({dimension_id,rank:index+1,strength_bp:Math.max(1200,6800-index*650),confidence_bp:Math.max(1800,6400-index*500),status:status==="contested"&&index<2?"contested":"provisional",support_count:3-index%2,counterevidence_count:index%2,missing_facts:index>3?["minimum_time_span"]:[]}))})}));
+}
+test("liuxiang desktop",async({page})=>{await page.setViewportSize({width:1440,height:1100});await seedSyntheticSubject(page);await routeLiuxiang(page,"provisional");await page.goto("/consult/liuxiang");await page.getByRole("button",{name:"起一卷六象合参"}).click();await page.screenshot({path:path.join(evidenceDir,"v1-ux-liuxiang-desktop-1440.png"),fullPage:true});});
+test("contested liuxiang",async({page})=>{await page.setViewportSize({width:1440,height:1100});await seedSyntheticSubject(page);await routeLiuxiang(page,"contested");await page.goto("/consult/liuxiang");await page.getByRole("button",{name:"起一卷六象合参"}).click();await expect(page.getByText("两象相争").first()).toBeVisible();await page.screenshot({path:path.join(evidenceDir,"v1-ux-contested-1440.png"),fullPage:true});});
+test("delete confirmation",async({page})=>{await page.setViewportSize({width:1440,height:1100});await page.goto("/me/data");await page.getByRole("button",{name:"删除账号及私人数据"}).click();await expect(page.getByRole("dialog",{name:"确认彻底删除？"})).toBeVisible();await page.screenshot({path:path.join(evidenceDir,"v1-ux-delete-confirmation-1440.png"),fullPage:true});});
+test("permission denied",async({page})=>{await page.setViewportSize({width:1440,height:1100});await page.goto("/forbidden");await expect(page.getByRole("heading",{name:"研究后台只对授权角色开放"})).toBeVisible();await page.screenshot({path:path.join(evidenceDir,"v1-ux-forbidden-1440.png"),fullPage:true});});

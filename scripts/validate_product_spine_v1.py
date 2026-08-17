@@ -22,7 +22,7 @@ def main() -> None:
     assert "product-mobile-nav" in shell and "DESKTOP_FEATURES.map" in shell
 
     liuxiang = read("apps/web/components/LiuxiangReadiness.tsx")
-    for required in ("资料不足，暂不成断", "真实映射规则尚未通过审校", "不显示任何合成测试结果"):
+    for required in ("真实映射规则尚未通过审校", "不显示任何合成测试结果", "<VerdictBanner status={run.status}>"):
         assert required in liuxiang, f"liuxiang boundary missing: {required}"
     for forbidden in ("sprint3-fixture", "synthetic_conformance", "aggregate_hash"):
         assert forbidden not in liuxiang, f"synthetic research output leaked to ordinary liuxiang page: {forbidden}"
@@ -33,12 +33,12 @@ def main() -> None:
 
     language = read("apps/web/lib/product-language.ts")
     required_terms = {
-        "strength": "象势强度",
-        "confidence": "证据可信度",
-        "decisive": "象意较明",
-        "provisional": "初见其象",
-        "contested": "诸象相争",
-        "insufficient": "资料不足，暂不成断",
+        "strength": "象势",
+        "confidence": "证契完备度",
+        "decisive": "象成，可断",
+        "provisional": "象初成，仍待补证",
+        "contested": "两象相争",
+        "insufficient": "证契未足，不成断",
     }
     for technical, label in required_terms.items():
         assert technical in language and label in language
