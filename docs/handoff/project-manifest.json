@@ -26,7 +26,7 @@
     "schemas": "packages/sanji-engine/src/sanji_engine/schemas",
     "rulesets": "packages/sanji-engine/src/sanji_engine/rulesets",
     "profiles": "packages/sanji-engine/src/sanji_engine/bazi/assets",
-    "prompts": "packages/prompts",
+    "prompts": "prompts",
     "knowledge": "knowledge",
     "golden_cases": "packages/sanji-engine/src/sanji_engine/golden_cases",
     "api_contracts": "docs/api",

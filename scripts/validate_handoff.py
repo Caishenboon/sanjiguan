@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
@@ -12,10 +13,17 @@ HANDOFF = ROOT / "docs" / "handoff"
 manifest = json.loads((HANDOFF / "project-manifest.json").read_text(encoding="utf-8"))
 schema = json.loads((HANDOFF / "project-manifest.schema.json").read_text(encoding="utf-8"))
 Draft202012Validator(schema).validate(manifest)
+tracked = set(
+    subprocess.run(["git", "ls-files", "-z"], cwd=ROOT, check=True, capture_output=True)
+    .stdout.decode("utf-8").split("\0")
+)
 
 for value in [*manifest["packages"], *manifest["entrypoints"].values(), *manifest["paths"].values(), *manifest["critical_documents"]]:
     if not (ROOT / value).exists():
         raise SystemExit(f"handoff manifest path missing: {value}")
+    normalized = value.rstrip("/")
+    if normalized not in tracked and not any(path.startswith(f"{normalized}/") for path in tracked):
+        raise SystemExit(f"handoff manifest path is not present in a clean Git checkout: {value}")
 
 required_handoff = {
     "README.md", "project-history.md", "current-state.md", "system-map.md",

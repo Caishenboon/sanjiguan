@@ -21,7 +21,7 @@ sanji-engine / 三际枢  packages/sanji-engine/src/sanji_engine
    ↓
 PostgreSQL / RLS / Replay / Audit  infra/migrations + apps/api/app/repositories.py
    ↓
-DeepSeek 可选成文层  apps/api/app/deepseek_provider.py + packages/prompts
+DeepSeek 可选成文层  apps/api/app/deepseek_provider.py + prompts
 ```
 
 核心公开契约是

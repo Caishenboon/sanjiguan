@@ -19,7 +19,7 @@
 - `infra/migrations/`：顺序、不可改写的 PostgreSQL migration 与 RLS。
 - `packages/sanji-engine/src/sanji_engine/schemas/`、`schemas/`：版本化契约。
 - `packages/sanji-engine/src/sanji_engine/rulesets/`、`packages/rules/`：规则资产。
-- `packages/prompts/`：受控成文模板；不能覆盖结构结果。
+- `prompts/`：受控成文模板；不能覆盖结构结果。
 - `knowledge/`：来源、授权与知识治理；restricted/sealed 内容不得摄入。
 - `tests/`、`packages/sanji-engine/src/sanji_engine/golden_cases/`：门禁与固定案例。
 

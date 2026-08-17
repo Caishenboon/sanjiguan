@@ -8,7 +8,7 @@ packages/sanji-ui/        共享设计系统与 Storybook
 packages/oracle-adapters/ 仅用于固定独立对照，不进入正式证据
 packages/upstream-adapters/固定上游传统算法适配
 packages/rules/           通用规则 Schema 与门禁资产
-packages/prompts/         受控成文模板；不能覆盖核心结论
+prompts/                  受控成文模板；不能覆盖核心结论
 packages/shared-types/    跨层契约
 knowledge/                来源、授权、审核与 restricted/sealed 边界
 infra/migrations/         只追加的 PostgreSQL migration 与 FORCE RLS
