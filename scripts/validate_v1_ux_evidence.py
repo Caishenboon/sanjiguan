@@ -29,6 +29,13 @@ EXPECTED = {
     "v1-ux-contested-1440.png": ("/consult/liuxiang", 1440, 1000, "两象相争"),
     "v1-ux-delete-confirmation-1440.png": ("/me/data", 1440, 1000, "删除二次确认"),
     "v1-ux-forbidden-1440.png": ("/forbidden", 1440, 1000, "权限不足"),
+    "v1-1-owner-login-1440.png": ("/start", 1440, 1000, "所有者进入"),
+    "v1-1-invitation-1440.png": ("/start", 1440, 1000, "邀请进入"),
+    "v1-1-record-center-1440.png": ("/records", 1440, 1000, "观照录记录中心"),
+    "v1-1-yijing-three-coin-1440.png": ("/consult/yijing", 1440, 1000, "易经实物三钱"),
+    "v1-1-bazi-unknown-time-1440.png": ("/consult/bazi", 1440, 1000, "八字未知时辰边界"),
+    "v1-1-ziwei-research-1440.png": ("/consult/ziwei", 1440, 1000, "紫微研究输入"),
+    "v1-1-network-offline-390.png": ("/offline", 390, 844, "网络失败离线壳"),
 }
 
 
@@ -53,14 +60,16 @@ def expected_manifest() -> dict[str, object]:
                 "viewport": {"width": width, "height": height},
                 "scenario": scenario,
                 "synthetic_data_only": True,
+                "provider_call_count": 0,
                 "sha256": sha256(path),
             }
         )
     return {
-        "schema_version": "sanji-v1-ux-evidence-manifest-1.0",
+        "schema_version": "sanji-v1-1-evidence-manifest-1.0",
         "evidence_class": "synthetic_conformance",
         "contains_real_user_data": False,
         "contains_provider_output": False,
+        "provider_call_count": 0,
         "screenshot_count": len(items),
         "screenshots": items,
     }

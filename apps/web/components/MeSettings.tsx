@@ -16,14 +16,11 @@ export default function MeSettings() {
   }
   useEffect(() => {
     let active = true;
-    fetch("/api/v1/me", { credentials: "include" })
-      .then(async (response) => {
-        if (!response.ok) return;
-        const body = await response.json();
-        if (active) setCanResearch(body.role === "owner" || body.role === "research_admin");
-      })
+    const controller = new AbortController();
+    apiRequest<{role:string}>("/api/v1/me", { signal: controller.signal })
+      .then((body) => { if (active) setCanResearch(body.role === "owner" || body.role === "research_admin"); })
       .catch(() => {});
-    return () => { active = false; };
+    return () => { active = false; controller.abort(); };
   }, []);
   return (
     <ProductShell title="我的主体与设置" eyebrow="我的">

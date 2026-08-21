@@ -1,5 +1,9 @@
 # 三际观 V1 Release Candidate（中文导航）
 
+V1.1 产品质量入口：[交付说明](docs/product/v1-1-delivery.md)、
+[用户指南](docs/user-guide.md)、[质量验证](docs/testing/v1-1-quality.md)。本轮不修改算法、
+Ruleset、Replay 或受保护 Hash。
+
 完整中文说明位于 [README.md](README.md)。新电脑安装见
 [Windows](docs/setup/new-machine-windows.md) 与 [Linux](docs/setup/new-machine-linux.md)，
 新 Codex 或维护者从 [交接入口](docs/handoff/README.md) 开始。

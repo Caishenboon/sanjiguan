@@ -47,6 +47,13 @@ export default function ProductShell({
   status?: string;
 }) {
   const pathname = usePathname();
+  const parent = pathname.startsWith("/consult/") ? { href: "/consult", label: "返回合参" }
+    : pathname.startsWith("/chronicle/") ? { href: "/chronicle", label: "返回三际录" }
+    : pathname.startsWith("/records/") ? { href: "/records", label: "返回记录" }
+    : pathname.startsWith("/me/") ? { href: "/me", label: "返回我的" }
+    : pathname.startsWith("/results/") ? { href: "/chronicle", label: "返回三际录" }
+    : pathname === "/onboarding" || pathname === "/start" || pathname === "/offline" ? { href: "/", label: "返回首页" }
+    : null;
   return (
     <div className="product-shell">
       <a className="skip-link" href="#main-content">跳到主要内容</a>
@@ -67,7 +74,7 @@ export default function ProductShell({
       </aside>
       <div className="product-main">
         <header className="product-topbar">
-          <div><p className="eyebrow">{eyebrow || "三际观"}</p><h1>{title}</h1></div>
+          <div>{parent && <Link className="breadcrumb-back" href={parent.href}>← {parent.label}</Link>}<p className="eyebrow">{eyebrow || "三际观"}</p><h1>{title}</h1></div>
           <span className="status-dot">{STATUS_LABELS[status] ?? status}</span>
         </header>
         <main id="main-content" className="product-content">{children}</main>
