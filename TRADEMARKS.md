@@ -1,6 +1,6 @@
-# Brand and trademark policy candidate
+# Brand and trademark policy
 
-**Draft only — not effective until written approval by the product owner.**
+Effective by product-owner authorization dated 2026-08-24.
 
 The source-code and content licenses do not grant rights to imply endorsement or
 official status. “三际观”, “三际枢”, “三际录”, the project logo, and their
@@ -12,5 +12,6 @@ name or logo in a way that is likely to confuse users about origin, maintenance,
 security support, or rule-review status.
 
 This candidate policy does not limit uses that applicable law independently
-permits. Questions and permission requests should use the public contact method
-chosen by the product owner; no private contact detail is embedded here.
+permits. Questions and permission requests should use GitHub Issues for
+non-sensitive matters and the security channel described in SECURITY.md for
+sensitive reports; no private contact detail is embedded here.

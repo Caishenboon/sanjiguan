@@ -21,7 +21,7 @@
       "properties": {
         "url": {"type": "string", "pattern": "^https://github\\.com/[^/]+/[^/]+$"},
         "default_branch": {"const": "main"},
-        "visibility": {"const": "private"},
+        "visibility": {"enum": ["private_authorized_for_public_switch", "public"]},
         "release_candidate_pr": {"type": "integer", "minimum": 1}
       }
     },
@@ -47,9 +47,9 @@
       "type": "object", "additionalProperties": false,
       "required": ["ready", "public_release_authorized", "license_decided"],
       "properties": {
-        "ready": {"const": false},
-        "public_release_authorized": {"const": false},
-        "license_decided": {"const": false}
+        "ready": {"const": true},
+        "public_release_authorized": {"const": true},
+        "license_decided": {"const": true}
       }
     },
     "critical_documents": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string"}},

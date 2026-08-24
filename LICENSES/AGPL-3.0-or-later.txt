@@ -1,4 +1,4 @@
 SPDX-License-Identifier: AGPL-3.0-or-later
 
-Candidate software license only; not activated until written product-owner
-approval. Canonical license text: https://www.gnu.org/licenses/agpl-3.0.txt
+Activated for project-owned software by product-owner authorization dated
+2026-08-24. Canonical license text: https://www.gnu.org/licenses/agpl-3.0.txt

@@ -1,6 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 
-Candidate license for project-owned rule data, method documentation, and
-non-software knowledge structures only; not activated until written
-product-owner approval. Canonical legal code:
+Activated for project-owned rule data, method documentation, and non-software
+knowledge structures by product-owner authorization dated 2026-08-24.
+Third-party, private, restricted, sealed, and redistribution-unclear material
+is excluded. Canonical legal code:
 https://creativecommons.org/licenses/by-sa/4.0/legalcode

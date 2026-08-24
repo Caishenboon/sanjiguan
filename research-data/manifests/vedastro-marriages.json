@@ -34,5 +34,5 @@
     "Year-only events remain year-only and are never expanded to January 1.",
     "Outcome labels are heterogeneous provider values and must not be treated as objective relationship quality."
   ],
-  "connector_enabled": true
+  "connector_enabled": false
 }

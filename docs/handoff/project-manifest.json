@@ -7,7 +7,7 @@
   "repository": {
     "url": "https://github.com/Caishenboon/sanjiguan",
     "default_branch": "main",
-    "visibility": "private",
+    "visibility": "private_authorized_for_public_switch",
     "release_candidate_pr": 27
   },
   "packages": [
@@ -62,9 +62,9 @@
     "llm_in_core": false
   },
   "open_source": {
-    "ready": false,
-    "public_release_authorized": false,
-    "license_decided": false
+    "ready": true,
+    "public_release_authorized": true,
+    "license_decided": true
   },
   "critical_documents": [
     "AGENTS.md", "docs/handoff/current-state.md", "docs/architecture/sanji-engine-contract.md",

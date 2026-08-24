@@ -145,6 +145,7 @@ class ResearchDataPipelineTests(unittest.TestCase):
             if value["dataset_id"].startswith("vedastro-org/")
         )
         broken = dict(manifest)
+        broken["connector_enabled"] = True
         broken["license_review_status"] = "license_review_required"
         self.assertIn(
             "enabled_connector_without_license_clearance",

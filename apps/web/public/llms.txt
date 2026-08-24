@@ -7,7 +7,7 @@
 安装与交接：仓库 docs/setup/ 与 docs/handoff/
 方法说明：仓库 docs/methods/
 API：仓库 docs/api/openapi.yaml
-开源状态：工程 RC；仓库 Private；许可证与公开尚未授权。
+开源状态：开源工程 RC；软件 AGPL-3.0-or-later，原创规则/方法 CC BY-SA 4.0；Private 用户数据不在公开范围。
 
 禁止误解：六象合参属于三际原创；传统规则按 Profile 区分；research_active 不等于传统
 共识或生产激活；宿世、中阴、缘契输出来自版本化系统规则；AI 不负责结构结论。

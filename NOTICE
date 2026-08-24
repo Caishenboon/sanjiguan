@@ -6,4 +6,6 @@
 第三方软件、字体、数据和固定上游快照保留其原有权利、许可证与 NOTICE；详见
 THIRD_PARTY_NOTICES.md、third-party-lock.json、sbom.cdx.json 与 LICENSES/。
 
-本仓库仍为 Private；根 LICENSE 中的候选方案尚未获得公开发布授权。
+项目原创软件采用 AGPL-3.0-or-later；项目原创规则数据、方法文档和非软件知识结构采用
+CC BY-SA 4.0。第三方材料继续适用其原有条款；外部数据、私人资料、restricted/sealed
+内容与再分发权利不清材料不属于上述授权。

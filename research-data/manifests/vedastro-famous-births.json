@@ -34,5 +34,5 @@
     "Rodden ratings are provider-supplied claims and are not independently verified by Sanjiguan.",
     "Names are not unique and must not be used alone for entity merging."
   ],
-  "connector_enabled": true
+  "connector_enabled": false
 }

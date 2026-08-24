@@ -8,12 +8,13 @@ Revision，完成后校验 SHA-256。普通 CI 不访问网络，原始大文件
 
 | 数据源 | 固定 Revision | 许可证结论 | 接入 |
 |---|---|---|---|
-| [VedAstro 出生资料](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location) | `c8645485d498011d77c6c762127852ccbad4a7d0` | HF 元数据声明 MIT，但固定仓库无独立 LICENSE；仅条件允许本地研究 | enabled |
-| [VedAstro 婚恋资料](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Marriage-Divorce-Info) | `2c297bc38ce348cc7c87d1283bce30a3aaa7583b` | 同上；原始再分发禁用 | enabled |
+| [VedAstro 出生资料](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location) | `c8645485d498011d77c6c762127852ccbad4a7d0` | HF 元数据声明 MIT，但固定仓库无独立 LICENSE；公开版本默认禁用，需另行法律/隐私复核 | disabled |
+| [VedAstro 婚恋资料](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Marriage-Divorce-Info) | `2c297bc38ce348cc7c87d1283bce30a3aaa7583b` | 同上；原始再分发禁用，公开版本默认禁用 | disabled |
 | [DReAMy-lib DreamBank](https://huggingface.co/datasets/DReAMy-lib/DreamBank-dreams-en) | `d400ee8cd114eaa09b1dbf3e44c2f248b2b1b5ec` | 再包装元数据虽写 Apache-2.0，但无独立 LICENSE 证明原始 DreamBank 正文的授权链 | disabled |
 
-DreamBank 只保留书目与字段信息。正文未下载、未提交、未嵌入，也不得发送
-外部 LLM。必须取得原始来源和再发布授权审查结论后，方可另行启用。
+三个外部数据 Connector 在公开版本中均默认禁用。DreamBank 只保留书目与字段信息；
+正文未下载、未提交、未嵌入，也不得发送外部 LLM。VedAstro 只保留固定 Revision、
+字段与质量报告元数据。任何 Connector 另行启用前，必须完成来源、许可、隐私与用途复核。
 
 ## 精度政策
 

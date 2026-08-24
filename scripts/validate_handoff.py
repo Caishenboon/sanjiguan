@@ -1,4 +1,4 @@
-"""Validate the handoff manifest, public index surface, and private crawl boundary."""
+"""Validate the handoff manifest, public index surface, and private-data crawl boundary."""
 from __future__ import annotations
 
 import json
@@ -35,7 +35,7 @@ if required_handoff - {path.name for path in HANDOFF.iterdir()}:
 
 current = (HANDOFF / "current-state.md").read_text(encoding="utf-8")
 for literal in (
-    "release: 1.0.0-rc.1", "repository_visibility: private",
+    "release: 1.0.0-rc.1", "repository_visibility: private_authorized_for_public_switch",
     "production_rules_active: false", "llm_in_deterministic_core: false",
     "database_migration_count: 24",
 ):

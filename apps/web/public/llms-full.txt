@@ -1,7 +1,7 @@
 # 三际观机器可读摘要
 
 产品：三际观。确定性核心：三际枢（Python 包 sanji_engine）。版本：1.0.0-rc.1。
-状态：Private 工程 RC；生产规则未激活；公开、Tag、Release 与正式许可证未授权。
+状态：开源工程 RC；生产规则未激活；没有 Tag 或 GitHub Release；Private 用户数据不在公开范围。
 
 系统分层：Web/PWA → FastAPI → Application Services → sanji-engine → PostgreSQL/RLS/
 Replay/Audit → 可选 DeepSeek 成文。相同输入与相同版本应产生相同结构结果和 Hash。
