@@ -28,14 +28,14 @@ export default function ProductHome() {
 
   return <ProductShell title={session.subject ? `欢迎回来，${session.subject.name}` : "从如实立卷开始"} eyebrow="首页 · 观三际">
     <section className="product-hero">
-      <div><p className="product-kicker">过去 · 当下 · 未来</p><h2>先把事实安放好，再察其间的关系。</h2>
-      <p>三际观保存原始资料、机械结构和版本边界；未知不会被补造，研究不会被说成定论。</p></div>
+      <div className="home-manifesto"><p className="product-kicker">往际 · 当下 · 未来</p><h2>先把事实安放好，<br/>再察其间的关系。</h2>
+      <p>三际观保存原始资料、机械结构和版本边界。未知不会被补造，研究不会被说成定论。</p><div className="home-axis" aria-label="三际观察轴"><span><b>往</b>已有记录</span><i/><span><b>今</b>当前观照</span><i/><span><b>来</b>规则推演</span></div></div>
       {!ready ? <PageState kind="loading" title="正在读取个人空间"><p>只读取当前安全会话所需的最小摘要。</p></PageState> :
        !session.subject ? <PageState kind="empty" title="还没有三际录"><p>先为自己立卷。出生时刻不知道也可以如实选择“未知”，系统不会补造。</p></PageState> :
        <PageState kind="success" title="主体资料已建立"><p>{session.subject.name} · 出生时刻精度：{session.subject.timePrecision === "unknown" ? "未知" : "已记录"}</p></PageState>}
     </section>
 
-    <section aria-labelledby="home-actions">
+    <section className="home-actions-section" aria-labelledby="home-actions">
       <div className="product-section-head"><div><p className="eyebrow">现在可以做</p><h2 id="home-actions">选择一个清楚的下一步</h2></div></div>
       <div className="action-grid">
         <Link className="action-card action-card--primary" href="/onboarding"><span>01</span><h3>{session.subject ? "完善三际录" : "建立三际录"}</h3><p>约 3 分钟 · 未知项可以如实留空</p><b>{session.subject ? "继续立卷" : "开始立卷"}</b></Link>
@@ -52,7 +52,7 @@ export default function ProductHome() {
     </section>
     {session.pendingTask && <section className="continue-task"><div><small>未完成任务</small><h2>{session.pendingTask.label}</h2></div><Link className="product-button" href={session.pendingTask.href}>继续上次任务</Link></section>}
 
-    <section className="public-overview" aria-labelledby="public-overview-title">
+    {!session.subject && <section className="public-overview" aria-labelledby="public-overview-title">
       <header className="public-overview__hero">
         <p className="eyebrow">三际观 · 1.0.0-rc.1</p>
         <p>三际观——宿世因缘与命势推演系统</p>
@@ -108,6 +108,6 @@ export default function ProductHome() {
       <section aria-labelledby="glossary-title"><h2 id="glossary-title">术语与常见问题</h2>
         <dl className="public-boundary-list"><div><dt>三际枢</dt><dd>独立运行的确定性算法核心。</dd></div><div><dt>方法方案</dt><dd>明确边界与流派差异的版本化配置，技术名称为 Profile。</dd></div><div><dt>规则版本</dt><dd>可校验、可审查的规则集合，技术名称为 Ruleset。</dd></div><div><dt>复演</dt><dd>按原版本重放，不使用当前可变规则。</dd></div><div><dt>研究态是否等于传统共识？</dt><dd>不等于；研究态只表示可在受限研究环境运行。</dd></div><div><dt>没有 DeepSeek 能否使用？</dt><dd>可以；完整结构和确定性报告不依赖 AI 密钥。</dd></div></dl>
       </section>
-    </section>
+    </section>}
   </ProductShell>;
 }

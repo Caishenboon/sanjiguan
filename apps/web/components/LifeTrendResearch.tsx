@@ -44,15 +44,17 @@ export default function LifeTrendResearch() {
     {error && <PageState kind="error" title="本次起卷未完成"><p>{error} 已有三际录未被覆盖，可检查连接后重试。</p></PageState>}
     {run && <>
       <article className="report-reader" aria-labelledby="report-title">
+        <div className="report-folio"><span>三际断章</span><b>卷一</b><small>确定性报告</small></div>
         <VerdictBanner status={run.status} title={run.report.chapter}><p>{run.report.plain_interpretation}</p></VerdictBanner>
-        <span className="report-kicker">象名</span><h2 className="report-title" id="report-title">{run.report.symbolic_title}</h2>
-        <section className="report-chapter"><h3>象辞</h3><p>{run.report.image_text}</p></section><section className="report-chapter"><h3>现代释义</h3><p>{run.report.plain_interpretation}</p></section>
-        <section className="report-chapter"><h3>往际</h3><p>{run.report.past}</p></section><section className="report-chapter"><h3>当下</h3><p>{run.report.current}</p></section><section className="report-chapter"><h3>未来</h3><p>{run.report.future}</p></section>
-        <section className="report-chapter"><h3>吉凶主次</h3><p>{run.report.auspice}</p></section>
-        <section className="report-chapter"><h3>应期</h3>{run.timing_windows.length ? run.timing_windows.map((window) => <p key={window.window_id}>{window.start}—{window.end} · {WINDOW_LABELS[window.type] || "变化窗口"} · 证契完备度 {window.confidence_bp/100}%</p>) : <p>证契未足，不强造应期。</p>}</section>
-        <section className="report-chapter"><h3>行动提示</h3><p>{run.report.action_guidance}</p></section>
-        <p className="report-provenance">本页使用三际枢确定性模板成文。成文服务未启用时，结构结果与完整报告仍然可读。</p>
-        <Link className="product-button" href={`/chronicle/${run.archive_id}`}>查看已保存的三际录</Link>
+        <header className="report-masthead"><div><span className="report-kicker">象名</span><h2 className="report-title" id="report-title">{run.report.symbolic_title}</h2></div><dl><div><dt>吉凶主次</dt><dd>{run.report.auspice}</dd></div><div><dt>成文方式</dt><dd>三际枢确定性模板</dd></div></dl></header>
+        <div className="report-reading-layout"><nav className="report-index" aria-label="断章目录"><b>本卷目录</b><a href="#report-image">01 象辞</a><a href="#report-plain">02 释义</a><a href="#report-past">03 往际</a><a href="#report-current">04 当下</a><a href="#report-future">05 未来</a><a href="#report-timing">06 应期</a></nav><div className="report-chapters">
+          <section className="report-chapter report-chapter--image" id="report-image"><span>01</span><div><h3>象辞</h3><p>{run.report.image_text}</p></div></section><section className="report-chapter" id="report-plain"><span>02</span><div><h3>现代释义</h3><p>{run.report.plain_interpretation}</p></div></section>
+          <section className="report-chapter" id="report-past"><span>03</span><div><h3>往际</h3><p>{run.report.past}</p></div></section><section className="report-chapter" id="report-current"><span>04</span><div><h3>当下</h3><p>{run.report.current}</p></div></section><section className="report-chapter" id="report-future"><span>05</span><div><h3>未来</h3><p>{run.report.future}</p></div></section>
+          <section className="report-chapter"><span>吉</span><div><h3>吉凶主次</h3><p>{run.report.auspice}</p></div></section>
+          <section className="report-chapter" id="report-timing"><span>期</span><div><h3>应期</h3>{run.timing_windows.length ? run.timing_windows.map((window) => <p key={window.window_id}>{window.start}—{window.end} · {WINDOW_LABELS[window.type] || "变化窗口"} · 证契完备度 {window.confidence_bp/100}%</p>) : <p>证契未足，不强造应期。</p>}</div></section>
+          <section className="report-chapter"><span>行</span><div><h3>行动提示</h3><p>{run.report.action_guidance}</p></div></section>
+        </div></div>
+        <footer className="report-footer"><p className="report-provenance">本页使用三际枢确定性模板成文。成文服务未启用时，结构结果与完整报告仍然可读。</p><Link className="product-button" href={`/chronicle/${run.archive_id}`}>收入三际录</Link></footer>
         <TechnicalDetails><dl className="technical-grid"><div><dt>Core Output Hash</dt><dd><code>{run.core_output_hash}</code></dd></div><div><dt>Report Hash</dt><dd><code>{run.deterministic_report_hash}</code></dd></div><div><dt>Trace Hash</dt><dd><code>{run.trace_hash}</code></dd></div><div><dt>状态原值</dt><dd>{productStatus(run.status)}</dd></div></dl></TechnicalDetails>
       </article>
       <section className="chronicle-detail" aria-labelledby="trend-title"><header><span>{productStatus(run.status)}</span><h2 id="trend-title">命势长图</h2><p>历史、当下、未来和资料留白分开呈现；空白时段不会被补成连续曲线。</p></header>
