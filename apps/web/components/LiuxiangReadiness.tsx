@@ -32,6 +32,7 @@ export default function LiuxiangReadiness(){
    {Object.entries(labels).map(([id,label],index)=><article key={id}><span aria-hidden="true">{String(index+1).padStart(2,"0")}</span><div><h3>{label}</h3><p>{counts[id]} 条记录；当前只使用明确事实与用户确认标签。</p></div><b>{counts[id]?"已有资料":"尚缺资料"}</b></article>)}
   </div></section>
   <section className="product-form" aria-label="选择参与证据"><h2>选择本次参与的记录</h2>{items.map(item=><label className="check-field" key={`${item.record_table}:${item.record_id}`}><input type="checkbox" checked={!excluded.has(item.record_id)&&!item.withdrawn} disabled={item.withdrawn} onChange={e=>setExcluded(current=>{const next=new Set(current);e.target.checked?next.delete(item.record_id):next.add(item.record_id);return next})}/><span><b>{labels[item.dimension_id]} · {item.fact_kind==="evidence"?"明确记录":"资料覆盖"}</b><small>{item.date_precision} · {item.state}{item.withdrawn?" · 已撤销":""}</small></span></label>)}
+   {state==="running"&&<div className="ritual-progress" role="status" aria-live="polite"><span>资料归卷</span><i/><span>同源校核</span><i/><span>诸象显现</span></div>}
    <button className="product-button" aria-disabled={state==="running"} aria-busy={state==="running"} onClick={executeRun}>{state==="running"?"正在取证与合参…":"起一卷六象合参"}</button>
   </section></>}
   {error&&<PageState kind="error" title="请求未完成"><p>{error}。资料仍保留在数据库中，可以重试。</p></PageState>}

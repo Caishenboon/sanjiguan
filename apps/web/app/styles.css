@@ -207,3 +207,47 @@ body{background:#07090d;color:var(--lotus)}
   .tool-grid--mechanical,.tool-grid--synthesis{grid-template-columns:repeat(2,1fr)}
   .tool-grid--synthesis .tool-featured{grid-column:span 2}
 }
+
+/* Signature instruments: decorative projections of existing state only. */
+.home-observatory{position:relative;min-height:430px;display:grid;place-items:center;isolation:isolate}
+.home-observatory>.product-state{position:absolute;left:50%;bottom:0;width:min(88%,340px);z-index:3;transform:translateX(-50%);margin:0;padding:18px 22px;border:1px solid rgba(210,171,96,.32);border-radius:8px;background:rgba(8,12,18,.84);backdrop-filter:blur(16px);box-shadow:0 24px 70px rgba(0,0,0,.32)}
+.home-celestial{position:relative;width:min(31vw,360px);aspect-ratio:1;border:1px solid #343b45;border-radius:50%;background:radial-gradient(circle at center,rgba(215,174,95,.12) 0 2%,transparent 3% 24%,rgba(215,174,95,.06) 25%,transparent 26% 49%,rgba(105,128,158,.05) 50%,transparent 51%),conic-gradient(from 20deg,transparent 0 16%,rgba(214,174,97,.11) 16% 18%,transparent 18% 47%,rgba(113,130,160,.08) 47% 50%,transparent 50% 79%,rgba(214,174,97,.08) 79% 82%,transparent 82%);box-shadow:inset 0 0 60px rgba(0,0,0,.5),0 30px 90px rgba(0,0,0,.2)}
+.home-celestial::before,.home-celestial::after,.home-celestial>i{content:"";position:absolute;inset:10%;border:1px solid rgba(181,151,96,.26);border-radius:50%}
+.home-celestial::after{inset:26%;border-color:rgba(181,151,96,.42)}
+.home-celestial>i:nth-child(1){inset:-6%;border-style:dashed;animation:celestial-spin 90s linear infinite}
+.home-celestial>i:nth-child(2){inset:18%;border-color:rgba(118,138,169,.26);animation:celestial-spin 55s linear infinite reverse}
+.home-celestial>i:nth-child(3){inset:42%;background:#d5aa59;border:0;box-shadow:0 0 35px rgba(213,170,89,.32)}
+.home-celestial>b{position:absolute;inset:0;display:grid;place-items:center;color:#f2ebdd;font:500 clamp(1.5rem,3vw,2.4rem) "Noto Serif SC",serif;letter-spacing:.12em}
+.home-celestial>small{position:absolute;left:50%;bottom:18%;transform:translateX(-50%);width:max-content;color:#8d98a7;font-size:.54rem;letter-spacing:.18em}
+.home-celestial>span{position:absolute;width:46px;height:46px;display:grid;place-items:center;border:1px solid #665738;border-radius:50%;background:#0a0f17;color:#d8b468;font:500 1rem "Noto Serif SC",serif;box-shadow:0 0 0 7px rgba(7,10,15,.75)}
+.home-celestial__past{left:4%;top:42%}.home-celestial__now{left:50%;top:-4%;transform:translateX(-50%)}.home-celestial__future{right:4%;top:42%}
+@keyframes celestial-spin{to{transform:rotate(360deg)}}
+
+.tool-instrument{position:absolute;right:18px;top:54px;width:112px;aspect-ratio:1;border:1px solid rgba(154,166,183,.2);border-radius:50%;opacity:.78;transition:opacity .25s ease,transform .35s ease}
+.tool-grid article:hover .tool-instrument{opacity:1;transform:rotate(4deg) scale(1.03)}
+.tool-instrument::before,.tool-instrument::after,.tool-instrument>i,.tool-instrument>span{content:"";position:absolute;inset:14%;border:1px solid rgba(211,171,95,.25);border-radius:50%}
+.tool-instrument::after{inset:31%;border-color:rgba(211,171,95,.5)}
+.tool-instrument>i:nth-child(1){inset:-5%;border-style:dashed;animation:celestial-spin 70s linear infinite reverse}
+.tool-instrument>i:nth-child(2){inset:24%;border-radius:4px;transform:rotate(45deg)}
+.tool-instrument>i:nth-child(3){inset:47%;border:0;background:#d4aa5a;box-shadow:0 0 20px rgba(212,170,90,.35)}
+.tool-instrument>span{inset:49% -12% auto -12%;height:1px;border:0;border-top:1px solid rgba(144,160,183,.24);border-radius:0}
+.tool-instrument>b{position:absolute;inset:0;display:grid;place-items:center;color:#e9dfce;font:500 1.5rem "Noto Serif SC",serif}
+.tool-instrument[data-system="yijing"]>i:nth-child(2){inset:22%;border-radius:50%;background:linear-gradient(90deg,transparent 47%,rgba(212,170,90,.32) 48% 52%,transparent 53%)}
+.tool-instrument[data-system="bazi"]{border-radius:8px;transform:rotate(45deg)}.tool-grid article:hover .tool-instrument[data-system="bazi"]{transform:rotate(49deg) scale(1.03)}.tool-instrument[data-system="bazi"]>b{transform:rotate(-45deg)}
+.tool-instrument[data-system="ziwei"]::before{inset:8%;border-radius:3px;transform:rotate(15deg)}
+.tool-instrument[data-system="liuxiang"]{background:conic-gradient(from 15deg,rgba(212,170,90,.12),transparent 12% 18%,rgba(102,122,153,.09) 19% 31%,transparent 32% 49%,rgba(212,170,90,.08) 50% 64%,transparent 65%)}
+.tool-instrument[data-system="sushe"]>i:nth-child(1){border-style:solid;border-color:rgba(127,146,177,.25)}
+.tool-instrument[data-system="zhongyin"]::before{inset:12% 32%;border-radius:50% 50% 4px 4px}
+.tool-instrument[data-system="yuanqi"]::before{inset:22% 52% 22% 8%}.tool-instrument[data-system="yuanqi"]::after{inset:22% 8% 22% 52%}
+.tool-instrument[data-system="life-trend"]>span{inset:64% 5% auto;height:18%;border:0;border-top:1px solid #c99f50;border-right:1px solid #c99f50;transform:skewY(-12deg)}
+.tool-grid article h2,.tool-grid article>p,.tool-grid article dl,.tool-grid article>a{position:relative;z-index:2}.tool-grid article h2{max-width:calc(100% - 105px)}
+
+.ritual-progress{display:flex;align-items:center;gap:10px;margin:18px 0;padding:14px 16px;border:1px solid rgba(211,171,95,.25);border-radius:6px;background:rgba(211,171,95,.05);color:#b8c1cc;font-size:.72rem;letter-spacing:.08em}
+.ritual-progress i{height:1px;flex:1;background:linear-gradient(90deg,#cfa658 0 45%,rgba(124,139,160,.2) 45%);background-size:200% 100%;animation:ritual-flow 2s linear infinite}
+@keyframes ritual-flow{to{background-position:-200% 0}}
+.liuxiang-result,.report-reader{animation:result-reveal .7s cubic-bezier(.2,.75,.25,1) both}
+@keyframes result-reveal{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+@media(max-width:1000px){.home-observatory{min-height:380px}.home-celestial{width:min(43vw,330px)}.tool-instrument{width:92px}.tool-grid article h2{max-width:calc(100% - 86px)}}
+@media(max-width:767px){.home-observatory{min-height:410px;margin-top:25px}.home-celestial{width:min(88vw,330px)}.home-observatory>.product-state{bottom:0;width:92%}.tool-instrument{right:16px;top:58px;width:100px}.ritual-progress{display:grid;grid-template-columns:auto 1fr auto 1fr auto;gap:6px;font-size:.6rem}.tool-grid article h2{max-width:calc(100% - 92px)}}
+@media(prefers-reduced-motion:reduce){.home-celestial>i,.tool-instrument>i,.ritual-progress i,.liuxiang-result,.report-reader{animation:none!important}.tool-grid article:hover .tool-instrument{transform:none}}

@@ -14,14 +14,18 @@ const TOOLS = [
   { id:"life-trend", glyph:"势", title:"三际断章与命势", kind:"原创时序研究", status:"研究可用", needs:"已授权的人生事件、行为、愿向与关系记录", description:"将往际、当下和未来推演分区呈现；空白处不插值，命势长图不是证券价格。", href:"/consult/life-trend" },
 ] as const;
 
+function ToolInstrument({glyph,system}:{glyph:string;system:string}){
+  return <div className="tool-instrument" data-system={system} aria-hidden="true"><i/><i/><i/><span/><b>{glyph}</b></div>;
+}
+
 export default function ConsultCenter(){
   return <ProductShell title="选择一次合参" eyebrow="合参 · 察诸象">
     <header className="consult-masthead"><div><p className="product-kicker">OBSERVATION WORKSPACE</p><h2>诸象不是八个孤立工具，<br/>而是同一卷资料的不同观察面。</h2><p>机械排盘负责形成结构，证据合参负责保留支持与逆证。每项能力都明确标注资料要求和研究边界。</p></div><div className="consult-seal" aria-hidden="true"><span>三际</span><b>合参</b></div></header>
     <section className="consult-section" aria-labelledby="mechanical-title"><header><span>01</span><div><p className="eyebrow">机械结构</p><h2 id="mechanical-title">先立其形</h2></div><p>可复现的盘面与结构，不自动等于人生解释。</p></header><div className="tool-grid tool-grid--mechanical">
-      {TOOLS.slice(0,3).map((tool)=><article key={tool.id}><span className="tool-glyph" aria-hidden="true">{tool.glyph}</span><div className="tool-head"><span>{tool.kind}</span><b className="status-ok">{tool.status}</b></div><h2>{tool.title}</h2><p>{tool.description}</p><dl><dt>所需资料</dt><dd>{tool.needs}</dd></dl><Link href={tool.href} aria-label={tool.id === "yijing" ? "开始" : `进入${tool.title}`}>进入观察 <span aria-hidden="true">→</span></Link></article>)}
+      {TOOLS.slice(0,3).map((tool)=><article key={tool.id}><ToolInstrument glyph={tool.glyph} system={tool.id}/><div className="tool-head"><span>{tool.kind}</span><b className="status-ok">{tool.status}</b></div><h2>{tool.title}</h2><p>{tool.description}</p><dl><dt>所需资料</dt><dd>{tool.needs}</dd></dl><Link href={tool.href} aria-label={tool.id === "yijing" ? "开始" : `进入${tool.title}`}>进入观察 <span aria-hidden="true">→</span></Link></article>)}
     </div></section>
     <section className="consult-section" aria-labelledby="synthesis-title"><header><span>02</span><div><p className="eyebrow">证据与专题</p><h2 id="synthesis-title">再察其间</h2></div><p>从已授权记录中取证，资料不足时允许不成断。</p></header><div className="tool-grid tool-grid--synthesis">
-      {TOOLS.slice(3).map((tool,index)=><article className={index===0||tool.id==="life-trend"?"tool-featured":""} key={tool.id}><span className="tool-glyph" aria-hidden="true">{tool.glyph}</span><div className="tool-head"><span>{tool.kind}</span><b className="status-ok">{tool.status}</b></div><h2>{tool.title}</h2><p>{tool.description}</p><dl><dt>所需资料</dt><dd>{tool.needs}</dd></dl><Link href={tool.href}>{tool.id==="liuxiang"?"查看资料并合参":"进入专题"} <span aria-hidden="true">→</span></Link></article>)}
+      {TOOLS.slice(3).map((tool,index)=><article className={index===0||tool.id==="life-trend"?"tool-featured":""} key={tool.id}><ToolInstrument glyph={tool.glyph} system={tool.id}/><div className="tool-head"><span>{tool.kind}</span><b className="status-ok">{tool.status}</b></div><h2>{tool.title}</h2><p>{tool.description}</p><dl><dt>所需资料</dt><dd>{tool.needs}</dd></dl><Link href={tool.href}>{tool.id==="liuxiang"?"查看资料并合参":"进入专题"} <span aria-hidden="true">→</span></Link></article>)}
     </div></section>
     <p className="research-disclaimer">引擎、规则版本与校验摘要不会占据普通阅读区；需要核验时，可在结果页的“方法与版本”中展开。</p>
   </ProductShell>;

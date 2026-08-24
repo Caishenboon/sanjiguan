@@ -52,7 +52,7 @@
       "scenario": "所有者进入",
       "synthetic_data_only": true,
       "provider_call_count": 0,
-      "sha256": "78b82f0088fe957592ca79309b56a1346903193062ff153e3d21efd545319e7c"
+      "sha256": "78ffc6c1863eb7ebe02750771da6a406ee8da6fb1d745bb97267381f4b7bd858"
     },
     {
       "file": "docs/product/evidence/screenshots/v1-1-record-center-1440.png",
@@ -100,7 +100,7 @@
       "scenario": "两象相争",
       "synthetic_data_only": true,
       "provider_call_count": 0,
-      "sha256": "7ac3595c791b6ad9e70919089e3c739709866191c07c6716a6ec37164300ce70"
+      "sha256": "277581f0db1f3a0a659247f73d62a27e6af5c2ebbfd64466b8b8505aa94bff2c"
     },
     {
       "file": "docs/product/evidence/screenshots/v1-ux-delete-confirmation-1440.png",
@@ -148,7 +148,7 @@
       "scenario": "首页桌面",
       "synthetic_data_only": true,
       "provider_call_count": 0,
-      "sha256": "92ec425cee299cbb20178d118d1b7dc85a15f9a54c8ed6541163653ab06ffa9d"
+      "sha256": "e5d22226496359a645ceee5f9c92ade1731b0be86c4392c7b4aca7e979d4b111"
     },
     {
       "file": "docs/product/evidence/screenshots/v1-ux-home-mobile-390.png",
@@ -160,7 +160,7 @@
       "scenario": "首页手机",
       "synthetic_data_only": true,
       "provider_call_count": 0,
-      "sha256": "e979153aa4ce52f253bced27d2147a1d3aa4d8aa856aa2d7ed5c827838cd095d"
+      "sha256": "92c700031246e2f8ce1de10dd113c1e13ab415984c376c38cbe0e2b9f75ad1f7"
     },
     {
       "file": "docs/product/evidence/screenshots/v1-ux-insufficient-liuxiang-1440.png",
@@ -172,7 +172,7 @@
       "scenario": "证契未足",
       "synthetic_data_only": true,
       "provider_call_count": 0,
-      "sha256": "7acbdc1b07a3eab683a6fa25fb570fc6300ef1fdf08acd35ca43ac9b7e92fc0b"
+      "sha256": "869a5320b071ce13a3a20bb2a948fafc1f1918c09ec80af89ee8498d2ec52cbb"
     },
     {
       "file": "docs/product/evidence/screenshots/v1-ux-life-trend-tablet-768.png",
@@ -184,7 +184,7 @@
       "scenario": "命势长图",
       "synthetic_data_only": true,
       "provider_call_count": 0,
-      "sha256": "261fbece792becb1f69851ee1d3d180565bdff92e81a389134a5649657aaf945"
+      "sha256": "f0f2e78407896b4daf05ff9d945d34fad28dd808dd26e182b6281580217cfaeb"
     },
     {
       "file": "docs/product/evidence/screenshots/v1-ux-liuxiang-desktop-1440.png",
@@ -196,7 +196,7 @@
       "scenario": "六象合参",
       "synthetic_data_only": true,
       "provider_call_count": 0,
-      "sha256": "202b9374d340d014361e85c0e1f56b8ef8b07fdd0e59efb2646e2704843ce036"
+      "sha256": "5fec76d5058a1c88ddf71eb6a103e3f963e7c6ecdd8cc20f739160a3ffd90479"
     },
     {
       "file": "docs/product/evidence/screenshots/v1-ux-onboarding-desktop-1440.png",
@@ -220,7 +220,7 @@
       "scenario": "八步立卷",
       "synthetic_data_only": true,
       "provider_call_count": 0,
-      "sha256": "6c88a09ed0366b2422cc30d91cd6195f7a259c08ea2c2ade79554a3c3675e27d"
+      "sha256": "60e32bff1eaa940060d7a07205947cdd109881bd8eb7cc819a3f3358c972814f"
     },
     {
       "file": "docs/product/evidence/screenshots/v1-ux-report-desktop-1440.png",
@@ -232,7 +232,7 @@
       "scenario": "三际断章",
       "synthetic_data_only": true,
       "provider_call_count": 0,
-      "sha256": "38de8337757a8554c2698e1bcda233ace3515df56f7a4c0be720c57ddd5eb6ac"
+      "sha256": "e6158b4dd60718b9cdd9ac0fc2a67ba5def0b936e4d580c184f3a8ccaf09ee1e"
     },
     {
       "file": "docs/product/evidence/screenshots/v1-ux-report-mobile-390.png",
@@ -244,7 +244,7 @@
       "scenario": "断章手机阅读",
       "synthetic_data_only": true,
       "provider_call_count": 0,
-      "sha256": "f4a62de2df6d57da5b53aca52b2c893b69ef37d67f77fbc23f6d263442ee2ea7"
+      "sha256": "b0428e93cf1957e7b0d412feb368726ca9dabfd8e6c9d96a2792ab5943036d65"
     },
     {
       "file": "docs/product/evidence/screenshots/v1-ux-sushe-wide-1920.png",
@@ -268,7 +268,7 @@
       "scenario": "缘契图",
       "synthetic_data_only": true,
       "provider_call_count": 0,
-      "sha256": "89593950882a7cd3a5e59ea9f44b142615f20a368cb141e4b0e7d36c42fdd1be"
+      "sha256": "032e6ab5f086d6fc95b8515ad06e779fe70413eba0e93982fed3e72ea7ba2f52"
     },
     {
       "file": "docs/product/evidence/screenshots/v1-ux-zhongyin-1440.png",
@@ -280,7 +280,7 @@
       "scenario": "中阴之门",
       "synthetic_data_only": true,
       "provider_call_count": 0,
-      "sha256": "3197aaee7c2cd4eab3a24bdc557888fd56c5defd085ce9234d305fea3115fc03"
+      "sha256": "35d14ca98577c1c078b1c3657feaeb3b9f727cc42892619cdfb917f91aa7de69"
     }
   ]
 }

@@ -30,9 +30,12 @@ export default function ProductHome() {
     <section className="product-hero">
       <div className="home-manifesto"><p className="product-kicker">往际 · 当下 · 未来</p><h2>先把事实安放好，<br/>再察其间的关系。</h2>
       <p>三际观保存原始资料、机械结构和版本边界。未知不会被补造，研究不会被说成定论。</p><div className="home-axis" aria-label="三际观察轴"><span><b>往</b>已有记录</span><i/><span><b>今</b>当前观照</span><i/><span><b>来</b>规则推演</span></div></div>
-      {!ready ? <PageState kind="loading" title="正在读取个人空间"><p>只读取当前安全会话所需的最小摘要。</p></PageState> :
-       !session.subject ? <PageState kind="empty" title="还没有三际录"><p>先为自己立卷。出生时刻不知道也可以如实选择“未知”，系统不会补造。</p></PageState> :
-       <PageState kind="success" title="主体资料已建立"><p>{session.subject.name} · 出生时刻精度：{session.subject.timePrecision === "unknown" ? "未知" : "已记录"}</p></PageState>}
+      <div className="home-observatory">
+        <div className="home-celestial" aria-hidden="true"><i/><i/><i/><span className="home-celestial__past">往</span><span className="home-celestial__now">今</span><span className="home-celestial__future">来</span><b>三际</b><small>观其因 · 察其缘 · 见其势</small></div>
+        {!ready ? <PageState kind="loading" title="正在读取个人空间"><p>只读取当前安全会话所需的最小摘要。</p></PageState> :
+         !session.subject ? <PageState kind="empty" title="还没有三际录"><p>先为自己立卷。出生时刻不知道也可以如实选择“未知”，系统不会补造。</p></PageState> :
+         <PageState kind="success" title="主体资料已建立"><p>{session.subject.name} · 出生时刻精度：{session.subject.timePrecision === "unknown" ? "未知" : "已记录"}</p></PageState>}
+      </div>
     </section>
 
     <section className="home-actions-section" aria-labelledby="home-actions">
