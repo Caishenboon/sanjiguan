@@ -212,6 +212,7 @@ jobs:
           python scripts/validate_v1_rc_visual_evidence.py
           python scripts/validate_v1_ux_evidence.py
           python scripts/validate_v1_1_quality.py
+          python scripts/validate_open_source_release.py
           python scripts/check_doc_links.py
       - name: Sprint 3 responsive, PWA, privacy, and accessibility contracts
         run: python -m unittest tests.test_sprint3_contract -v
@@ -275,7 +276,9 @@ jobs:
           python scripts/validate_v1_rc_visual_evidence.py
           python scripts/validate_v1_ux_evidence.py
           python scripts/validate_v1_1_quality.py
+          python scripts/validate_open_source_release.py
           python -m unittest tests.test_v1_release -v
+          python -m unittest tests.test_open_source_release_closure -v
       - name: Generate ephemeral local configuration
         run: python scripts/init_env.py
       - name: Docker Compose configuration and clean build

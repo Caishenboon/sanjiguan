@@ -9,7 +9,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SELF = Path(__file__).resolve()
-SCANNER_SOURCES = {SELF, ROOT / "scripts" / "validate_v1_release.py"}
+SCANNER_SOURCES = {
+    SELF,
+    ROOT / "scripts" / "validate_open_source_release.py",
+    ROOT / "scripts" / "validate_v1_release.py",
+}
 TEXT_SUFFIXES = {".md", ".txt", ".json", ".yml", ".yaml", ".toml", ".py", ".ts", ".tsx", ".sql", ".sh", ".env"}
 PATTERNS = {
     "windows user path": re.compile(r"[A-Za-z]:[\\/](?:Users|Documents|Temp)[\\/]", re.I),

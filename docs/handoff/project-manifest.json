@@ -8,7 +8,7 @@
     "url": "https://github.com/Caishenboon/sanjiguan",
     "default_branch": "main",
     "visibility": "private",
-    "release_candidate_pr": 26
+    "release_candidate_pr": 27
   },
   "packages": [
     "apps/web", "apps/api", "packages/sanji-engine", "packages/sanji-ui",
@@ -70,7 +70,10 @@
     "AGENTS.md", "docs/handoff/current-state.md", "docs/architecture/sanji-engine-contract.md",
     "docs/methods/traditional-algorithms-complete-v1.md", "docs/releases/v1-rc-delivery.md",
     "docs/security/threat-model.md", "docs/open-source/readiness.md",
-    "docs/product/v1-1-comprehensive-red-blue-audit.md", "docs/product/v1-1-delivery.md"
+    "docs/product/v1-1-comprehensive-red-blue-audit.md", "docs/product/v1-1-delivery.md",
+    "docs/open-source/public-release-closure-v1.md",
+    "docs/open-source/public-release-manifest.json",
+    "docs/open-source/publication-decisions.md"
   ],
   "prohibitions": [
     "llm_deterministic_calculation", "silent_ruleset_rewrite", "bulk_golden_acceptance",
