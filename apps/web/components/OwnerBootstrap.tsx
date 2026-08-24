@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProductShell from "./ProductShell";
+import { apiRequest } from "../lib/product-session";
 
 export default function OwnerBootstrap() {
   const router = useRouter();
@@ -16,13 +17,10 @@ export default function OwnerBootstrap() {
     setSaving(true);
     setError("");
     try {
-      const response = await fetch("/api/v1/auth/bootstrap-owner", {
+      await apiRequest("/api/v1/auth/bootstrap-owner", {
         method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bootstrap_token: token, email }),
       });
-      if (!response.ok) throw new Error("初始化口令无效，或所有者已经建立。");
       router.push("/onboarding");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "初始化未完成。");
@@ -35,11 +33,10 @@ export default function OwnerBootstrap() {
     setSaving(true);
     setError("");
     try {
-      const response = await fetch("/api/v1/auth/invitations/accept", {
-        method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
+      await apiRequest("/api/v1/auth/invitations/accept", {
+        method: "POST",
         body: JSON.stringify({ token }),
       });
-      if (!response.ok) throw new Error("邀请已失效、已使用或输入不完整。");
       router.push("/onboarding");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "登录未完成。");

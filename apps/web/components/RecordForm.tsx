@@ -25,6 +25,8 @@ export default function RecordForm({ requestedType }: { requestedType: string })
   useEffect(()=>{
     const session=readProductSession();
     setProfileId(session.subject?.id||"");
+    const stored=sessionStorage.getItem(`sanjiguan:draft:${type}`);
+    if(stored){try{const draft=JSON.parse(stored);setTitle(draft.title||"");setDate(draft.date||new Date().toISOString().slice(0,10));setDateUnknown(Boolean(draft.dateUnknown));setText(draft.text||"");}catch{/* 损坏草稿不覆盖空表单 */}}
   },[]);
 
   function saveDraft(){

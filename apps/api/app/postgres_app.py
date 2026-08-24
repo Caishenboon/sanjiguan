@@ -10,13 +10,15 @@ from uuid import UUID
 
 import psycopg
 from fastapi import Cookie, FastAPI, Header, HTTPException, Request, Response
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from psycopg.rows import dict_row
 from psycopg_pool import ConnectionPool
 
 from apps.api.app.core.encryption import EnvironmentKeyProvider, TestKeyProvider, assert_key_provider_allowed
 from apps.api.app.core.ids import uuid7
 from apps.api.app.core.runtime import SESSION_COOKIE_NAME, load_runtime_config
-from apps.api.app.core.security import new_token, token_hash
+from apps.api.app.core.security import new_token, normalized_request_id, token_hash
 from apps.api.app.schemas.models import InvitationAccept, InvitationCreate, ProfileCreate, ProfilePatch
 
 config = load_runtime_config()
@@ -43,7 +45,7 @@ logger = logging.getLogger("sanjiguan.api")
 
 @app.middleware("http")
 async def release_security(request: Request, call_next):
-    request_id = request.headers.get("X-Request-ID") or os.urandom(8).hex()
+    request_id = normalized_request_id(request.headers.get("X-Request-ID"))
     request.state.request_id = request_id
     started = time.monotonic()
     if request.method in {"POST", "PATCH", "PUT", "DELETE"}:
@@ -55,6 +57,10 @@ async def release_security(request: Request, call_next):
     response.headers["Cache-Control"] = "no-store"
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    response.headers["X-Frame-Options"] = "DENY"
+    if config.production:
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     logger.info(json.dumps({
         "event": "http_request",
         "request_id": request_id,
@@ -65,6 +71,51 @@ async def release_security(request: Request, call_next):
         "private_body_logged": False,
     }, separators=(",", ":")))
     return response
+
+
+def _error_body(request: Request, code: str, message: str, *, detail=None) -> dict:
+    return {
+        "detail": message if detail is None else detail,
+        "error": {
+            "code": code,
+            "message": message,
+            "request_id": getattr(request.state, "request_id", None),
+        },
+    }
+
+
+@app.exception_handler(HTTPException)
+async def http_error(request: Request, exc: HTTPException):
+    detail_code = exc.detail.get("code") if isinstance(exc.detail, dict) else None
+    message = detail_code if isinstance(detail_code, str) else str(exc.detail)
+    code = message.upper() if message.replace("_", "").isalnum() else "REQUEST_REJECTED"
+    return JSONResponse(
+        content=_error_body(request, code, message, detail=exc.detail),
+        status_code=exc.status_code,
+        headers=exc.headers,
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_error(request: Request, _exc: RequestValidationError):
+    return JSONResponse(
+        content=_error_body(request, "REQUEST_VALIDATION_FAILED", "request_validation_failed"),
+        status_code=422,
+    )
+
+
+@app.exception_handler(Exception)
+async def unexpected_error(request: Request, exc: Exception):
+    logger.error(json.dumps({
+        "event": "unhandled_error",
+        "request_id": getattr(request.state, "request_id", None),
+        "error_type": type(exc).__name__,
+        "private_body_logged": False,
+    }, separators=(",", ":")))
+    return JSONResponse(
+        content=_error_body(request, "INTERNAL_ERROR", "request_failed"),
+        status_code=500,
+    )
 
 
 def fingerprint(payload: object) -> str:

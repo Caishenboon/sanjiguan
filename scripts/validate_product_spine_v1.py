@@ -17,12 +17,13 @@ def main() -> None:
     nav_labels = ['label: "首页"', 'label: "记录"', 'label: "合参"', 'label: "三际录"', 'label: "我的"']
     assert all(label in shell for label in nav_labels), "five ordinary navigation labels required"
     assert shell.count("subtitle:") == 5, "ordinary primary navigation must contain exactly five entries"
-    for label in ("六象合参", "三际断章", "宿世星图", "中阴之门", "命势长图", "缘契图", "观照录", "历次命卷", "设置与数据管理"):
-        assert label in shell, f"desktop feature navigation missing: {label}"
-    assert "product-mobile-nav" in shell and "DESKTOP_FEATURES.map" in shell
+    consult = read("apps/web/components/ConsultCenter.tsx")
+    for label in ("易经三钱", "八字", "紫微", "六象合参", "宿世星图", "中阴之门", "缘契图", "三际断章与命势"):
+        assert label in consult, f"consult capability missing: {label}"
+    assert "product-mobile-nav" in shell and "TOOLS.slice" in consult
 
     liuxiang = read("apps/web/components/LiuxiangReadiness.tsx")
-    for required in ("资料不足，暂不成断", "真实映射规则尚未通过审校", "不显示任何合成测试结果"):
+    for required in ("真实映射规则尚未通过审校", "不显示任何合成测试结果", "<VerdictBanner status={run.status}>"):
         assert required in liuxiang, f"liuxiang boundary missing: {required}"
     for forbidden in ("sprint3-fixture", "synthetic_conformance", "aggregate_hash"):
         assert forbidden not in liuxiang, f"synthetic research output leaked to ordinary liuxiang page: {forbidden}"
@@ -33,12 +34,12 @@ def main() -> None:
 
     language = read("apps/web/lib/product-language.ts")
     required_terms = {
-        "strength": "象势强度",
-        "confidence": "证据可信度",
-        "decisive": "象意较明",
-        "provisional": "初见其象",
-        "contested": "诸象相争",
-        "insufficient": "资料不足，暂不成断",
+        "strength": "象势",
+        "confidence": "证契完备度",
+        "decisive": "象成，可断",
+        "provisional": "象初成，仍待补证",
+        "contested": "两象相争",
+        "insufficient": "证契未足，不成断",
     }
     for technical, label in required_terms.items():
         assert technical in language and label in language

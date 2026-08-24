@@ -31,4 +31,6 @@ DeepSeek 可选成文层  apps/api/app/deepseek_provider.py + prompts
 Schema 位于 [`schemas/`](../../packages/sanji-engine/src/sanji_engine/schemas/)。
 
 Web 只负责输入、状态与渐进披露；FastAPI 负责鉴权、编排和持久化；数据库通过 RLS
-实施主体隔离；DeepSeek 不进入核心依赖、Trace 或锁定 Hash。
+实施主体隔离；DeepSeek 不进入核心依赖、Trace 或锁定 Hash。V1.1 Web 请求统一经过
+`apps/web/lib/product-session.ts`，具有超时、取消、请求关联 ID 与 no-store；PWA 只缓存公开
+壳层，所有私人路径保持 network-only。

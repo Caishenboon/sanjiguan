@@ -1,5 +1,9 @@
 # 三际观
 
+> V1.1 产品质量工作不改变确定性引擎、研究 Ruleset、Replay 语义或受保护 Hash。参见
+> [V1.1 交付说明](docs/product/v1-1-delivery.md)、[用户指南](docs/user-guide.md)与
+> [质量验证](docs/testing/v1-1-quality.md)。
+
 > 观因于往际，察缘于当下，见势于未来。
 
 三际观是一套面向少数授权使用者的确定性私人研究系统。V1 把个人记录、传统术数结构、

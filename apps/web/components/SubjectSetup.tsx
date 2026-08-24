@@ -12,6 +12,8 @@ type BirthRecord = {
   place:{label?:string|null;latitude:number;longitude:number}; user_confirmed:boolean;
 };
 type ProfileResponse = { id: string; display_name?:string; birth?:BirthRecord|null };
+const DRAFT_KEY = "sanjiguan:onboarding-draft:v1";
+const JOURNEY_STEPS = ["启卷", "出生时空", "时间校正", "梦象", "业象", "愿象", "缘象与事件", "三钱与确认"] as const;
 
 export default function SubjectSetup() {
   const router = useRouter();
@@ -27,6 +29,7 @@ export default function SubjectSetup() {
   const [confirmed, setConfirmed] = useState(false);
   const [status, setStatus] = useState<"idle"|"saving"|"error">("idle");
   const [error, setError] = useState("");
+  const [draftSaved, setDraftSaved] = useState(false);
 
   useEffect(() => {
     const saved = readProductSession().subject;
@@ -49,6 +52,32 @@ export default function SubjectSetup() {
       }).catch(()=>setError("已保留本页资料，但无法读取服务端完整出生记录。请检查连接后重试。"));
     }
   }, []);
+
+  useEffect(() => {
+    if (readProductSession().subject) return;
+    try {
+      const draft = JSON.parse(sessionStorage.getItem(DRAFT_KEY) || "null");
+      if (!draft) return;
+      setName(draft.name || ""); setBirthDate(draft.birthDate || ""); setBirthTime(draft.birthTime || "");
+      setUnknownTime(Boolean(draft.unknownTime)); setPlace(draft.place || ""); setLatitude(draft.latitude || "");
+      setLongitude(draft.longitude || ""); setCalendarType(draft.calendarType || "gregorian");
+      setTimezone(draft.timezone || "Asia/Shanghai"); setConfirmed(Boolean(draft.confirmed)); setDraftSaved(true);
+    } catch { /* A damaged local draft is ignored; the server remains authoritative. */ }
+  }, []);
+
+  useEffect(() => {
+    if (!name && !birthDate && !place && !latitude && !longitude) return;
+    const timer = window.setTimeout(() => {
+      sessionStorage.setItem(DRAFT_KEY, JSON.stringify({name,birthDate,birthTime,unknownTime,place,latitude,longitude,calendarType,timezone,confirmed}));
+      setDraftSaved(true);
+    }, 300);
+    return () => window.clearTimeout(timer);
+  }, [name,birthDate,birthTime,unknownTime,place,latitude,longitude,calendarType,timezone,confirmed]);
+
+  function saveDraftNow() {
+    sessionStorage.setItem(DRAFT_KEY, JSON.stringify({name,birthDate,birthTime,unknownTime,place,latitude,longitude,calendarType,timezone,confirmed}));
+    setDraftSaved(true);
+  }
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -90,6 +119,7 @@ export default function SubjectSetup() {
         subject: { id: response.id || current?.id || "", name: name.trim(), birthDate, timePrecision: unknownTime ? "unknown" : "minute" },
         pendingTask: { label: "记录第一件重要的事", href: "/records" },
       }));
+      sessionStorage.removeItem(DRAFT_KEY);
       router.push("/?welcome=1");
     } catch (cause) {
       setStatus("error");
@@ -97,10 +127,14 @@ export default function SubjectSetup() {
     }
   }
 
-  return <ProductShell title="建立主体资料" eyebrow="我的 · 基本资料">
+  return <ProductShell title="八步立卷" eyebrow="立卷 · 第 1—3 步" status="私人草稿">
+    <nav className="journey-progress" aria-label="八步立卷进度">
+      <header><strong>当前：启卷与出生时空</strong><span>第 1—3 步，共 8 步</span></header>
+      <ol>{JOURNEY_STEPS.map((step,index)=><li key={step} className={index<3?"is-complete":undefined} aria-current={index===0?"step":undefined}>{index+1}. {step}</li>)}</ol>
+    </nav>
     <div className="form-layout">
       <form className="product-form" onSubmit={submit} noValidate>
-        <div className="product-section-head"><div><p className="eyebrow">第一步</p><h2>只记录你确认过的原始资料</h2></div><span>约 3 分钟</span></div>
+        <div className="product-section-head"><div><p className="eyebrow">启卷 · 出生时空 · 时间确认</p><h2>只记录你确认过的原始资料</h2><p>这些资料用于建立排盘输入与边界候选；梦象、业象、愿象和缘象将在后续记录中继续。</p></div><span aria-live="polite">{draftSaved?"草稿已保存在本机":"正在准备草稿"}</span></div>
         <label htmlFor="subject-name">如何称呼这个主体 <b>必填</b></label>
         <input id="subject-name" name="name" value={name} onChange={(e)=>setName(e.target.value)} autoComplete="name" required />
         <label htmlFor="birth-date">出生日期 <b>必填</b></label>
@@ -122,9 +156,9 @@ export default function SubjectSetup() {
         <select id="timezone" value={timezone} onChange={(e)=>setTimezone(e.target.value)}><option>Asia/Shanghai</option><option>Asia/Hong_Kong</option><option>Asia/Taipei</option><option>UTC</option></select>
         <label className="check-field"><input type="checkbox" checked={confirmed} onChange={(e)=>setConfirmed(e.target.checked)} /><span><b>我确认以上是原始输入</b><small>太阳时校正会另行记录，不会静默改写这里的时间。</small></span></label>
         {error && <p className="field-error" role="alert" id="setup-error">{error}</p>}
-        <div className="form-actions"><Link href="/" className="text-button">取消</Link><button className="product-button" disabled={status==="saving"}>{status==="saving" ? "正在保存…" : "保存资料"}</button></div>
+        <div className="form-actions"><Link href="/" className="text-button" onClick={saveDraftNow}>暂存退出</Link><button className="product-button" disabled={status==="saving"}>{status==="saving" ? "正在保存三际录…" : "确认并继续立卷"}</button></div>
       </form>
-      <aside className="form-help"><h2>这份资料将用于什么？</h2><ul><li>保存历史法定时间与地点原文</li><li>建立机械排盘所需的候选输入</li><li>明确未知、争议与边界敏感项</li></ul><p>不会自动生成宿世身份、吉凶或应期。</p></aside>
+      <aside className="form-help"><h2>为什么需要这些资料？</h2><ul><li>保存历史法定时间与地点原文</li><li>建立机械排盘所需的候选输入</li><li>并列平太阳时、视太阳时与边界差异</li><li>明确未知、争议与方法方案</li></ul><p><b>隐私：</b>出生资料属于私人敏感信息，只通过安全会话写入你的三际录。</p><p>不会自动生成宿世身份、吉凶或应期，也不会调用 DeepSeek。</p></aside>
     </div>
     {status==="error" && <PageState kind="error" title="网络连接失败"><p>你的输入仍保留在当前页面；确认连接后再次点击保存。</p></PageState>}
   </ProductShell>;

@@ -7,6 +7,8 @@ from uuid import UUID
 from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 
+from apps.api.app.core.security import normalized_request_id
+
 from apps.api.app.schemas.models import (
     BirthTimeNormalizationResult,
     InvitationAccept,
@@ -47,12 +49,14 @@ async def value_error_handler(request: Request, exc: ValueError):
 
 @app.middleware("http")
 async def request_id_middleware(request: Request, call_next):
-    request.state.request_id = request.headers.get("X-Request-ID", os.urandom(8).hex())
+    request.state.request_id = normalized_request_id(request.headers.get("X-Request-ID"))
     response = await call_next(request)
     response.headers["X-Request-ID"] = request.state.request_id
     response.headers["Cache-Control"] = "no-store"
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    response.headers["X-Frame-Options"] = "DENY"
     return response
 
 

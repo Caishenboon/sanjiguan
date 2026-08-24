@@ -15,6 +15,7 @@
 | 八字传统结构 | #23 | `bb8bcbd7…` | `30802736516` | 藏干、十神、干支关系 | `docs/methods/bazi-traditional-structure-foundation-v1.md` | 结构研究 | 当前有效 |
 | 固定上游对照 | #24 | 由 #25 一并进入主干 | `30812620050` | 固定上游适配与对照 | `docs/methods/upstream-traditional-engines-v1.md` | 不作多数投票 | 被 #25 集成 |
 | 传统算法 V1 | #25 | `2a1e8fb7…` | `30826916968` | 八字、受限三合紫微、京房纳甲六爻 | `docs/methods/traditional-algorithms-complete-v1.md` | 全部研究态 | 当前主干基线 |
-| V1 RC 封卷 | #26 | Open | `31993582101` | 邀请、完整旅程、部署恢复、交接和公开整备 | `docs/releases/v1-rc-delivery.md` | 不改旧 Hash | 等待负责人验收 |
+| V1 RC 封卷 | #26 | `bef14661…` | 见 PR/main | 邀请、完整旅程、部署恢复、交接和公开整备 | `docs/releases/v1-rc-delivery.md` | 不改旧 Hash | 当前主干基线 |
+| V1.1 产品质量 | 待创建 | Open（预期） | 待远程运行 | 语言、旅程、错误边界、PWA 隐私与安全头 | `docs/product/v1-1-delivery.md` | 不改算法与旧 Hash | 本轮施工 |
 
 省略的完整 SHA 可由 Git 历史核验；本表不保存密钥、私人数据、本机路径或外部数据正文。

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ProductShell, { PageState, TechnicalDetails } from "./ProductShell";
+import ObservationInstrument from "./ObservationInstrument";
 import { apiRequest } from "../lib/product-session";
 
 const lineNames:Record<string,string>={old_yin:"老阴",young_yang:"少阳",young_yin:"少阴",old_yang:"老阳"};
@@ -16,7 +17,7 @@ export default function ResultReader({runId,traditionalRunId}:{runId:string;trad
  const liuyao=traditional?.result.module_results["traditional-complete"].result.systems.find(v=>v.system==="liuyao");const complete=liuyao?.result;const mechanical=traditional?.mechanical_results?.liuyao;
  return <ProductShell title="易经三钱机械结果" eyebrow="合参 · 阅读结果" status="机械结构">
   <section className="result-summary"><div><p className="eyebrow">本次完成</p><h2>已按实物三钱记录形成卦象结构</h2><p>这不是吉凶、应期或人生结论。你可以核对六爻、本卦、变卦与动爻，然后在研究详情中查看版本。</p></div><span className="result-kind">机械排盘</span></section>
-  <section className="result-primary" aria-labelledby="structure-heading"><div><p className="eyebrow">主要结构</p><h2 id="structure-heading">{result?.base_hexagram?.name||"本卦"} → {result?.transformed_hexagram?.name||"变卦"}</h2><dl><div><dt>本卦</dt><dd>第 {result?.base_hexagram?.sequence||"—"} 卦 · {result?.base_hexagram?.name||"未返回"}</dd></div><div><dt>变卦</dt><dd>第 {result?.transformed_hexagram?.sequence||"—"} 卦 · {result?.transformed_hexagram?.name||"未返回"}</dd></div><div><dt>动爻</dt><dd>{result?.moving_lines?.length?result.moving_lines.join("、"):"无"}</dd></div></dl></div>
+  <section className="result-primary result-primary--instrument" aria-labelledby="structure-heading"><ObservationInstrument mode="yijing" title={result?.base_hexagram?.name||"本卦"} items={(result?.lines||[]).map(line=>({label:`第${line.line_position}爻`,value:lineNames[line.line_state]||line.line_state,state:line.moving?"moving":"active"}))} caption="六爻自下而上保存；亮点只标记真实动爻，不附加吉凶解释。"/><div><p className="eyebrow">主要结构</p><h2 id="structure-heading">{result?.base_hexagram?.name||"本卦"} → {result?.transformed_hexagram?.name||"变卦"}</h2><dl><div><dt>本卦</dt><dd>第 {result?.base_hexagram?.sequence||"—"} 卦 · {result?.base_hexagram?.name||"未返回"}</dd></div><div><dt>变卦</dt><dd>第 {result?.transformed_hexagram?.sequence||"—"} 卦 · {result?.transformed_hexagram?.name||"未返回"}</dd></div><div><dt>动爻</dt><dd>{result?.moving_lines?.length?result.moving_lines.join("、"):"无"}</dd></div></dl></div>
    <ol className="line-results">{result?.lines?.map((line)=><li key={line.line_position}><span>第 {line.line_position} 爻</span><b>{line.sum} · {lineNames[line.line_state]||line.line_state}</b><small>{line.moving?"动爻":"静爻"}</small></li>)}</ol>
   </section>
   {complete&&<section className="scope-card"><h2>六爻传统结构研究</h2><p>本卦 {mechanical?.primary?.name} · {mechanical?.primary?.palace}宫；世爻 {mechanical?.primary?.shi_position}；应爻 {mechanical?.primary?.ying_position}</p><p>用神候选：{complete.question?.liuqin||"资料不足"}；状态：{complete.question?.status}；结构化吉凶：{complete.verdict}</p><p>动爻：{complete.moving_lines?.join("、")||"无"}；伏吟：{complete.structural_flags?.fuyin_positions?.join("、")||"无"}；反吟：{complete.structural_flags?.fanyin_positions?.join("、")||"无"}</p><p className="inline-warning">此结果属于固定六爻研究 Profile，不等于所有六爻流派的唯一断法。</p></section>}

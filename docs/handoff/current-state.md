@@ -42,11 +42,10 @@ Replay、Reanalysis、比较、Docker 冷启动和虚构恢复演练已经接到
 Python/API、Web、Storybook、Lighthouse、Gitleaks、Schema/OpenAPI、许可证、V1 冷启动和
 恢复演练。
 
-PR #26 的已核验产品提交为 `96b89d5f2e784bf414e9f97b7f02f81794285c45`；
-[Run 31998530992](https://github.com/Caishenboon/sanjiguan/actions/runs/31998530992) 六项全部
-成功，0 failed、0 skipped。证据封卷后的最终 PR Head 由 PR 远程记录给出。六项新增响应式
-与状态截图采用完全虚构数据，详见
+PR #26 已以普通 Merge Commit 合并为主干基线 `bef14661e9fb66c4dca1d60032946b5e7c3d0170`。
+V1.1 产品质量分支在该基线上优化语言、旅程、错误边界、PWA 公共壳和安全头；不修改三际枢、
+Ruleset、Profile、Golden、migration 或受保护 Hash。视觉与状态截图采用完全虚构数据，详见
 [`v1-rc-visual-evidence.json`](../releases/evidence/v1-rc-visual-evidence.json)。
 
-下一步只能做经负责人批准的 RC 修复、文档/安全收口或明确的新 Sprint；不能自动合并
-PR #26、激活生产规则、公开仓库、创建 Tag/Release、决定许可证或启动新术数体系。
+下一步只能完成 V1.1 本轮的测试、PR 和远程验收；不能激活生产规则、公开仓库、创建
+Tag/Release、决定许可证或启动新术数体系。
