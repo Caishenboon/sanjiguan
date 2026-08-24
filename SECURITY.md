@@ -1,8 +1,8 @@
 # Security policy
 
 本项目当前为 Private V1 候选。请通过 GitHub Private 仓库的安全报告渠道联系项目
-所有者，不要在 Issue 中提交漏洞细节、私人资料或密钥。未来仓库获准公开时，必须先启用
-GitHub Private Vulnerability Reporting；公开 Issue 仍只用于不含敏感细节的普通缺陷。
+所有者，不要在 Issue 中提交漏洞细节、私人资料或密钥。未来仓库获准公开时，必须在切换
+Public 后立即启用 GitHub Private Vulnerability Reporting；公开 Issue 仍只用于不含敏感细节的普通缺陷。
 
 ## 支持范围
 

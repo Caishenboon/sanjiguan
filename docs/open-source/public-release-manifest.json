@@ -54,8 +54,8 @@
     "owner_authorization_packet": "docs/open-source/public-release-authorization-packet.md",
     "public_switch_runbook": "docs/open-source/public-switch-runbook.md",
     "trademark_policy_candidate": "TRADEMARKS.md",
-    "branch_protection_required_before_public": true,
-    "private_vulnerability_reporting_required_before_public": true,
+    "branch_protection_required_immediately_after_public": true,
+    "private_vulnerability_reporting_required_immediately_after_public": true,
     "tag_or_release_authorized": false
   },
   "blocking_decisions": [

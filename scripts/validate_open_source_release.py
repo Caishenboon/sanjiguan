@@ -94,9 +94,9 @@ def audit() -> dict[str, object]:
             integrity_errors.append(f"missing_publication_control:{relative}")
 
     controls = manifest.get("prepared_publication_controls", {})
-    if controls.get("branch_protection_required_before_public") is not True:
+    if controls.get("branch_protection_required_immediately_after_public") is not True:
         integrity_errors.append("branch_protection_not_required")
-    if controls.get("private_vulnerability_reporting_required_before_public") is not True:
+    if controls.get("private_vulnerability_reporting_required_immediately_after_public") is not True:
         integrity_errors.append("private_vulnerability_reporting_not_required")
     if controls.get("tag_or_release_authorized") is not False:
         integrity_errors.append("tag_or_release_authorized_without_owner")
