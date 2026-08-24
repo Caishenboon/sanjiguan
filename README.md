@@ -126,6 +126,8 @@ Ruleset 和 Profile 都有版本、来源、审校/激活状态与内容 Hash。
 - [安全说明](SECURITY.md)
 - [贡献指南](CONTRIBUTING.md)
 - [开源准备状态](docs/open-source/readiness.md)
+- [开源发布封卷](docs/open-source/public-release-closure-v1.md)
+- [公开发布待确认决定](docs/open-source/publication-decisions.md)
 - [许可证审计](docs/open-source/license-audit-v1-rc.md)
 - [知识库公开边界](docs/open-source/knowledge-boundary-v1-rc.md)
 - [API 契约](docs/api/openapi.yaml)
@@ -134,7 +136,8 @@ Ruleset 和 Profile 都有版本、来源、审校/激活状态与内容 Hash。
 
 当前 `LICENSE` 明确不授予公开许可。候选方案是原创代码 `AGPL-3.0-or-later`，原创规则
 数据、方法文档和非软件知识结构 `CC BY-SA 4.0`；第三方资产保留各自许可。正式许可、
-商标、公开仓库、Tag 与 Release 均须产品负责人书面批准。
+商标、历史提交邮箱处置、公开仓库、Tag 与 Release 均须产品负责人书面批准。工程封卷
+已经完成，但 `OPEN_SOURCE_READY=false`，详见[开源发布封卷](docs/open-source/public-release-closure-v1.md)。
 
 ## 开发验证
 

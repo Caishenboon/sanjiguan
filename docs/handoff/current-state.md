@@ -5,11 +5,12 @@ product: 三际观
 engine: 三际枢
 release: 1.0.0-rc.1
 default_branch: main
-release_candidate_pr: 26
+release_candidate_pr: 27
 engineering_rc_ready: true
 ai_handoff_ready: true
 new_machine_handoff_ready: true
 merge_ready: true
+open_source_engineering_closure_ready: true
 open_source_ready: false
 public_release_authorized: false
 repository_visibility: private
@@ -42,10 +43,13 @@ Replay、Reanalysis、比较、Docker 冷启动和虚构恢复演练已经接到
 Python/API、Web、Storybook、Lighthouse、Gitleaks、Schema/OpenAPI、许可证、V1 冷启动和
 恢复演练。
 
-PR #26 已以普通 Merge Commit 合并为主干基线 `bef14661e9fb66c4dca1d60032946b5e7c3d0170`。
-V1.1 产品质量分支在该基线上优化语言、旅程、错误边界、PWA 公共壳和安全头；不修改三际枢、
-Ruleset、Profile、Golden、migration 或受保护 Hash。视觉与状态截图采用完全虚构数据，详见
-[`v1-rc-visual-evidence.json`](../releases/evidence/v1-rc-visual-evidence.json)。
+PR #27 已以普通 Merge Commit 合并为主干基线 `c7101f0d0955e583e111509ce83784b587b39196`；
+[main CI Run 32705480100](https://github.com/Caishenboon/sanjiguan/actions/runs/32705480100)
+六项全部成功。V1.2 产品质量与诸象仪器没有修改三际枢、Ruleset、Profile、Golden、migration
+或受保护 Hash。视觉与状态截图采用完全虚构数据，详见
+[`docs/product/evidence/manifest.json`](../product/evidence/manifest.json)。
 
-下一步只能完成 V1.1 本轮的测试、PR 和远程验收；不能激活生产规则、公开仓库、创建
-Tag/Release、决定许可证或启动新术数体系。
+下一步是独立开源发布封卷。机器工程边界已经可以验证，但正式许可证/署名主体、20 个非
+`noreply` 历史提交邮箱、合格知识边界审查、公共人物法律审查和负责人最终 Public 授权仍是
+硬阻断。详见 [`public-release-closure-v1.md`](../open-source/public-release-closure-v1.md)。
+在这些决定完成前不能公开仓库、创建 Tag/Release、激活生产规则或启动新术数体系。

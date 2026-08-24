@@ -16,7 +16,11 @@ for current, dirs, files in os.walk(root):
 text_suffixes = {".py", ".md", ".json", ".yml", ".yaml", ".sql", ".tsx", ".ts", ".txt", ".toml"}
 absolute = re.compile(r"(?:[A-Za-z]:[\\/](?:Users|Documents)[\\/]|/Users/[^/\s]+/|/home/[^/\s]+/)")
 for path in tracked_candidates:
-    if path in {Path(__file__).resolve(), (root / "scripts/check_portability.py").resolve()}:
+    if path in {
+        Path(__file__).resolve(),
+        (root / "scripts/check_portability.py").resolve(),
+        (root / "scripts/validate_open_source_release.py").resolve(),
+    }:
         continue
     if path.suffix.lower() not in text_suffixes and path.name not in {"Dockerfile", "Caddyfile"}:
         continue
@@ -63,6 +67,9 @@ for relative in (
     "docs/releases/v1-checklist.md",
     "docs/open-source/license-audit-v1-rc.md",
     "docs/open-source/knowledge-boundary-v1-rc.md",
+    "docs/open-source/public-release-closure-v1.md",
+    "docs/open-source/public-release-manifest.json",
+    "docs/open-source/publication-decisions.md",
     "docs/releases/v1-rc-delivery.md",
     "docs/releases/v1-rc-security-audit.md",
     "docs/releases/v1-rc-final-red-blue-review.md",
