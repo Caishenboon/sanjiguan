@@ -1,5 +1,10 @@
 # 开源发布封卷 V1
 
+> 2026-08-24 更新：项目所有者已激活分层许可证、接受当前 Git 历史、确认公开署名与
+> 商标政策，并授权 Public。PR #28 已合并，main CI Run 32721037735 六项成功。
+> 当前最小公开范围进一步把 VedAstro Connector 默认关闭；仍不分发外部原始数据、真实
+> 人物 Fixture、restricted/sealed 内容或具体修法。下文保留最初封卷基线及风险演变记录。
+
 本封卷审计基线为 PR #27 的普通 Merge Commit
 `c7101f0d0955e583e111509ce83784b587b39196`，以及合并后
 [main CI Run 32705480100](https://github.com/Caishenboon/sanjiguan/actions/runs/32705480100)。
@@ -63,13 +68,12 @@ ENGINEERING_RC_READY=true
 AI_HANDOFF_READY=true
 NEW_MACHINE_HANDOFF_READY=true
 OPEN_SOURCE_ENGINEERING_CLOSURE_READY=true
-OPEN_SOURCE_READY=false
-PUBLIC_RELEASE_AUTHORIZED=false
+OPEN_SOURCE_READY=true
+PUBLIC_RELEASE_AUTHORIZED=true
 ```
 
-结论：工程封卷可以合并，但当前不允许把仓库切换为 Public。只有
-[`publication-decisions.md`](publication-decisions.md) 中的硬决定得到负责人书面确认，且
-相应提交通过同一套 CI 后，才可再次执行 `--require-public-ready` 门禁并进行公开切换。
+结论：原始工程封卷所列权利人决定已经闭环。当前公开载荷不声称获得传承审校或法律意见，
+而是排除了会触发这些专业审查的内容和默认功能；未来扩大范围时相应门禁自动恢复。
 
 为缩短人工闭环，待签事项已经整理为
 [公开发布授权与复核包](public-release-authorization-packet.md)，实际切换顺序与不可逆风险见

@@ -1,17 +1,30 @@
-License decision pending
+Sanjiguan / 三际观 licensing notice
 
-This repository remains private. No license is granted for the project-owned
-code, rules, data, documentation, or knowledge assets until the product owner
-gives written approval.
+Copyright (C) 2026 Caishenboon
 
-The prepared public-release candidates are:
+Project-owned software in this repository is licensed under the GNU Affero
+General Public License, version 3 or (at your option) any later version
+(AGPL-3.0-or-later). The canonical license text is available at:
 
-- project-owned software: AGPL-3.0-or-later;
-- project-owned rule data, method documentation, and non-software knowledge
-  structures: CC BY-SA 4.0;
-- third-party material: its original license and notice.
+https://www.gnu.org/licenses/agpl-3.0.txt
 
-Candidate license references are stored in LICENSES/. Their presence is not an
-authorization to publish this repository. Restricted, sealed, confidential,
-personal, or redistribution-unclear material is excluded from any candidate
-public release.
+Project-owned rule data, method documentation, and non-software knowledge
+structures are licensed under Creative Commons Attribution-ShareAlike 4.0
+International (CC BY-SA 4.0), unless a file or directory states otherwise.
+The canonical legal code is available at:
+
+https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+This dual-scope grant does not cover third-party material, external datasets,
+real user records, confidential information, restricted or sealed material,
+trademarks, logos, or material whose redistribution rights are unclear. Those
+items remain subject to their own terms or are excluded from the repository.
+
+Third-party software and assets retain their original licenses and notices;
+see THIRD_PARTY_NOTICES.md, third-party-lock.json, sbom.cdx.json, and LICENSES/.
+The project names and visual identity are governed separately by TRADEMARKS.md.
+
+All traditional Profiles and Sanji-original rules remain research-active,
+UNCONFIRMED, and production_activatable=false. An open-source license is not a
+claim of traditional consensus, lineage authorization, predictive accuracy, or
+fitness for medical, legal, financial, or other high-stakes decisions.

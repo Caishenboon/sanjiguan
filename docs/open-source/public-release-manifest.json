@@ -1,9 +1,9 @@
 {
   "schema_version": "sanji-open-source-closure/1.0.0",
-  "audited_main_commit": "c7101f0d0955e583e111509ce83784b587b39196",
+  "audited_main_commit": "38baecc637106918e4b5890506ee53fa4b8cecba",
   "audited_main_ci": {
-    "run_id": 32705480100,
-    "run_url": "https://github.com/Caishenboon/sanjiguan/actions/runs/32705480100",
+    "run_id": 32721037735,
+    "run_url": "https://github.com/Caishenboon/sanjiguan/actions/runs/32721037735",
     "jobs_total": 6,
     "jobs_passed": 6,
     "jobs_failed": 0,
@@ -11,7 +11,7 @@
     "soft_failures": 0
   },
   "repository_state": {
-    "visibility": "private",
+    "visibility": "private_authorized_for_public_switch",
     "tags": 0,
     "releases": 0,
     "protected_hashes": 17
@@ -21,25 +21,27 @@
     "tracked_external_raw_datasets": false,
     "tracked_restricted_or_sealed_fulltext": false,
     "dreambank_text_connector_enabled": false,
+    "vedastro_connectors_enabled": false,
     "vedastro_raw_redistribution_allowed": false,
     "synthetic_screenshot_manifest_count": 26,
     "deepseek_secret_committed": false,
     "workflow_default_permissions": "contents: read"
   },
   "license_state": {
-    "project_license_activated": false,
-    "software_candidate": "AGPL-3.0-or-later",
-    "rule_and_method_candidate": "CC-BY-SA-4.0",
-    "copyright_holder_confirmed": false,
-    "attribution_name_confirmed": false,
-    "trademark_policy_confirmed": false
+    "project_license_activated": true,
+    "software_license": "AGPL-3.0-or-later",
+    "rule_and_method_license": "CC-BY-SA-4.0",
+    "copyright_holder": "Caishenboon",
+    "copyright_year": 2026,
+    "attribution_name": "Caishenboon",
+    "trademark_policy_confirmed": true
   },
   "history_privacy": {
     "commit_count_at_audit": 126,
     "non_noreply_commit_count": 20,
     "raw_email_recorded_in_manifest": false,
     "synthetic_ci_merge_commit_excluded": true,
-    "publication_decision": "pending_owner"
+    "publication_decision": "accepted_current_history_without_rewrite"
   },
   "excluded_or_disabled_material": [
     "real_user_records",
@@ -53,28 +55,30 @@
   "prepared_publication_controls": {
     "owner_authorization_packet": "docs/open-source/public-release-authorization-packet.md",
     "public_switch_runbook": "docs/open-source/public-switch-runbook.md",
-    "trademark_policy_candidate": "TRADEMARKS.md",
+    "public_release_summary": "docs/open-source/public-release-summary.md",
+    "trademark_policy": "TRADEMARKS.md",
     "branch_protection_required_immediately_after_public": true,
     "private_vulnerability_reporting_required_immediately_after_public": true,
     "tag_or_release_authorized": false
   },
-  "blocking_decisions": [
-    "PROJECT_LICENSE_NOT_ACTIVATED",
-    "RULE_AND_METHOD_LICENSE_NOT_ACTIVATED",
-    "COPYRIGHT_AND_ATTRIBUTION_HOLDER_UNCONFIRMED",
-    "TRADEMARK_POLICY_UNCONFIRMED",
-    "NON_NOREPLY_COMMIT_HISTORY_DECISION_REQUIRED",
-    "QUALIFIED_KNOWLEDGE_BOUNDARY_REVIEW_REQUIRED",
-    "PUBLIC_FIGURE_PRIVACY_LEGAL_REVIEW_REQUIRED",
-    "DEMO_FIXTURE_HUMAN_REVIEW_REQUIRED",
-    "OWNER_FINAL_PUBLIC_SWITCH_CONFIRMATION_REQUIRED"
+  "human_review_assertions": {
+    "qualified_traditional_or_lineage_review_claimed": false,
+    "legal_opinion_claimed": false,
+    "reason_not_required_for_current_public_payload": "The public payload contains no restricted/sealed fulltext or practice instructions, no external raw datasets, no real-person fixtures, and all external research connectors are disabled. Reintroducing any such scope requires separate qualified and legal/privacy review."
+  },
+  "residual_non_blocking_requirements": [
+    "QUALIFIED_REVIEW_REQUIRED_BEFORE_ADDING_TRADITION_OR_LINEAGE_RESTRICTED_CONTENT",
+    "LEGAL_AND_PRIVACY_REVIEW_REQUIRED_BEFORE_ENABLING_PUBLIC_FIGURE_DATA_CONNECTORS",
+    "NO_TAG_OR_GITHUB_RELEASE_AUTHORIZED",
+    "NO_PRODUCTION_RULE_ACTIVATION_AUTHORIZED"
   ],
+  "blocking_decisions": [],
   "release_decisions": {
     "ENGINEERING_RC_READY": true,
     "AI_HANDOFF_READY": true,
     "NEW_MACHINE_HANDOFF_READY": true,
     "OPEN_SOURCE_ENGINEERING_CLOSURE_READY": true,
-    "OPEN_SOURCE_READY": false,
-    "PUBLIC_RELEASE_AUTHORIZED": false
+    "OPEN_SOURCE_READY": true,
+    "PUBLIC_RELEASE_AUTHORIZED": true
   }
 }

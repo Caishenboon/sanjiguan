@@ -100,7 +100,7 @@ export default function ProductHome() {
       </section>
 
       <section aria-labelledby="open-source-title"><h2 id="open-source-title">开源状态</h2>
-        <p>当前是工程 RC，仓库仍为 Private。代码许可证候选为 AGPL-3.0-or-later，原创规则与方法资产候选为 CC BY-SA 4.0；两者均未获最终书面批准，不代表已经开源。</p>
+        <p>当前是开源工程 RC：项目原创软件采用 AGPL-3.0-or-later，原创规则与方法资产采用 CC BY-SA 4.0。私人用户数据始终保持 Private；所有传统与原创规则仍是未确认的研究态。</p>
       </section>
 
       <section aria-labelledby="summary-title"><h2 id="summary-title">中文与 English summary</h2>

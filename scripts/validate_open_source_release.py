@@ -15,6 +15,7 @@ MANIFEST_PATH = ROOT / "docs/open-source/public-release-manifest.json"
 REQUIRED_CLOSURE_FILES = {
     "docs/open-source/public-release-authorization-packet.md",
     "docs/open-source/public-switch-runbook.md",
+    "docs/open-source/public-release-summary.md",
     "TRADEMARKS.md",
 }
 TEXT_SUFFIXES = {
@@ -122,6 +123,8 @@ def audit() -> dict[str, object]:
             integrity_errors.append(f"external_data_committable:{name}")
         if dataset["public_redistribution_allowed"]:
             integrity_errors.append(f"external_redistribution_enabled:{name}")
+        if dataset["connector_enabled"]:
+            integrity_errors.append(f"public_figure_connector_enabled:{name}")
 
     dreambank = json.loads(
         (ROOT / "research-data/manifests/dreambank-dreams-en.json").read_text(encoding="utf-8")
@@ -169,6 +172,12 @@ def audit() -> dict[str, object]:
         "llm_in_core": False,
     }:
         integrity_errors.append("rule_state_changed")
+
+    human_assertions = manifest.get("human_review_assertions", {})
+    if human_assertions.get("qualified_traditional_or_lineage_review_claimed") is not False:
+        integrity_errors.append("unqualified_traditional_review_claim")
+    if human_assertions.get("legal_opinion_claimed") is not False:
+        integrity_errors.append("unsupported_legal_opinion_claim")
 
     license_text = (ROOT / "LICENSE").read_text(encoding="utf-8")
     license_activated = "No license is granted" not in license_text

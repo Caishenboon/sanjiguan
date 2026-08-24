@@ -128,7 +128,7 @@ assert sbom["specVersion"] == "1.6"
 assert sbom["metadata"]["component"]["version"] == "1.0.0-rc.1"
 
 license_notice = (root / "LICENSE").read_text(encoding="utf-8")
-assert "No license is granted" in license_notice
+assert "No license is granted" not in license_notice
 assert "AGPL-3.0-or-later" in license_notice and "CC BY-SA 4.0" in license_notice
 
 workflow = (root / ".github/workflows/ci.yml").read_text(encoding="utf-8")
@@ -144,8 +144,8 @@ assert 'Array.from({length:6},()=>["","",""])' in coin_journey
 assert '<option value="">请选择</option>' in coin_journey
 handoff_manifest = json.loads((root / "docs/handoff/project-manifest.json").read_text(encoding="utf-8"))
 assert handoff_manifest["release"] == "1.0.0-rc.1"
-assert handoff_manifest["repository"]["visibility"] == "private"
-assert handoff_manifest["open_source"]["public_release_authorized"] is False
+assert handoff_manifest["repository"]["visibility"] in {"private_authorized_for_public_switch", "public"}
+assert handoff_manifest["open_source"]["public_release_authorized"] is True
 assert handoff_manifest["rule_state"]["production_activatable"] is False
 assert len(handoff_manifest["protected_hashes"]) >= 10
 assert (root / "infra/migrations/0022_v1_rc_original_birth_record.sql").exists()

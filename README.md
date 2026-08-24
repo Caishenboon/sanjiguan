@@ -10,8 +10,8 @@
 三际原创证据合参、宿世/中阴/缘契专题、命势长图、三际断章和三际录连接成可追溯、可
 Replay、可重新分析的完整链路。
 
-当前版本为 `1.0.0-rc.1` 工程候选。仓库保持 **Private**，没有 Tag 或 Release，也没有
-获得公开授权。所有传统 Profile 与原创规则仍为
+当前版本为 `1.0.0-rc.1` 工程候选。项目所有者已授权开源；没有 Tag 或 GitHub Release。
+所有传统 Profile 与原创规则仍为
 `research_active / UNCONFIRMED / production_activatable=false`。
 
 > **术数引擎定象，规则引擎成断，DeepSeek只成文。**
@@ -53,7 +53,7 @@ Web/PWA → FastAPI → Application Services → sanji-engine（三际枢）
 需要 Git、Docker 和 Docker Compose：
 
 ```bash
-git clone <private-repository-url>
+git clone https://github.com/Caishenboon/sanjiguan.git
 cd sanjiguan
 python scripts/init_env.py
 docker compose up --build
@@ -126,6 +126,7 @@ Ruleset 和 Profile 都有版本、来源、审校/激活状态与内容 Hash。
 - [安全说明](SECURITY.md)
 - [贡献指南](CONTRIBUTING.md)
 - [开源准备状态](docs/open-source/readiness.md)
+- [首次公开发布摘要](docs/open-source/public-release-summary.md)
 - [开源发布封卷](docs/open-source/public-release-closure-v1.md)
 - [公开发布待确认决定](docs/open-source/publication-decisions.md)
 - [许可证审计](docs/open-source/license-audit-v1-rc.md)
@@ -134,10 +135,10 @@ Ruleset 和 Profile 都有版本、来源、审校/激活状态与内容 Hash。
 
 ## 开源与许可证状态
 
-当前 `LICENSE` 明确不授予公开许可。候选方案是原创代码 `AGPL-3.0-or-later`，原创规则
-数据、方法文档和非软件知识结构 `CC BY-SA 4.0`；第三方资产保留各自许可。正式许可、
-商标、历史提交邮箱处置、公开仓库、Tag 与 Release 均须产品负责人书面批准。工程封卷
-已经完成，但 `OPEN_SOURCE_READY=false`，详见[开源发布封卷](docs/open-source/public-release-closure-v1.md)。
+项目原创软件采用 `AGPL-3.0-or-later`；项目原创规则数据、方法文档和非软件知识结构采用
+`CC BY-SA 4.0`。第三方资产保留各自许可，品牌使用另见 `TRADEMARKS.md`。外部数据、
+真实用户资料、restricted/sealed 内容和权利不清资产不属于上述授权。当前没有 Tag 或
+GitHub Release，所有规则仍为研究态；详见[开源准备状态](docs/open-source/readiness.md)。
 
 ## 开发验证
 
@@ -152,7 +153,7 @@ cd apps/web && pnpm install --frozen-lockfile && pnpm build
 
 ## 当前限制
 
-研究结果不是现实有效性证明或保证预测。外部数据许可、生产 KMS、数据地区、备份保留、
+研究结果不是现实有效性证明或保证预测。外部数据 Connector 默认禁用；生产 KMS、数据地区、备份保留、
 删除 SLA、restricted/sealed 内容和生产规则激活仍待负责人或合格审校人确认。
 
 贡献前阅读 [AGENTS.md](AGENTS.md)、[CONTRIBUTING.md](CONTRIBUTING.md) 与

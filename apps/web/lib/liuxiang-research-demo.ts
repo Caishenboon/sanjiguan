@@ -21,12 +21,12 @@ export const researchSources = [
   {
     name:"VedAstro 出生资料",revision:"c864548…",license:"条件允许本地研究",
     rows:"15,807",precision:"精确时刻 15,807；IANA 时区缺失 15,807",
-    shared:"vedastro_org",enabled:true,
+    shared:"vedastro_org",enabled:false,
   },
   {
     name:"VedAstro 婚恋事件",revision:"2c297bc…",license:"条件允许本地研究",
     rows:"人物 15,807 · 事件 18,148",precision:"结婚精确日 11,080 · 仅年份 5,664",
-    shared:"vedastro_org",enabled:true,
+    shared:"vedastro_org",enabled:false,
   },
   {
     name:"DreamBank 英文梦境",revision:"d400ee8…",license:"license_review_required",

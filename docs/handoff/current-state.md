@@ -11,9 +11,9 @@ ai_handoff_ready: true
 new_machine_handoff_ready: true
 merge_ready: true
 open_source_engineering_closure_ready: true
-open_source_ready: false
-public_release_authorized: false
-repository_visibility: private
+open_source_ready: true
+public_release_authorized: true
+repository_visibility: private_authorized_for_public_switch
 production_rules_active: false
 llm_in_deterministic_core: false
 database_migration_count: 24
@@ -27,7 +27,7 @@ Replay、Reanalysis、比较、Docker 冷启动和虚构恢复演练已经接到
 
 ## 仍未完成
 
-生产传统/原创规则激活、正式许可证、公开仓库、Tag/Release、生产 KMS、数据地区、备份
+生产传统/原创规则激活、Public 切换后的保护规则、Tag/Release、生产 KMS、数据地区、备份
 保留和删除 SLA、外部数据再分发授权、restricted/sealed 内容治理和现实有效性验证。
 
 所有传统 Profile 及三际原创规则保持
@@ -49,7 +49,8 @@ PR #27 已以普通 Merge Commit 合并为主干基线 `c7101f0d0955e583e111509c
 或受保护 Hash。视觉与状态截图采用完全虚构数据，详见
 [`docs/product/evidence/manifest.json`](../product/evidence/manifest.json)。
 
-下一步是独立开源发布封卷。机器工程边界已经可以验证，但正式许可证/署名主体、20 个非
-`noreply` 历史提交邮箱、合格知识边界审查、公共人物法律审查和负责人最终 Public 授权仍是
-硬阻断。详见 [`public-release-closure-v1.md`](../open-source/public-release-closure-v1.md)。
-在这些决定完成前不能公开仓库、创建 Tag/Release、激活生产规则或启动新术数体系。
+PR #28 已合并为 `38baecc637106918e4b5890506ee53fa4b8cecba`，
+[main CI Run 32721037735](https://github.com/Caishenboon/sanjiguan/actions/runs/32721037735)
+六项全部成功。项目所有者已激活分层许可证、接受当前历史、确认署名/商标并授权 Public。
+当前公开载荷排除受限/密封内容、外部原始数据、真实人物 Fixture 和敏感推断，三个外部
+数据 Connector 均默认禁用。公开后仍不得创建 Tag/Release、激活生产规则或调用 DeepSeek。

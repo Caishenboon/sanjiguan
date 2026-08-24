@@ -1,6 +1,8 @@
 # Contributing
 
-仓库尚未公开，也未选择最终开源许可证。项目所有者书面确认许可证和公开计划前，不接受外部贡献，也不改变仓库可见性。
+欢迎通过 Issue 和 Pull Request 提交改进。项目原创软件采用 AGPL-3.0-or-later；原创规则、
+方法文档与非软件知识结构采用 CC BY-SA 4.0。提交即表示贡献者有权按对应范围提供内容，
+且不会提交私人、受限、密封或再分发权利不清材料。
 
 内部变更必须：
 
@@ -20,4 +22,4 @@
 
 ## Dependencies and licenses
 
-新增依赖必须更新 `third-party-lock.json`、`THIRD_PARTY_NOTICES.md` 和 `sbom.cdx.json`，确认版本、许可证及分发边界。代码许可证、规则数据许可证、知识内容权利和测试数据许可分别治理；不得擅自加入最终开源许可证。
+新增依赖必须更新 `third-party-lock.json`、`THIRD_PARTY_NOTICES.md` 和 `sbom.cdx.json`，确认版本、许可证及分发边界。代码许可证、规则数据许可证、知识内容权利和测试数据许可分别治理；不得擅自改变根许可证、内容许可证或资产边界。
