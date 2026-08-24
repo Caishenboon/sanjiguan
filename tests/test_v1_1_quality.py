@@ -35,6 +35,11 @@ class V11QualityContracts(unittest.TestCase):
         self.assertIn("REQUEST_ID_PATTERN", security)
         self.assertNotIn("request_body", api)
 
+    def test_api_error_envelope_preserves_structured_detail(self):
+        api = self.read("apps/api/app/postgres_app.py")
+        self.assertIn("detail=exc.detail", api)
+        self.assertIn('exc.detail.get("code") if isinstance(exc.detail, dict)', api)
+
     def test_pwa_keeps_private_data_out_of_cache(self):
         source = self.read("apps/web/public/sw.js")
         for private_path in ("/api/", "/profile/", "/chronicle", "/records", "/consult", "/me", "prompt"):

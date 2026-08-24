@@ -73,9 +73,9 @@ async def release_security(request: Request, call_next):
     return response
 
 
-def _error_body(request: Request, code: str, message: str) -> dict:
+def _error_body(request: Request, code: str, message: str, *, detail=None) -> dict:
     return {
-        "detail": message,
+        "detail": message if detail is None else detail,
         "error": {
             "code": code,
             "message": message,
@@ -86,10 +86,11 @@ def _error_body(request: Request, code: str, message: str) -> dict:
 
 @app.exception_handler(HTTPException)
 async def http_error(request: Request, exc: HTTPException):
-    message = str(exc.detail)
+    detail_code = exc.detail.get("code") if isinstance(exc.detail, dict) else None
+    message = detail_code if isinstance(detail_code, str) else str(exc.detail)
     code = message.upper() if message.replace("_", "").isalnum() else "REQUEST_REJECTED"
     return JSONResponse(
-        content=_error_body(request, code, message),
+        content=_error_body(request, code, message, detail=exc.detail),
         status_code=exc.status_code,
         headers=exc.headers,
     )
