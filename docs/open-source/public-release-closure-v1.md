@@ -70,3 +70,8 @@ PUBLIC_RELEASE_AUTHORIZED=false
 结论：工程封卷可以合并，但当前不允许把仓库切换为 Public。只有
 [`publication-decisions.md`](publication-decisions.md) 中的硬决定得到负责人书面确认，且
 相应提交通过同一套 CI 后，才可再次执行 `--require-public-ready` 门禁并进行公开切换。
+
+为缩短人工闭环，待签事项已经整理为
+[公开发布授权与复核包](public-release-authorization-packet.md)，实际切换顺序与不可逆风险见
+[GitHub Public 切换运行手册](public-switch-runbook.md)。这些文件只准备证据和流程，不表示
+许可证、商标政策或 Public 授权已经生效。

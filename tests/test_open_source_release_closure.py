@@ -26,6 +26,15 @@ class OpenSourceReleaseClosureTests(unittest.TestCase):
         result = audit()
         self.assertEqual(20, result["non_noreply_commit_count"])
 
+    def test_publication_controls_are_prepared_without_authorizing_publication(self):
+        result = audit()
+        self.assertEqual([], result["integrity_errors"])
+        self.assertFalse(result["public_release_ready"])
+        self.assertIn(
+            "OWNER_FINAL_PUBLIC_SWITCH_CONFIRMATION_REQUIRED",
+            result["blocking_decisions"],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

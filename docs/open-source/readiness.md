@@ -31,6 +31,9 @@
 - [ ] 决定 20 个非 GitHub noreply 历史提交邮箱的公开处置方式
 - [ ] 确认版权/署名主体及品牌、商标边界
 - [ ] 产品所有者书面批准公开
+- [x] 已准备逐项签署的[公开发布授权与复核包](public-release-authorization-packet.md)
+- [x] 已准备[Public 切换运行手册](public-switch-runbook.md)，其中要求先配置 `main` 保护与私密漏洞报告
+- [x] 已准备保守的[`TRADEMARKS.md`](../../TRADEMARKS.md)候选文本；尚未生效
 
 许可证候选为代码 AGPL-3.0-or-later、原创规则数据与方法文档 CC BY-SA 4.0。
 根 `LICENSE` 明确不在负责人批准前授予公开许可。不得因仓库中存在依赖许可证而

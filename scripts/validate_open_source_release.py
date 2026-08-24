@@ -12,6 +12,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "docs/open-source/public-release-manifest.json"
+REQUIRED_CLOSURE_FILES = {
+    "docs/open-source/public-release-authorization-packet.md",
+    "docs/open-source/public-switch-runbook.md",
+    "TRADEMARKS.md",
+}
 TEXT_SUFFIXES = {
     ".css", ".env", ".html", ".js", ".json", ".md", ".mjs", ".py",
     ".sh", ".sql", ".toml", ".ts", ".tsx", ".txt", ".yaml", ".yml",
@@ -83,6 +88,18 @@ def audit() -> dict[str, object]:
 
     if manifest["schema_version"] != "sanji-open-source-closure/1.0.0":
         integrity_errors.append("manifest_schema_version")
+
+    for relative in REQUIRED_CLOSURE_FILES:
+        if not (ROOT / relative).is_file():
+            integrity_errors.append(f"missing_publication_control:{relative}")
+
+    controls = manifest.get("prepared_publication_controls", {})
+    if controls.get("branch_protection_required_before_public") is not True:
+        integrity_errors.append("branch_protection_not_required")
+    if controls.get("private_vulnerability_reporting_required_before_public") is not True:
+        integrity_errors.append("private_vulnerability_reporting_not_required")
+    if controls.get("tag_or_release_authorized") is not False:
+        integrity_errors.append("tag_or_release_authorized_without_owner")
 
     for relative in tracked:
         path = ROOT / relative
