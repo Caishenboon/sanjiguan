@@ -38,6 +38,7 @@
     "commit_count_at_audit": 126,
     "non_noreply_commit_count": 20,
     "raw_email_recorded_in_manifest": false,
+    "synthetic_ci_merge_commit_excluded": true,
     "publication_decision": "pending_owner"
   },
   "excluded_or_disabled_material": [

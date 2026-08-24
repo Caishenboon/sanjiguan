@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -47,6 +48,18 @@ def _tracked_paths() -> list[str]:
         capture_output=True,
     )
     return [value for value in result.stdout.decode("utf-8").split("\0") if value]
+
+
+def _published_history_authors() -> list[str]:
+    authors = _git_lines("log", "--all", "--format=%ae")
+    if os.environ.get("GITHUB_EVENT_NAME") != "pull_request":
+        return authors
+    parents = _git_lines("rev-list", "--parents", "-n", "1", "HEAD")[0].split()
+    if len(parents) <= 2:
+        return authors
+    synthetic_merge_author = _git_lines("log", "-1", "--format=%ae", "HEAD")[0]
+    authors.remove(synthetic_merge_author)
+    return authors
 
 
 def _walk_values(value: object, key: str = "") -> list[tuple[str, object]]:
@@ -145,7 +158,7 @@ def audit() -> dict[str, object]:
     if license_activated != manifest["license_state"]["project_license_activated"]:
         integrity_errors.append("license_manifest_mismatch")
 
-    authors = _git_lines("log", "--all", "--format=%ae")
+    authors = _published_history_authors()
     non_noreply = [email for email in authors if not email.endswith("@users.noreply.github.com")]
     if len(non_noreply) != manifest["history_privacy"]["non_noreply_commit_count"]:
         integrity_errors.append("history_email_count_changed")
