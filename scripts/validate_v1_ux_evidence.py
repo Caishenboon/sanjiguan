@@ -36,6 +36,9 @@ EXPECTED = {
     "v1-1-bazi-unknown-time-1440.png": ("/consult/bazi", 1440, 1000, "八字未知时辰边界"),
     "v1-1-ziwei-research-1440.png": ("/consult/ziwei", 1440, 1000, "紫微研究输入"),
     "v1-1-network-offline-390.png": ("/offline", 390, 844, "网络失败离线壳"),
+    "v1-2-yijing-instrument-1440.png": ("/results/synthetic-yijing-instrument", 1440, 1100, "易经六爻演变仪"),
+    "v1-2-bazi-instrument-1440.png": ("/consult/bazi", 1440, 1100, "八字四柱结构台"),
+    "v1-2-ziwei-instrument-1440.png": ("/consult/ziwei", 1440, 1100, "紫微十二宫盘"),
 }
 
 
@@ -65,7 +68,7 @@ def expected_manifest() -> dict[str, object]:
             }
         )
     return {
-        "schema_version": "sanji-v1-1-evidence-manifest-1.0",
+        "schema_version": "sanji-v1-2-evidence-manifest-1.0",
         "evidence_class": "synthetic_conformance",
         "contains_real_user_data": False,
         "contains_provider_output": False,

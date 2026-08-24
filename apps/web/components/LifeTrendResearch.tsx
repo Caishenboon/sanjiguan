@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ProductShell, { PageState, TechnicalDetails, VerdictBanner } from "./ProductShell";
+import ObservationInstrument,{RitualProgress} from "./ObservationInstrument";
 import { apiRequest, readProductSession } from "../lib/product-session";
 import { productStatus } from "../lib/product-language";
 
@@ -40,7 +41,7 @@ export default function LifeTrendResearch() {
   if (state === "loading") return <ProductShell title="命势长图" eyebrow="合参 · 三际断章"><PageState kind="loading" title="正在读取授权资料"><p>正在取证。私人正文不会发送给外部模型。</p></PageState></ProductShell>;
   return <ProductShell title="三际断章与命势长图" eyebrow="合参 · 主报告" status="research only">
     <aside className="privacy-note"><b>三际观原创研究 · 未经审校</b><p>命势长图呈现不同生命主题在各阶段的相对起伏，不代表金融收益，也不是现实准确率声明。往际事实、当下与未来推演会明确分区。</p></aside>
-    {!profile ? <PageState kind="insufficient" title="先建立三际录"><p>建立主体并记录带时间精度的事实后，才能起一卷命势观察。</p><Link className="product-button" href="/onboarding">开始立卷</Link></PageState> : <section className="product-form"><h2>准备本次观察</h2><p>{evidence.length} 项结构事实与授权记录可用；资料覆盖只影响证契完备度，不会直接抬高势位。</p><label><span>时间粒度</span><select value={granularity} onChange={(event) => setGranularity(event.target.value)}><option value="auto">按资料精度自动选择</option><option value="month">月</option><option value="quarter">季</option><option value="year">年</option><option value="phase">多年阶段</option></select></label><button className="product-button" aria-disabled={state === "running"} aria-busy={state === "running"} onClick={start}>{state === "running" ? "正在取证、合参与成断…" : "生成命势长图与三际断章"}</button></section>}
+    {!profile ? <PageState kind="insufficient" title="先建立三际录"><p>建立主体并记录带时间精度的事实后，才能起一卷命势观察。</p><Link className="product-button" href="/onboarding">开始立卷</Link></PageState> : <section className="product-form"><div className="life-trend-preflight"><ObservationInstrument mode="life-trend" title="命势计时仪" items={[{label:"事实",value:`${evidence.length} 项`},{label:"粒度",value:granularity==="auto"?"自动":granularity},{label:"未来",value:"2 窗口",state:"future"}]} caption="只有具备时间精度的事实才进入时间轴；缺失区段保持留白。"/><div><h2>准备本次观察</h2><p>{evidence.length} 项结构事实与授权记录可用；资料覆盖只影响证契完备度，不会直接抬高势位。</p><label><span>时间粒度</span><select value={granularity} onChange={(event) => setGranularity(event.target.value)}><option value="auto">按资料精度自动选择</option><option value="month">月</option><option value="quarter">季</option><option value="year">年</option><option value="phase">多年阶段</option></select></label>{state==="running"&&<RitualProgress steps={["时间归序","诸势合参","断章成卷"]} current={1}/>}<button className="product-button" aria-disabled={state === "running"} aria-busy={state === "running"} onClick={start}>{state === "running" ? "正在取证、合参与成断…" : "生成命势长图与三际断章"}</button></div></div></section>}
     {error && <PageState kind="error" title="本次起卷未完成"><p>{error} 已有三际录未被覆盖，可检查连接后重试。</p></PageState>}
     {run && <>
       <article className="report-reader" aria-labelledby="report-title">

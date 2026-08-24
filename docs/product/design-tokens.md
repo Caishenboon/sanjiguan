@@ -18,3 +18,5 @@
 章节、象名与标题使用仓库内 Noto Serif SC 及系统宋体回退；正文和表单使用 Noto Sans SC；Hash 与技术字段使用 Noto Sans Mono。禁止未授权远程字体。
 
 用户页面优先复用 `PageState`、`VerdictBanner`、`MetricPair`、`TechnicalDetails`、按钮、步骤条与确认对话框。吉凶、相争、不成断均由文字、边框及图标共同表达，不只依赖颜色。
+
+V1.2 增加共用 `ObservationInstrument` 展示语法。仪器只能投影 API 或确定性核心已经返回的结构；圆环、刻度、星点与连线均不得隐含额外评分。八类仪器的语义和边界见 [`v1-2-zhuxiang-instruments.md`](v1-2-zhuxiang-instruments.md)。

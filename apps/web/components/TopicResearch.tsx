@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ProductShell, { MetricPair, PageState, TechnicalDetails, VerdictBanner } from "./ProductShell";
+import ObservationInstrument,{RitualProgress,type InstrumentMode} from "./ObservationInstrument";
 import { apiRequest, readProductSession } from "../lib/product-session";
 import { epistemicDisplay, productStatus } from "../lib/product-language";
 
@@ -47,6 +48,8 @@ function ep(value?:Epistemic<unknown>){
   return epistemicDisplay(shown,value.epistemic_status,value.confidence_bp);
 }
 
+function topicInstrument(mode:Topic):InstrumentMode{return mode==="sushe"?"sushe":mode.startsWith("zhongyin")?"zhongyin":"yuanqi"}
+
 export default function TopicResearch({topic}: {topic:Topic}){
   const [mode,setMode]=useState<Topic>(topic);
   const [profileId,setProfileId]=useState(""); const [items,setItems]=useState<Evidence[]>([]);
@@ -62,10 +65,10 @@ export default function TopicResearch({topic}: {topic:Topic}){
     {!profileId&&<PageState kind="insufficient" title="先建立或选择主体"><p>专题推演只读取你授权主体的记录。</p><Link className="product-button" href="/onboarding">建立主体</Link></PageState>}
     {profileId&&<section className="product-form" aria-label="专题资料选择"><h2>选择本次参与的资料</h2><p>{items.length} 条结构引用可用；撤销记录不会进入新执行。</p>
       {items.map(item=><label className="check-field" key={item.record_id}><input type="checkbox" checked={!excluded.has(item.record_id)&&!item.withdrawn} disabled={item.withdrawn} onChange={e=>setExcluded(old=>{const next=new Set(old);e.target.checked?next.delete(item.record_id):next.add(item.record_id);return next})}/><span><b>{item.node_type}</b><small>{item.tags.join("、")||"资料覆盖"}{item.withdrawn?" · 已撤销":""}</small></span></label>)}
-      <button className="product-button" aria-disabled={state==="running"} aria-busy={state==="running"} onClick={runTopic}>{state==="running"?"正在确定性推演…":"开始专题推演"}</button>
+      {state==="running"&&<RitualProgress steps={["事实归卷","证据成图","候选显现"]} current={1}/>}<button className="product-button" aria-disabled={state==="running"} aria-busy={state==="running"} onClick={runTopic}>{state==="running"?"正在确定性推演…":"开始专题推演"}</button>
     </section>}
     {error&&<PageState kind="error" title="本次执行未完成"><p>{error}。已有记录没有被覆盖，可检查资料后重试。</p></PageState>}
-    {run&&<section className="chronicle-detail topic-result"><VerdictBanner status={run.status} title={productStatus(run.status)}><p>{run.status==="insufficient"?"现有资料仍不足以形成稳定判断；下方候选保留为低可信研究线索。":run.status==="contested"?"主要候选彼此接近或存在明显冲突，请同时阅读支持、逆证与尚缺资料。":"结果已按当前资料和研究规则形成；它不是经过传统审校的定论。"}</p></VerdictBanner><MetricPair strengthBp={run.strength_bp} confidenceBp={run.confidence_bp}/>
+    {run&&<section className="chronicle-detail topic-result"><div className="topic-result__instrument"><ObservationInstrument mode={topicInstrument(mode)} title={COPY[mode].title} items={run.candidates.slice(0,3).map((item,index)=>({label:`候选 ${index+1}`,value:item.name?ep(item.name):productStatus(item.status),state:item.status==="contested"?"counter":item.status==="insufficient"?"missing":"active"}))} caption="图中只排列当前确定性执行返回的候选和状态；它不是历史事实或传统定论。"/><div><VerdictBanner status={run.status} title={productStatus(run.status)}><p>{run.status==="insufficient"?"现有资料仍不足以形成稳定判断；下方候选保留为低可信研究线索。":run.status==="contested"?"主要候选彼此接近或存在明显冲突，请同时阅读支持、逆证与尚缺资料。":"结果已按当前资料和研究规则形成；它不是经过传统审校的定论。"}</p></VerdictBanner><MetricPair strengthBp={run.strength_bp} confidenceBp={run.confidence_bp}/></div></div>
       {run.candidates.map((item,index)=><section key={item.candidate_id}><span>{String(index+1).padStart(2,"0")}</span><div>
         {item.name&&<h2>{ep(item.name)}</h2>}
         {!item.name&&<h2>候选 {item.rank} · {productStatus(item.status)}</h2>}

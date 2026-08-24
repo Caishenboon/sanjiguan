@@ -50,7 +50,8 @@ test("onboarding draft can resume without inventing missing birth time", async (
   await page.getByLabel("如何称呼这个主体").fill("虚构续卷主体");
   await page.getByLabel("出生时刻未知").check();
   await page.getByRole("link", { name: "暂存退出" }).click();
-  await page.reload();
+  await expect(page).toHaveURL(/\/$/);
+  await page.goto("/onboarding");
   await expect(page.getByLabel("如何称呼这个主体")).toHaveValue("虚构续卷主体");
   await expect(page.getByLabel("出生时刻未知")).toBeChecked();
   await expect(page.getByText("第 1—3 步，共 8 步")).toBeVisible();
