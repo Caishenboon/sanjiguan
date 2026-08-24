@@ -28,7 +28,7 @@ Tag、GitHub Release、规则生产激活与外部数据 Connector 仍未授权�
 - [ ] 获得 DreamBank 正文再包装的书面许可；此前 Connector 保持禁用
 - [x] 三际观原创六象、Mapping 规则和非软件方法资产采用 CC BY-SA 4.0
 - [x] 当前公开范围不包含公共人物原始数据、Fixture 或敏感推断，Connector 默认禁用；扩大范围前法律/隐私审查仍为硬门禁
-- [x] 产品所有者接受 20 个非 GitHub noreply 历史提交邮箱公开，不重写历史
+- [x] 产品所有者接受 21 个非 GitHub noreply 历史提交邮箱公开，不重写历史；第 21 个来自 PR #29 普通 Merge Commit，未引入新的邮箱值
 - [x] 版权/署名主体为 Caishenboon（2026），品牌采用 `TRADEMARKS.md`
 - [x] 产品所有者书面批准将仓库切换为 Public
 - [x] 已准备逐项签署的[公开发布授权与复核包](public-release-authorization-packet.md)
