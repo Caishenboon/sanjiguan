@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class HandoffAndPublicIndexTests(unittest.TestCase):
     def test_manifest_state_is_public_authorized_and_research_only(self):
         manifest = json.loads((ROOT / "docs/handoff/project-manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual("private_authorized_for_public_switch", manifest["repository"]["visibility"])
+        self.assertEqual("public", manifest["repository"]["visibility"])
         self.assertTrue(manifest["open_source"]["public_release_authorized"])
         self.assertFalse(manifest["rule_state"]["production_activatable"])
         self.assertFalse(manifest["rule_state"]["llm_in_core"])

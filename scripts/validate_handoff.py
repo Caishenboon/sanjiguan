@@ -35,7 +35,7 @@ if required_handoff - {path.name for path in HANDOFF.iterdir()}:
 
 current = (HANDOFF / "current-state.md").read_text(encoding="utf-8")
 for literal in (
-    "release: 1.0.0-rc.1", "repository_visibility: private_authorized_for_public_switch",
+    "release: 1.0.0-rc.1", "repository_visibility: public",
     "production_rules_active: false", "llm_in_deterministic_core: false",
     "database_migration_count: 24",
 ):

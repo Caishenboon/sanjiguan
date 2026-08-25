@@ -26,13 +26,18 @@ DreamBank 三个外部数据 Connector 全部默认禁用。重新启用外部�
 
 - 开源封卷 Merge Commit：`38baecc637106918e4b5890506ee53fa4b8cecba`
 - 合并后主干 CI：[Run 32721037735](https://github.com/Caishenboon/sanjiguan/actions/runs/32721037735)
+- 公开激活 PR：[#29](https://github.com/Caishenboon/sanjiguan/pull/29)，Merge Commit `f018dc02fbd50206e696f52b526344af43adfee3`
+- 发布门禁修复 PR：[#30](https://github.com/Caishenboon/sanjiguan/pull/30)，Merge Commit `90f3253a63cd877c4409bc97ca952d37695a7c85`
+- 最终主干 CI：[Run 32766173234](https://github.com/Caishenboon/sanjiguan/actions/runs/32766173234)
 - 六项 Job：全部成功，0 failed、0 skipped、0 soft failure
 - 受保护 Hash：17 项保持不变
 - 产品证据：26 项完全虚构截图，Provider 调用数为 0
 - Git 历史：项目所有者接受 21 个非 noreply 提交邮箱随历史公开，不重写历史；第 21 个来自 PR #29 普通 Merge Commit，未引入新的邮箱值
 
-最终可见性与公开后安全设置以 `public-release-manifest.json` 和
-`public-switch-runbook.md` 的执行记录为准。
+仓库已于 `2026-08-25` 切换为 Public；未认证访问已验证仓库主页、README、LICENSE 与
+SECURITY 均可读取。`main` 已要求 PR、分支最新、讨论解决和六项 CI 成功，管理员不得绕过；
+强推与删除未开放。私密漏洞报告、依赖图和 Dependabot 安全提醒均已启用。最终状态以
+`public-release-manifest.json` 和 `public-switch-runbook.md` 的执行记录为准。
 
 ## 未授权事项
 
