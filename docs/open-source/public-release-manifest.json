@@ -1,9 +1,9 @@
 {
   "schema_version": "sanji-open-source-closure/1.0.0",
-  "audited_main_commit": "38baecc637106918e4b5890506ee53fa4b8cecba",
+  "audited_main_commit": "90f3253a63cd877c4409bc97ca952d37695a7c85",
   "audited_main_ci": {
-    "run_id": 32721037735,
-    "run_url": "https://github.com/Caishenboon/sanjiguan/actions/runs/32721037735",
+    "run_id": 32766173234,
+    "run_url": "https://github.com/Caishenboon/sanjiguan/actions/runs/32766173234",
     "jobs_total": 6,
     "jobs_passed": 6,
     "jobs_failed": 0,
@@ -11,7 +11,7 @@
     "soft_failures": 0
   },
   "repository_state": {
-    "visibility": "private_authorized_for_public_switch",
+    "visibility": "public",
     "tags": 0,
     "releases": 0,
     "protected_hashes": 17
@@ -38,7 +38,8 @@
   },
   "history_privacy": {
     "commit_count_at_audit": 126,
-    "non_noreply_commit_count": 21,
+    "non_noreply_commit_count_at_public_switch": 21,
+    "unique_non_noreply_email_count": 1,
     "raw_email_recorded_in_manifest": false,
     "synthetic_ci_merge_commit_excluded": true,
     "publication_decision": "accepted_current_history_without_rewrite"
@@ -59,6 +60,24 @@
     "trademark_policy": "TRADEMARKS.md",
     "branch_protection_required_immediately_after_public": true,
     "private_vulnerability_reporting_required_immediately_after_public": true,
+    "public_switch_completed_at": "2026-08-25",
+    "unauthenticated_repository_read_verified": true,
+    "branch_protection_enabled": true,
+    "branch_protection_requires_pull_request": true,
+    "branch_protection_requires_up_to_date_branch": true,
+    "branch_protection_requires_conversation_resolution": true,
+    "branch_protection_disallows_admin_bypass": true,
+    "required_status_checks": [
+      "baseline",
+      "v1-release-gates",
+      "sanji-engine-determinism (ubuntu-latest)",
+      "sanji-engine-determinism (windows-latest)",
+      "web-visual-determinism (ubuntu-24.04, linux)",
+      "web-visual-determinism (windows-2025, win32)"
+    ],
+    "private_vulnerability_reporting_enabled": true,
+    "dependency_graph_enabled": true,
+    "dependabot_alerts_enabled": true,
     "tag_or_release_authorized": false
   },
   "human_review_assertions": {

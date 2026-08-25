@@ -13,7 +13,7 @@ merge_ready: true
 open_source_engineering_closure_ready: true
 open_source_ready: true
 public_release_authorized: true
-repository_visibility: private_authorized_for_public_switch
+repository_visibility: public
 production_rules_active: false
 llm_in_deterministic_core: false
 database_migration_count: 24
@@ -27,7 +27,7 @@ Replay、Reanalysis、比较、Docker 冷启动和虚构恢复演练已经接到
 
 ## 仍未完成
 
-生产传统/原创规则激活、Public 切换后的保护规则、Tag/Release、生产 KMS、数据地区、备份
+生产传统/原创规则激活、Tag/Release、生产 KMS、数据地区、备份
 保留和删除 SLA、外部数据再分发授权、restricted/sealed 内容治理和现实有效性验证。
 
 所有传统 Profile 及三际原创规则保持
@@ -54,3 +54,9 @@ PR #28 已合并为 `38baecc637106918e4b5890506ee53fa4b8cecba`，
 六项全部成功。项目所有者已激活分层许可证、接受当前历史、确认署名/商标并授权 Public。
 当前公开载荷排除受限/密封内容、外部原始数据、真实人物 Fixture 和敏感推断，三个外部
 数据 Connector 均默认禁用。公开后仍不得创建 Tag/Release、激活生产规则或调用 DeepSeek。
+
+PR #29 已以普通 Merge Commit `f018dc02fbd50206e696f52b526344af43adfee3` 激活最小公开范围；
+PR #30 以 `90f3253a63cd877c4409bc97ca952d37695a7c85` 修复合并后历史邮箱计数门禁。
+[最终 main CI Run 32766173234](https://github.com/Caishenboon/sanjiguan/actions/runs/32766173234)
+六项全部成功。仓库现为 Public；`main` 分支保护、私密漏洞报告、依赖图和 Dependabot 安全
+提醒已启用，Tag / Release 仍为 `0 / 0`。

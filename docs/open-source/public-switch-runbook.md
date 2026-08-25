@@ -35,3 +35,15 @@ GitHub 官方说明指出，Private 切换为 Public 后，仓库内容、Action
 发现密钥、私人数据、受限内容或许可证错误时，先停止传播并记录最少证据，再按事件响应流程处理。
 把仓库重新设为 Private 不能收回已经被克隆或 Fork 的内容，因此不能把“再改回 Private”视为可靠
 撤销手段。
+
+## 2026-08-25 执行记录
+
+- PR #29 以普通 Merge Commit `f018dc02fbd50206e696f52b526344af43adfee3` 合并公开激活资产。
+- 首次合并后 main Run `32764894491` 因真实 Merge Commit 使历史邮箱计数从 20 增至 21 而失败；失败记录保留，未降低门禁。
+- PR #30 以普通 Merge Commit `90f3253a63cd877c4409bc97ca952d37695a7c85` 修正该证据计数；未引入新的邮箱值。
+- 最终切换前 main CI [Run 32766173234](https://github.com/Caishenboon/sanjiguan/actions/runs/32766173234) 六项成功，0 failed、0 skipped、0 soft failure。
+- 产品负责人在 GitHub 官方二次验证后完成 Private → Public 切换。
+- `main` 已要求 PR、分支最新、讨论解决及六项必需 CI；管理员不得绕过，force push 与删除未开放。
+- Private Vulnerability Reporting、Dependency Graph 与 Dependabot alerts 已启用。
+- 未认证访问验证仓库主页、README、LICENSE 与 SECURITY 均返回 HTTP 200。
+- Tag / GitHub Release 保持 `0 / 0`；生产规则未激活，外部数据 Connector 未启用，DeepSeek 未调用。

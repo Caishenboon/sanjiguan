@@ -186,8 +186,9 @@ def audit() -> dict[str, object]:
 
     authors = _published_history_authors()
     non_noreply = [email for email in authors if not email.endswith("@users.noreply.github.com")]
-    if len(non_noreply) != manifest["history_privacy"]["non_noreply_commit_count"]:
-        integrity_errors.append("history_email_count_changed")
+    unique_non_noreply = set(non_noreply)
+    if len(unique_non_noreply) != manifest["history_privacy"]["unique_non_noreply_email_count"]:
+        integrity_errors.append("history_email_identity_count_changed")
 
     blockers = list(manifest["blocking_decisions"])
     public_ready = not integrity_errors and not blockers and license_activated
@@ -196,6 +197,7 @@ def audit() -> dict[str, object]:
         "integrity_errors": sorted(set(integrity_errors)),
         "blocking_decisions": blockers,
         "non_noreply_commit_count": len(non_noreply),
+        "unique_non_noreply_email_count": len(unique_non_noreply),
         "public_release_ready": public_ready,
         "safe_to_remain_private": not integrity_errors,
     }
