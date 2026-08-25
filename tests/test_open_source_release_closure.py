@@ -20,7 +20,8 @@ class OpenSourceReleaseClosureTests(unittest.TestCase):
 
     def test_history_email_is_counted_without_storing_the_address(self):
         result = audit()
-        self.assertEqual(21, result["non_noreply_commit_count"])
+        self.assertEqual(1, result["unique_non_noreply_email_count"])
+        self.assertGreaterEqual(result["non_noreply_commit_count"], 21)
 
     def test_publication_controls_preserve_post_switch_safety_requirements(self):
         result = audit()

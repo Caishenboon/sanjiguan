@@ -32,7 +32,7 @@ DreamBank 三个外部数据 Connector 全部默认禁用。重新启用外部�
 - 六项 Job：全部成功，0 failed、0 skipped、0 soft failure
 - 受保护 Hash：17 项保持不变
 - 产品证据：26 项完全虚构截图，Provider 调用数为 0
-- Git 历史：项目所有者接受 21 个非 noreply 提交邮箱随历史公开，不重写历史；第 21 个来自 PR #29 普通 Merge Commit，未引入新的邮箱值
+- Git 历史：公开切换时有 21 次非 noreply 邮箱出现，只涉及 1 个唯一邮箱值；项目所有者接受随历史公开且不重写历史。第 21 次来自 PR #29 普通 Merge Commit，未引入新的邮箱值
 
 仓库已于 `2026-08-25` 切换为 Public；未认证访问已验证仓库主页、README、LICENSE 与
 SECURITY 均可读取。`main` 已要求 PR、分支最新、讨论解决和六项 CI 成功，管理员不得绕过；

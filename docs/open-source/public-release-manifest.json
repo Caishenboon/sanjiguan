@@ -38,7 +38,8 @@
   },
   "history_privacy": {
     "commit_count_at_audit": 126,
-    "non_noreply_commit_count": 21,
+    "non_noreply_commit_count_at_public_switch": 21,
+    "unique_non_noreply_email_count": 1,
     "raw_email_recorded_in_manifest": false,
     "synthetic_ci_merge_commit_excluded": true,
     "publication_decision": "accepted_current_history_without_rewrite"

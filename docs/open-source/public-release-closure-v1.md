@@ -42,9 +42,12 @@ Private，Tag / Release 为 `0 / 0`。
 
 ### 2. Git 历史邮箱元数据
 
-全历史审计基线共有 126 个提交；PR #29 合并后，21 个提交使用非 GitHub `noreply` 邮箱。第 21 个为普通 GitHub Merge Commit，未引入新的邮箱值。封卷
+全历史审计基线共有 126 个提交；公开切换时有 21 次非 GitHub `noreply` 邮箱出现，只涉及
+1 个唯一邮箱值。第 21 次为 PR #29 普通 GitHub Merge Commit，未引入新的邮箱值。封卷
 Manifest 只记录数量，不复制邮箱值。PR CI 产生但不会进入真实分支的临时合并提交不计入
 公开历史；所有真实 Git refs 仍纳入扫描。直接把现仓库设为 Public 会公开这些历史元数据。
+后续普通 Merge Commit 若重复同一已接受邮箱值，不构成新的邮箱身份暴露；门禁继续阻断任何
+新增的唯一非 noreply 邮箱值。
 
 可选处置必须由负责人决定：
 
